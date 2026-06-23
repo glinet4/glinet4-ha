@@ -84,6 +84,16 @@ class GLinetDevice(CoordinatorEntity["GLinetUpdateCoordinator"], ScannerEntity):
         return self._attr_hostname
 
     @property
+    def available(self) -> bool:
+        """Trackers stay available across transient poll failures.
+
+        Presence (home/away) is carried by is_connected + consider_home, so the
+        tracker should not flip to ``unavailable`` just because one poll failed
+        (which CoordinatorEntity.available would otherwise do).
+        """
+        return True
+
+    @property
     def is_connected(self) -> bool:
         """Return true if the device is connected to the network."""
         return self._device.is_connected

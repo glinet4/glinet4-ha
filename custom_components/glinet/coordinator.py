@@ -47,7 +47,11 @@ T = TypeVar("T")
 
 @dataclass
 class GLinetData:
-    """Immutable-ish snapshot of router state exposed to entities each refresh."""
+    """Snapshot of router state exposed to entities each refresh.
+
+    Holds references to the coordinator's working collections (not copies);
+    entities read it fresh after every coordinator update.
+    """
 
     system_status: dict = field(default_factory=dict)
     devices: dict[str, ClientDevInfo] = field(default_factory=dict)
@@ -350,7 +354,15 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
 
     async def update_tailscale_state(self) -> None:
         """Make a call to the API to get the tailscale state."""
-        if not await self._api.tailscale_configured():
+        # tailscale_configured() is a plain API call (no _update_platform
+        # wrapper), so guard it: a transient error must not abort the whole
+        # refresh or escape uncaught.
+        try:
+            configured = await self._api.tailscale_configured()
+        except (TimeoutError, NonZeroResponse, TokenError, OSError) as err:
+            _LOGGER.debug("Could not determine tailscale state: %s", err)
+            return
+        if not configured:
             self._tailscale_config = {}
             return
         self._tailscale_config = (
