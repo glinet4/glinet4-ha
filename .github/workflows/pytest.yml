@@ -14,17 +14,17 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.13"
-
-      - name: Install test dependencies
-        # pytest-homeassistant-custom-component pins the matching HA core and
-        # pulls pytest / pytest-asyncio. gli4py is the integration runtime dep.
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest-homeassistant-custom-component==0.13.313 gli4py==0.0.17b3
+          enable-cache: true
 
       - name: Run pytest
-        run: pytest
+        # Ephemeral uv env: no project build required (tests import the
+        # integration via pythonpath), and the lockfile is left untouched.
+        # Versions mirror the `test` dependency group in pyproject.toml.
+        run: >
+          uv run --no-project --python 3.13
+          --with pytest-homeassistant-custom-component==0.13.313
+          --with gli4py==0.0.17b3
+          pytest
