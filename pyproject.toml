@@ -24,6 +24,19 @@ dev = [
     "types-requests<2.32.4.20260108",
     "voluptuous-stubs>=0.1.1",
 ]
+# Test group pulls Home Assistant's test helpers. pytest-homeassistant-custom-
+# component pins an exact HA core version (0.13.313 -> HA 2026.2.0); bump it in
+# lockstep with the HA version you target. gli4py is the integration's runtime
+# dependency (see manifest.json) and is needed to import the package under test.
+test = [
+    "pytest-homeassistant-custom-component==0.13.313",
+    "gli4py==0.0.17b3",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["."]
+testpaths = ["tests"]
 
 [tool.hatch.version]
 source = "vcs"
@@ -132,6 +145,13 @@ ignore = [
     "COM819",
     "ISC001",
 ]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests annotate fixtures with runtime types and use helper functions freely;
+# the type-checking-import and docstring rules add noise without value here.
+"tests/**" = ["TC001", "TC002", "TC003", "D103", "SLF001"]
+# scripts/ are local dev helpers (git-ignored), not a package.
+"scripts/**" = ["TC001", "TC002", "TC003", "INP001", "D103", "SLF001"]
 
 [tool.ruff.lint.flake8-pytest-style]
 fixture-parentheses = false
