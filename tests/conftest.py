@@ -48,8 +48,8 @@ def mock_config_entry() -> MockConfigEntry:
             CONF_USERNAME: "root",
             CONF_PASSWORD: "test-password",
             CONF_API_TOKEN: "test-token",
-            CONF_CONSIDER_HOME: 180,
         },
+        options={CONF_CONSIDER_HOME: 180},
     )
 
 

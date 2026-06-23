@@ -42,6 +42,31 @@ async def test_online_client_is_home(
     assert hass.states.get(entity_id).state == "home"
 
 
+async def test_unnamed_client_excluded(
+    hass: HomeAssistant, init_integration: MockConfigEntry, mock_glinet: AsyncMock
+) -> None:
+    """A client with neither alias nor name is not tracked."""
+    unnamed_mac = "00:11:22:aa:bb:cc"
+    clients = load_json("connected_clients")
+    clients[unnamed_mac] = {
+        "mac": unnamed_mac,
+        "name": "",
+        "online": True,
+        "type": 0,
+        "ip": "192.0.2.50",
+    }
+    mock_glinet.connected_clients.return_value = clients
+
+    coordinator: GLinetUpdateCoordinator = init_integration.runtime_data
+    await coordinator.async_refresh()
+    await hass.async_block_till_done()
+
+    entity_id = er.async_get(hass).async_get_entity_id(
+        "device_tracker", DOMAIN, unnamed_mac
+    )
+    assert entity_id is None
+
+
 async def test_new_client_discovered_on_refresh(
     hass: HomeAssistant, init_integration: MockConfigEntry, mock_glinet: AsyncMock
 ) -> None:
