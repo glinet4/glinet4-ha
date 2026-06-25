@@ -16,6 +16,7 @@ from homeassistant.components.device_tracker import (
     DEFAULT_CONSIDER_HOME,
     DOMAIN as TRACKER_DOMAIN,
 )
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     CONF_HOST,
     CONF_MAC,
@@ -37,7 +38,6 @@ from .utils import adjust_mac
 if TYPE_CHECKING:
     from collections.abc import Callable, Coroutine
 
-    from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_registry import RegistryEntry
 
@@ -75,6 +75,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
 
     def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
         """Initialize the coordinator."""
+        # always_update stays True (default): trackers mutate state in place, so
+        # always_update=False would compare snapshots equal and drop their updates.
         super().__init__(
             hass,
             _LOGGER,
@@ -84,16 +86,13 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         )
         self._options: dict = dict(entry.options)
 
-        # gli4py API
         self._api: GLinet
         self._host: str = entry.data[CONF_HOST]
 
-        # Stable identity
         self._factory_mac: str = "UNKNOWN"
         self._model: str = "UNKNOWN"
         self._sw_v: str = "UNKNOWN"
 
-        # Persistent accumulators referenced by the GLinetData snapshot
         self._devices: dict[str, ClientDevInfo] = {}
         self._connected_devices: int = 0
         self._wifi_ifaces: dict[str, WifiInterface] = {}
@@ -103,14 +102,12 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._tailscale_config: dict = {}
         self._tailscale_connection: bool | None = None
 
-        # Flow control
         self._late_init_complete: bool = False
         self._connect_error: bool = False
         self._token_error: bool = False
-
-    # ------------------------------------------------------------------
-    # Setup / authentication
-    # ------------------------------------------------------------------
+        # Set by _update_platform when any call hits a transport error this
+        # cycle, so _async_update_data can fail the whole refresh
+        self._cycle_failed: bool = False
 
     async def async_setup(self) -> None:
         """Authenticate, load identity and restore known trackers.
@@ -132,7 +129,6 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                     entry.unique_id, entry.original_name
                 )
 
-        # Each new setup should renew the token
         await self.renew_token()
 
     async def async_init(self) -> None:
@@ -198,12 +194,9 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             )
             raise  # Let generic network/timeout exceptions bubble up normally
 
-    # ------------------------------------------------------------------
-    # Polling
-    # ------------------------------------------------------------------
-
     async def _async_update_data(self) -> GLinetData:
         """Fetch a fresh snapshot of router state."""
+        self._cycle_failed = False
         status = await self._update_platform(self._api.router_get_status)
         if status is None:
             # The core health call failed (router unreachable / token not yet
@@ -216,6 +209,12 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         await self.update_wifi_ifaces_state()
         await self.update_wireguard_client_state()
         await self.update_tailscale_state()
+
+        # If any call hit a transport error this cycle, fail the whole refresh
+        if self._cycle_failed:
+            raise UpdateFailed(
+                f"One or more calls to GL-iNet router {self._host} failed"
+            )
 
         return GLinetData(
             system_status=self._system_status,
@@ -232,6 +231,9 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self, api_callable: Callable[[], Coroutine[Any, Any, T]]
     ) -> T | None:
         """Boilerplate to make update requests to api and handle errors."""
+        # TODO: replace the hand-rolled _token_error/_connect_error recovery
+        # with ConfigEntryAuthFailed (auth) + UpdateFailed (transport), letting
+        # the coordinator handle retry/availability (the modern HA pattern).
         try:
             if self._token_error:
                 _LOGGER.debug(
@@ -246,6 +248,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             )
             response = await api_callable()
         except TimeoutError:
+            self._cycle_failed = True
             if not self._connect_error:
                 self._connect_error = True
                 _LOGGER.exception(
@@ -253,6 +256,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 )
             return None
         except TokenError as exc:
+            self._cycle_failed = True
             self._token_error = True
             if not self._connect_error:
                 self._connect_error = True
@@ -263,6 +267,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 )
             return None
         except NonZeroResponse:
+            self._cycle_failed = True
             if not self._connect_error:
                 self._connect_error = True
                 _LOGGER.exception(
@@ -273,6 +278,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             # Bubble up to Home Assistant to pause polling and trigger re-auth
             raise
         except Exception:  # pylint: disable=broad-except  # noqa: BLE001
+            self._cycle_failed = True
             if not self._connect_error:
                 self._connect_error = True
             _LOGGER.exception(
@@ -327,7 +333,6 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
 
             alias = dev_info.get("alias", "").strip()
             name = dev_info.get("name", "").strip()
-            # Skip if both alias and name are empty
             if not alias and not name:
                 continue
 
@@ -342,8 +347,10 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         ifaces = await self._update_platform(self._api.wifi_ifaces_get)
         if not ifaces:
             return
-        for name, iface in ifaces.items():
-            self._wifi_ifaces[name] = WifiInterface(
+        # Rebuild the mapping each poll so an interface that disappears from the
+        # router doesn't linger in the snapshot.
+        self._wifi_ifaces = {
+            name: WifiInterface(
                 name=name,
                 enabled=iface.get("enabled", False),
                 ssid=iface.get("ssid", ""),
@@ -351,6 +358,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 hidden=iface.get("hidden", False),
                 encryption=iface.get("encryption", "UNKNOWN"),
             )
+            for name, iface in ifaces.items()
+        }
 
     async def update_tailscale_state(self) -> None:
         """Make a call to the API to get the tailscale state."""
@@ -380,49 +389,39 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         """Make call to the API to get the wireguard client state."""
         response = await self._update_platform(self._api.wireguard_client_list)
         if not response:
+            # No clients
+            self._wireguard_clients = {}
+            self._wireguard_connections = []
             return
-        for config in response:
-            self._wireguard_clients[config["peer_id"]] = WireGuardClient(
+        clients = {
+            config["peer_id"]: WireGuardClient(
                 name=config["name"],
                 connected=False,
                 group_id=config["group_id"],
                 peer_id=config["peer_id"],
                 tunnel_id=config.get("tunnel_id", None),
             )
+            for config in response
+        }
+        connections: list[WireGuardClient] = []
 
-        if len(self._wireguard_clients) == 0:
-            _LOGGER.debug("No wireguard clients, there is nothing to update")
-            return
-
-        # update whether the currently selected WG client is connected
-        response = await self._update_platform(self._api.wireguard_client_state)
-        if not response:
-            return
-        # 0 is disconnted, 1 is connected, 2 is connecting
-        self._wireguard_connections = []
-        for config in response:
+        states = await self._update_platform(self._api.wireguard_client_state)
+        for config in states or []:
             # OpenVPN configs are sometimes returned leading to errors.
             if config.get("type") != "wireguard":
                 continue
-            # if config["enabled"] is false then status does not exist
-            connected: bool = config.get("status", 0) != 0
+            client = clients.get(config["peer_id"])
+            if client is None:
+                continue
+            client.tunnel_id = config.get("tunnel_id", None)
+            # 0 is disconnected, 1 is connected, 2 is connecting; if
+            # config["enabled"] is false then status does not exist.
+            client.connected = config.get("status", 0) != 0
+            if client.connected:
+                connections.append(client)
 
-            if self._wireguard_clients[config["peer_id"]]:
-                client: WireGuardClient = self._wireguard_clients[config["peer_id"]]
-                client.tunnel_id = config.get("tunnel_id", None)
-                client.connected = connected
-                if connected:
-                    self._wireguard_connections.append(client)
-
-    def update_options(self, new_options: dict) -> bool:
-        """Update options. Returns True if a reload is required."""
-        req_reload = False
-        self._options.update(new_options)
-        return req_reload
-
-    # ------------------------------------------------------------------
-    # Identity properties consumed by entities
-    # ------------------------------------------------------------------
+        self._wireguard_clients = clients
+        self._wireguard_connections = connections
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -464,3 +463,6 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
     def device_name(self) -> str:
         """Return the router's display name (used for the device registry)."""
         return f"GL-iNet {self._model.upper()}"
+
+
+type GlinetConfigEntry = ConfigEntry[GLinetUpdateCoordinator]
