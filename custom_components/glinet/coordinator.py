@@ -433,7 +433,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 (CONNECTION_NETWORK_MAC, format_mac(self.factory_mac)),
                 (CONNECTION_NETWORK_MAC, adjust_mac(self.factory_mac, 1)),
             },
-            name=self.name,
+            name=self.device_name,
             model=self.model or "GL-iNet Router",
             manufacturer="GL-iNet",
             configuration_url=self._host,
@@ -461,6 +461,6 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         return self._model.upper()
 
     @property
-    def name(self) -> str:
-        """Return router name."""
+    def device_name(self) -> str:
+        """Return the router's display name (used for the device registry)."""
         return f"GL-iNet {self._model.upper()}"
