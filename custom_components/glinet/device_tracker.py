@@ -7,17 +7,15 @@ from typing import TYPE_CHECKING, Any
 
 from propcache.api import cached_property
 
-from homeassistant.components.device_tracker import SourceType
-from homeassistant.components.device_tracker.config_entry import ScannerEntity
+from homeassistant.components.device_tracker import ScannerEntity, SourceType
 from homeassistant.core import callback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 if TYPE_CHECKING:
-    from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-    from .coordinator import GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetUpdateCoordinator
     from .models import ClientDevInfo
 
 _LOGGER = logging.getLogger(__name__)
@@ -27,11 +25,11 @@ DEFAULT_DEVICE_NAME = "Unknown device"
 
 async def async_setup_entry(
     _: HomeAssistant,
-    entry: ConfigEntry,
+    entry: GlinetConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up device tracker for GLinet component."""
-    coordinator: GLinetUpdateCoordinator = entry.runtime_data
+    coordinator = entry.runtime_data
     tracked: set[str] = set()
 
     @callback

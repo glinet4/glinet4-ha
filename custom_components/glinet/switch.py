@@ -10,21 +10,20 @@ from homeassistant.const import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 if TYPE_CHECKING:
-    from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetUpdateCoordinator
     from .models import WifiInterface, WireGuardClient
 
 _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
-    _: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up the GL-iNet switches."""
-    coordinator: GLinetUpdateCoordinator = entry.runtime_data
+    coordinator = entry.runtime_data
     data = coordinator.data
     switches: list[WifiApSwitch | WireGuardSwitch | TailscaleSwitch] = []
     if data.wireguard_clients:

@@ -19,11 +19,10 @@ from homeassistant.util import dt as dt_util
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-    from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -150,12 +149,12 @@ SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
 
 
 async def async_setup_entry(
-    _: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+    _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up sensors."""
     _LOGGER.debug("Setting up GL-iNet Sensors")
 
-    coordinator: GLinetUpdateCoordinator = entry.runtime_data
+    coordinator = entry.runtime_data
     sensors: list[SystemStatusSensor | SystemUptimeSensor] = [
         SystemStatusSensor(coordinator=coordinator, entity_description=description)
         for description in SYSTEM_SENSORS
