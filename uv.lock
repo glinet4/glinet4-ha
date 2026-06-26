@@ -956,15 +956,11 @@ wheels = [
 [[package]]
 name = "gli4py"
 version = "0.0.17b3"
-source = { registry = "https://pypi.org/simple" }
+source = { git = "https://github.com/shauneccles/gli4py?rev=dev#80c55f016c119857b4df8dfae39b943aa0ab35d9" }
 dependencies = [
     { name = "libpass" },
     { name = "semver" },
     { name = "uplink" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/f1/35/e23512a2975a051cf7c1ab529aa418eed54d91e347d21dae150307dd3caf/gli4py-0.0.17b3.tar.gz", hash = "sha256:32e6c50f768cd663e8e890626316c4712dc4933b633c9f26557f9d4fcab91b64", size = 20969, upload-time = "2026-03-11T16:41:26.536Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/fd/86/e642d21f640fe349ec0de45dcff8bd77586c664438676c02ce6c4af688c9/gli4py-0.0.17b3-py3-none-any.whl", hash = "sha256:3988059c6737696a5770c9d4829cea240fdc0646db35fde04cead8b63067c6a8", size = 21850, upload-time = "2026-03-11T16:41:25.147Z" },
 ]
 
 [[package]]
@@ -977,6 +973,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "codespell" },
+    { name = "gli4py" },
     { name = "homeassistant-stubs" },
     { name = "mypy" },
     { name = "pygithub" },
@@ -997,6 +994,7 @@ requires-dist = [{ name = "homeassistant", specifier = ">=2025.9.0" }]
 [package.metadata.requires-dev]
 dev = [
     { name = "codespell", specifier = ">=2.4.1" },
+    { name = "gli4py", git = "https://github.com/shauneccles/gli4py?rev=dev" },
     { name = "homeassistant-stubs", specifier = "==2026.2.0" },
     { name = "mypy", specifier = ">=1.16.1" },
     { name = "pygithub", specifier = ">=2.6" },
@@ -1007,7 +1005,7 @@ dev = [
     { name = "voluptuous-stubs", specifier = ">=0.1.1" },
 ]
 test = [
-    { name = "gli4py", specifier = "==0.0.17b3" },
+    { name = "gli4py", git = "https://github.com/shauneccles/gli4py?rev=dev" },
     { name = "pytest-homeassistant-custom-component", specifier = "==0.13.313" },
 ]
 

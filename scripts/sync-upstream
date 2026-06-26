@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Keep this fork's `master` a clean mirror of its upstream, so it stays a tidy
+# base for upstream PRs. Run it in each fork (this integration repo and the
+# gli4py fork).
+#
+#   scripts/sync-upstream
+#
+# Adds an `upstream` remote if missing (resolved from the GitHub parent), fetches,
+# fast-forwards `master`, and pushes it to `origin`. It does NOT touch your
+# feature branches or `dev` — rebase those onto the refreshed `master` yourself
+# when you're ready (see the fork strategy in issue #12).
+set -e
+
+cd "$(dirname "$0")/.."
+
+upstream_repo=$(gh repo view --json parent \
+  --jq 'if .parent then .parent.owner.login + "/" + .parent.name else "" end' 2>/dev/null || true)
+if [ -z "$upstream_repo" ]; then
+  echo "This repo has no GitHub parent (not a fork) — nothing to sync." >&2
+  exit 0
+fi
+
+if ! git remote get-url upstream >/dev/null 2>&1; then
+  echo "Adding 'upstream' remote -> ${upstream_repo}"
+  git remote add upstream "https://github.com/${upstream_repo}.git"
+fi
+
+current=$(git rev-parse --abbrev-ref HEAD)
+git fetch upstream
+git fetch origin
+
+echo "Fast-forwarding master to upstream/master (${upstream_repo})..."
+git checkout master 2>/dev/null || git checkout -b master origin/master
+git merge --ff-only upstream/master
+git push origin master
+git checkout "$current"
+
+echo "master synced. Rebase 'dev'/feature branches onto it when ready."

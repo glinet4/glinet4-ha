@@ -29,6 +29,6 @@ jobs:
         run: >
           uv run --no-project --python 3.13
           --with pytest-homeassistant-custom-component==0.13.313
-          --with gli4py==0.0.17b3
+          --with "gli4py @ git+https://github.com/shauneccles/gli4py@dev"
           --with pytest-cov
           pytest --cov=custom_components/glinet --cov-report=term-missing

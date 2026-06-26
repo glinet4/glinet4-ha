@@ -28,14 +28,22 @@ dev = [
     "ruff>=0.12.0",
     "types-requests<2.32.4.20260108",
     "voluptuous-stubs>=0.1.1",
+    # `dev` branch only: run `scripts/develop` (a live HA against the MT6000)
+    # against our forked gli4py so the integration + library iterate together.
+    "gli4py @ git+https://github.com/shauneccles/gli4py@dev",
 ]
 # Test group pulls Home Assistant's test helpers. pytest-homeassistant-custom-
 # component pins an exact HA core version (0.13.313 -> HA 2026.2.0); bump it in
-# lockstep with the HA version you target. gli4py is the integration's runtime
-# dependency (see manifest.json) and is needed to import the package under test.
+# lockstep with the HA version you target.
+#
+# `dev` branch only: gli4py is installed from our fork's `dev` branch so the
+# integration and the library iterate together (see issue #12). The fork's
+# version is still 0.0.17b3, which matches manifest.json; bump the manifest pin
+# in lockstep when the fork's version changes. On the upstream-bound branches
+# (#150/#151) this stays a plain PyPI pin.
 test = [
     "pytest-homeassistant-custom-component==0.13.313",
-    "gli4py==0.0.17b3",
+    "gli4py @ git+https://github.com/shauneccles/gli4py@dev",
 ]
 
 [tool.pytest.ini_options]
