@@ -17,6 +17,10 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
+# Updates flow through the DataUpdateCoordinator, so the per-entity update
+# throttle is unnecessary (0 = no limit).
+PARALLEL_UPDATES = 0
+
 
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback

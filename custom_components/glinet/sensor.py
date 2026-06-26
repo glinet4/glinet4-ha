@@ -26,6 +26,10 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
+# Updates flow through the DataUpdateCoordinator, so the per-entity update
+# throttle is unnecessary (0 = no limit).
+PARALLEL_UPDATES = 0
+
 # Minimum movement in the derived boot time before a new timestamp is committed
 # to state. Mirrors Home Assistant's UniFi integration, which uses the same
 # tolerance to stop derived uptime timestamps flapping on every poll.

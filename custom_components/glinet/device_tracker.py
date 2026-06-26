@@ -20,6 +20,10 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
+# Updates flow through the DataUpdateCoordinator, so the per-entity update
+# throttle is unnecessary (0 = no limit).
+PARALLEL_UPDATES = 0
+
 DEFAULT_DEVICE_NAME = "Unknown device"
 
 
