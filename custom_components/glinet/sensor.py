@@ -185,7 +185,10 @@ async def async_setup_entry(
 
 def _derive_boot_time(seconds_uptime: float) -> datetime:
     """Derive the boot timestamp from the router's uptime counter."""
-    return dt_util.utcnow() - timedelta(seconds=seconds_uptime)
+    # dt_util.utcnow() is untyped (Any) under the stubs; pin it to datetime so
+    # the subtraction below is typed rather than returning Any.
+    now: datetime = dt_util.utcnow()
+    return now - timedelta(seconds=seconds_uptime)
 
 
 def _boot_time_changed(old: datetime | None, new: datetime) -> bool:

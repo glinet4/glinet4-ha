@@ -44,6 +44,11 @@ async def async_setup_entry(
 class GliSwitchBase(CoordinatorEntity["GLinetUpdateCoordinator"], SwitchEntity):
     """GL-inet switch base class."""
 
+    # Bind the concrete coordinator type so `self.coordinator.data` is typed as
+    # GLinetData rather than Any (the generic parameter isn't propagated to the
+    # attribute by the homeassistant stubs).
+    coordinator: GLinetUpdateCoordinator
+
     _attr_has_entity_name = True
     _attr_entity_category = EntityCategory.CONFIG
 

@@ -57,7 +57,7 @@ class GLinetData:
     devices: dict[str, ClientDevInfo] = field(default_factory=dict)
     connected_devices: int = 0
     wifi_ifaces: dict[str, WifiInterface] = field(default_factory=dict)
-    wireguard_clients: dict[str, WireGuardClient] = field(default_factory=dict)
+    wireguard_clients: dict[int, WireGuardClient] = field(default_factory=dict)
     wireguard_connections: list[WireGuardClient] = field(default_factory=list)
     tailscale_config: dict = field(default_factory=dict)
     tailscale_connection: bool | None = None
@@ -97,7 +97,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._connected_devices: int = 0
         self._wifi_ifaces: dict[str, WifiInterface] = {}
         self._system_status: dict = {}
-        self._wireguard_clients: dict[str, WireGuardClient] = {}
+        self._wireguard_clients: dict[int, WireGuardClient] = {}
         self._wireguard_connections: list[WireGuardClient] = []
         self._tailscale_config: dict = {}
         self._tailscale_connection: bool | None = None
