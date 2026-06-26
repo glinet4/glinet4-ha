@@ -26,9 +26,15 @@ repos:
         entry: uv run mypy
         language: system
         types: [python]
+        # mypy runs in strict mode against the integration source only; the test
+        # suite leans on AsyncMock and pytest fixtures that strict typing can't
+        # model, so it is exercised by pytest rather than mypy.
+        exclude: ^(tests|scripts)/
         require_serial: true
       - id: pylint
         name: pylint
+        # Additional disables (wrong-import-order, unused-argument, pytest fixture
+        # friction) live in [tool.pylint.messages_control] in pyproject.toml.
         entry: uv run pylint --disable=import-error,fixme,line-too-long,invalid-name,too-many-public-methods,abstract-method,overridden-final-method,too-many-instance-attributes,too-many-public-methods,too-few-public-methods,too-many-branches
         language: system
         types: [python]

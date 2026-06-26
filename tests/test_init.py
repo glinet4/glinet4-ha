@@ -8,7 +8,7 @@ from gli4py.error_handling import AuthenticationError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet.coordinator import GLinetUpdateCoordinator
-from homeassistant.config_entries import ConfigEntryState
+from homeassistant.config_entries import SOURCE_REAUTH, ConfigEntryState
 from homeassistant.core import HomeAssistant
 
 
@@ -41,7 +41,7 @@ async def test_setup_retry_when_unreachable(
 async def test_auth_failure_aborts_setup(
     hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_glinet: AsyncMock
 ) -> None:
-    """A token renewal that fails authentication aborts setup."""
+    """A token renewal that fails authentication aborts setup and starts reauth."""
     # login succeeds during async_init (get_api + login) then fails when the
     # coordinator renews the token in async_setup.
     mock_glinet.login.side_effect = [None, None, AuthenticationError("bad creds")]
@@ -51,6 +51,6 @@ async def test_auth_failure_aborts_setup(
     await hass.async_block_till_done()
 
     assert mock_config_entry.state is ConfigEntryState.SETUP_ERROR
-    # NOTE: ConfigEntryAuthFailed is raised, which should drive a reauth flow,
-    # but the config flow has no async_step_reauth yet. Adding a reauth handler
-    # (and asserting the flow here) is tracked as a separate follow-up.
+    # ConfigEntryAuthFailed drives the reauth flow added in config_flow.py.
+    flows = hass.config_entries.flow.async_progress()
+    assert any(flow["context"]["source"] == SOURCE_REAUTH for flow in flows)

@@ -25,8 +25,20 @@ def _online_client() -> tuple[str, dict]:
 async def test_trackers_created(
     hass: HomeAssistant, init_integration: MockConfigEntry
 ) -> None:
-    """A tracker is created for every named client from the router."""
-    trackers = hass.states.async_entity_ids("device_tracker")
+    """A tracker is registered for every named client from the router.
+
+    ``ScannerEntity`` trackers are disabled by default until the user enables
+    them (no ``device_info``/pre-existing device), so assert on the entity
+    registry rather than live states.
+    """
+    registry = er.async_get(hass)
+    trackers = [
+        entry
+        for entry in er.async_entries_for_config_entry(
+            registry, init_integration.entry_id
+        )
+        if entry.domain == "device_tracker"
+    ]
     assert len(trackers) == len(load_json("connected_clients"))
 
 
@@ -35,9 +47,7 @@ async def test_online_client_is_home(
 ) -> None:
     """An online client is reported as home."""
     mac, _ = _online_client()
-    entity_id = er.async_get(hass).async_get_entity_id(
-        "device_tracker", DOMAIN, mac
-    )
+    entity_id = er.async_get(hass).async_get_entity_id("device_tracker", DOMAIN, mac)
     assert entity_id is not None
     assert hass.states.get(entity_id).state == "home"
 
@@ -90,4 +100,6 @@ async def test_new_client_discovered_on_refresh(
         "device_tracker", DOMAIN, new_mac
     )
     assert entity_id is not None
-    assert hass.states.get(entity_id).state == "home"
+    # The tracker is disabled by default, so verify presence via the coordinator
+    # snapshot (the source of the "home" state once the user enables the entity).
+    assert coordinator.data.devices[new_mac].is_connected is True
