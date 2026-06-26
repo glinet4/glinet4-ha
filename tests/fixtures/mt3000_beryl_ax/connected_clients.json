@@ -1,7 +1,7 @@
 {
   "00:11:22:00:00:02": {
     "blocked": false,
-    "iface": "iface-23",
+    "iface": "2.4G",
     "ip": "192.0.2.5",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -22,7 +22,7 @@
   },
   "00:11:22:00:00:03": {
     "blocked": false,
-    "iface": "iface-23",
+    "iface": "2.4G",
     "ip": "192.0.2.6",
     "ipv6": [],
     "last_update_rate": 1782124747,
@@ -43,7 +43,7 @@
   },
   "00:11:22:00:00:04": {
     "blocked": false,
-    "iface": "iface-23",
+    "iface": "2.4G",
     "ip": "192.0.2.7",
     "ipv6": [],
     "last_update_rate": 1781941746,
@@ -64,7 +64,7 @@
   },
   "00:11:22:00:00:05": {
     "blocked": false,
-    "iface": "iface-23",
+    "iface": "2.4G",
     "ip": "192.0.2.8",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -85,7 +85,7 @@
   },
   "00:11:22:00:00:06": {
     "blocked": false,
-    "iface": "iface-23",
+    "iface": "2.4G",
     "ip": "192.0.2.9",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -106,7 +106,7 @@
   },
   "00:11:22:00:00:07": {
     "blocked": false,
-    "iface": "iface-23",
+    "iface": "2.4G",
     "ip": "192.0.2.10",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -127,7 +127,7 @@
   },
   "00:11:22:00:00:08": {
     "blocked": false,
-    "iface": "iface-30",
+    "iface": "5G",
     "ip": "192.0.2.11",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -148,7 +148,7 @@
   },
   "00:11:22:00:00:09": {
     "blocked": false,
-    "iface": "iface-23",
+    "iface": "2.4G",
     "ip": "192.0.2.12",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -169,7 +169,7 @@
   },
   "00:11:22:00:00:0a": {
     "blocked": false,
-    "iface": "iface-23",
+    "iface": "2.4G",
     "ip": "192.0.2.13",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -190,7 +190,7 @@
   },
   "00:11:22:00:00:0b": {
     "blocked": false,
-    "iface": "iface-34",
+    "iface": "cable",
     "ip": "192.0.2.14",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -211,7 +211,7 @@
   },
   "00:11:22:00:00:0c": {
     "blocked": false,
-    "iface": "iface-30",
+    "iface": "5G",
     "ip": "192.0.2.15",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -232,7 +232,7 @@
   },
   "00:11:22:00:00:0d": {
     "blocked": false,
-    "iface": "iface-34",
+    "iface": "cable",
     "ip": "192.0.2.16",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -255,7 +255,7 @@
     "alias": "alias-38",
     "blocked": false,
     "class": "REDACTED",
-    "iface": "iface-23",
+    "iface": "2.4G",
     "ip": "192.0.2.17",
     "ipv6": [],
     "last_update_rate": 1781503476,
@@ -277,7 +277,7 @@
   "00:11:22:00:00:0f": {
     "blocked": false,
     "class": "REDACTED",
-    "iface": "iface-34",
+    "iface": "cable",
     "ip": "192.0.2.18",
     "ipv6": [],
     "last_update_rate": 1781503476,

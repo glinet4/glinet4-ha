@@ -110,3 +110,29 @@ async def test_sensor_filtered_when_value_missing(
     assert _entity_id(hass, profile.factory_mac, "cpu_temp") is None
     # A sensor with data is still created.
     assert _entity_id(hass, profile.factory_mac, "memory_use") is not None
+
+
+async def test_load_average_zero_is_reported(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """A load average of exactly 0 is reported, not dropped as unavailable.
+
+    Regression: the old value_fn short-circuited on the falsy 0 and the sensor
+    went unavailable.
+    """
+    status = profile.load("router_get_status")
+    status["system"]["load_average"] = [0, 0, 0]
+    mock_glinet.router_get_status.return_value = status
+
+    mock_config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    load1 = _entity_id(hass, profile.factory_mac, "load_avg1")
+    assert load1 is not None
+    state = hass.states.get(load1).state
+    assert state not in ("unavailable", "unknown")
+    assert float(state) == 0

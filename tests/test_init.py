@@ -5,11 +5,11 @@ from __future__ import annotations
 from unittest.mock import AsyncMock, patch
 
 from gli4py.error_handling import AuthenticationError
-import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet.const import DOMAIN
 from custom_components.glinet.coordinator import GLinetUpdateCoordinator
+from custom_components.glinet.models import DeviceInterfaceType
 from homeassistant.components.device_tracker import CONF_CONSIDER_HOME
 from homeassistant.config_entries import SOURCE_REAUTH, ConfigEntryState
 from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_PASSWORD, CONF_USERNAME
@@ -62,20 +62,13 @@ async def test_auth_failure_aborts_setup(
     assert any(flow["context"]["source"] == SOURCE_REAUTH for flow in flows)
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="WiFi7/MLO client interface-type index overflow crashes the refresh "
-    "(models.py ClientDevInfo.update). Remove this marker once the lookup is "
-    "made bounds-safe; this then asserts setup succeeds.",
-)
 async def test_wifi7_mlo_client_setup_succeeds(hass: HomeAssistant) -> None:
-    """REGRESSION: a client whose interface type index overflows must not crash.
+    """REGRESSION: a WiFi7/MLO client must not crash setup.
 
-    The ``wifi7_mlo_client`` profile injects a client reporting an interface
-    ``type`` past the end of ``DeviceInterfaceType``; today the unguarded
-    ``list(DeviceInterfaceType)[type]`` lookup raises IndexError, the refresh
-    fails and the entry lands in SETUP_RETRY. This documents the crash and will
-    flip to a real pass (xpass -> strict failure) the moment the bug is fixed.
+    The ``wifi7_mlo_client`` profile has a client reporting an interface ``type``
+    past the end of the legacy index *and* ``iface: "MLO"``. The old
+    ``list(DeviceInterfaceType)[type]`` lookup raised IndexError and the entry
+    landed in SETUP_RETRY; the resolver now loads cleanly and labels it MLO.
     """
     profile = load_profile("wifi7_mlo_client")
     entry = MockConfigEntry(
@@ -96,3 +89,5 @@ async def test_wifi7_mlo_client_setup_succeeds(hass: HomeAssistant) -> None:
     ):
         assert await hass.config_entries.async_setup(entry.entry_id)
     assert entry.state is ConfigEntryState.LOADED
+    mlo_device = entry.runtime_data.data.devices["00:11:22:00:00:99"]
+    assert mlo_device.interface_type is DeviceInterfaceType.MLO

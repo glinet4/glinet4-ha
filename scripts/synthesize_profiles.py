@@ -32,11 +32,10 @@ from typing import Any
 FIXTURES = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
 BASE_ID = "mt6000"
 
-# Interface ``type`` index that overflows DeviceInterfaceType (14 members, valid
-# indices 0-13) in custom_components/glinet/models.py:ClientDevInfo.update. A
-# WiFi7/MLO client reporting this code raises IndexError and crashes setup until
-# that lookup is made bounds-safe.
-CRASHING_INTERFACE_TYPE = 14
+# A legacy integer interface ``type`` code past the end of the resolver's index
+# map (see custom_components/glinet/models.py). The interface resolver falls back
+# to UNKNOWN for it rather than raising - this used to IndexError and crash setup.
+OUT_OF_RANGE_INTERFACE_TYPE = 14
 
 
 def load_base() -> dict[str, Any]:
@@ -212,15 +211,17 @@ def beryl_ax(base: dict[str, Any]) -> None:
 
 
 def wifi7_mlo_client(base: dict[str, Any]) -> None:
-    """Build a profile whose MLO client interface type crashes setup."""
+    """Build a profile with a WiFi7/MLO client (regression for the type crash)."""
     files = copy.deepcopy(base)
+    # An MLO client whose self-describing iface resolves cleanly while its legacy
+    # integer type is out of range - this used to crash setup with an IndexError.
     files["connected_clients"]["00:11:22:00:00:99"] = {
         "mac": "00:11:22:00:00:99",
         "name": "name-wifi7",
         "online": True,
-        "type": CRASHING_INTERFACE_TYPE,
+        "type": OUT_OF_RANGE_INTERFACE_TYPE,
         "ip": "192.0.2.99",
-        "iface": "iface-mlo",
+        "iface": "MLO",
     }
     write_profile(
         "wifi7_mlo_client",
@@ -232,11 +233,10 @@ def wifi7_mlo_client(base: dict[str, Any]) -> None:
             "factory_mac": "00:11:22:00:00:01",
             "title": "GL-iNet MT6000",
             "description": (
-                "Derived from mt6000 with a WiFi7/MLO client whose interface "
-                "type index overflows DeviceInterfaceType, crashing setup until "
-                "models.py makes the lookup bounds-safe."
+                "Derived from mt6000 with a WiFi7/MLO client (iface 'MLO', an "
+                "out-of-range integer type). The interface resolver handles it "
+                "without the historic IndexError."
             ),
-            "expect_setup_crash": True,
             "capabilities": {
                 "has_wireguard": True,
                 "has_tailscale": True,
@@ -245,6 +245,17 @@ def wifi7_mlo_client(base: dict[str, Any]) -> None:
             "endpoints": {
                 "tailscale_configured": True,
                 "tailscale_connection_state": "CONNECTED",
+            },
+            "expected": {
+                **client_counts(files["connected_clients"]),
+                "wifi_iface_count": len(files["wifi_ifaces_get"]),
+                "wireguard_client_count": 1,
+                "wireguard_connection_count": 1,
+            },
+            "semantic": {
+                "cpu_temp": "47",
+                "load_avg1": "0.13",
+                "uptime_seconds": 695435.84,
             },
         },
     )
