@@ -1,15 +1,30 @@
-"""Common fixtures for the GL-iNet integration tests."""
+"""Common fixtures for the GL-iNet integration tests.
+
+The suite is **profile-driven**: every directory under ``tests/fixtures`` that
+contains a ``profile.json`` is a router "profile" (a model + firmware + captured
+API responses). The ``profile`` fixture is parametrized over every such profile,
+so each test that consumes it runs once per profile and its node id gains a
+``[<profile-id>]`` suffix.
+
+Only ``mt6000`` is a real, sanitised capture; the rest are derived by
+``scripts/synthesize_profiles.py``. Drop a new captured profile directory in
+(see ``scripts/capture_fixtures.py``) and the whole suite runs against it with
+no code changes.
+"""
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 import json
 from pathlib import Path
 from typing import Any
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, PropertyMock, patch
 
 from gli4py.enums import TailscaleConnection
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
+from syrupy.assertion import SnapshotAssertion
 
 from custom_components.glinet.const import DOMAIN
 from homeassistant.components.device_tracker import CONF_CONSIDER_HOME
@@ -18,14 +33,63 @@ from homeassistant.core import HomeAssistant
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
-# The sanitised factory MAC captured from the live router (see scripts/
-# capture_fixtures.py). Drives unique_id / device identity in the tests.
-FACTORY_MAC = "00:11:22:00:00:01"
+
+@pytest.fixture
+def snapshot(snapshot: SnapshotAssertion) -> SnapshotAssertion:
+    """Use Home Assistant's snapshot serializer (states, registry entries)."""
+    return snapshot.use_extension(HomeAssistantSnapshotExtension)
 
 
-def load_json(name: str) -> Any:
-    """Load a sanitised API fixture captured from the live router."""
-    return json.loads((FIXTURES / f"{name}.json").read_text())
+@dataclass(frozen=True)
+class Profile:
+    """A captured (or synthesized) router profile and its expectations."""
+
+    id: str
+    directory: Path
+    manifest: dict[str, Any]
+
+    def load(self, name: str) -> Any | None:
+        """Return an endpoint fixture, or None when this profile omits it."""
+        path = self.directory / f"{name}.json"
+        if not path.is_file():
+            return None
+        return json.loads(path.read_text(encoding="utf-8"))
+
+    @property
+    def factory_mac(self) -> str:
+        """Return the router's sanitised factory MAC (the entry unique_id)."""
+        return self.manifest["factory_mac"]
+
+
+def load_profile(profile_id: str) -> Profile:
+    """Load a single profile by directory id (for non-parametrized tests)."""
+    directory = FIXTURES / profile_id
+    manifest = json.loads((directory / "profile.json").read_text(encoding="utf-8"))
+    return Profile(profile_id, directory, manifest)
+
+
+def _discover_profiles() -> list[str]:
+    """Return the matrix profile ids (those a healthy setup can load).
+
+    Profiles flagged ``expect_setup_crash`` reproduce a real crash and would
+    blow up every test, so they are excluded from the matrix and exercised by a
+    dedicated regression test instead.
+    """
+    ids = []
+    for path in sorted(FIXTURES.iterdir()):
+        manifest = path / "profile.json"
+        if not manifest.is_file():
+            continue
+        if json.loads(manifest.read_text(encoding="utf-8")).get("expect_setup_crash"):
+            continue
+        ids.append(path.name)
+    return ids
+
+
+@pytest.fixture(params=_discover_profiles())
+def profile(request: pytest.FixtureRequest) -> Profile:
+    """Parametrized router profile; consuming tests run once per profile."""
+    return load_profile(request.param)
 
 
 @pytest.fixture(autouse=True)
@@ -37,12 +101,37 @@ def auto_enable_custom_integrations(
 
 
 @pytest.fixture
-def mock_config_entry() -> MockConfigEntry:
-    """Return a mock config entry for the integration."""
+def entity_registry_enabled_by_default() -> Any:
+    """Force every entity (incl. disabled-by-default trackers) to be enabled.
+
+    ``ScannerEntity`` device trackers and the Tailscale switch are disabled by
+    default, but snapshot_platform asserts every entity is enabled, so patch the
+    default on both the base entity and ScannerEntity. Must wrap setup, so
+    request it before the integration is configured.
+    """
+    with (
+        patch(
+            "homeassistant.helpers.entity.Entity.entity_registry_enabled_default",
+            new_callable=PropertyMock,
+            return_value=True,
+        ),
+        patch(
+            "homeassistant.components.device_tracker.config_entry."
+            "ScannerEntity.entity_registry_enabled_default",
+            new_callable=PropertyMock,
+            return_value=True,
+        ),
+    ):
+        yield
+
+
+@pytest.fixture
+def mock_config_entry(profile: Profile) -> MockConfigEntry:
+    """Return a mock config entry built from the active profile's manifest."""
     return MockConfigEntry(
         domain=DOMAIN,
-        title="GL-iNet MT6000",
-        unique_id=FACTORY_MAC,
+        title=profile.manifest["title"],
+        unique_id=profile.factory_mac,
         data={
             CONF_HOST: "http://192.168.8.1",
             CONF_USERNAME: "root",
@@ -53,18 +142,32 @@ def mock_config_entry() -> MockConfigEntry:
     )
 
 
-def build_mock_api() -> AsyncMock:
-    """Build an AsyncMock GLinet client backed by the captured fixtures."""
+def build_mock_api(profile: Profile) -> AsyncMock:
+    """Build an AsyncMock GLinet client backed by a profile's fixtures.
+
+    Endpoints a profile omits are coerced to the *type the real client returns*
+    (``{}`` / ``[]`` / ``False`` / ``DISCONNECTED``). This matters: an unset
+    AsyncMock attribute returns a truthy child mock, which would make a
+    feature-absent profile silently pass on garbage instead of exercising the
+    real "feature absent" code path.
+    """
     api = AsyncMock()
-    api.router_info.return_value = load_json("router_info")
-    api.router_get_status.return_value = load_json("router_get_status")
-    api.connected_clients.return_value = load_json("connected_clients")
-    api.wifi_ifaces_get.return_value = load_json("wifi_ifaces_get")
-    api.tailscale_configured.return_value = True
-    api._tailscale_get_config.return_value = load_json("tailscale_get_config")
-    api.tailscale_connection_state.return_value = TailscaleConnection.CONNECTED
-    api.wireguard_client_list.return_value = load_json("wireguard_client_list")
-    api.wireguard_client_state.return_value = load_json("wireguard_client_state")
+    api.router_info.return_value = profile.load("router_info")
+    api.router_get_status.return_value = profile.load("router_get_status")
+    api.connected_clients.return_value = profile.load("connected_clients") or {}
+    api.wifi_ifaces_get.return_value = profile.load("wifi_ifaces_get") or {}
+
+    endpoints = profile.manifest.get("endpoints", {})
+    api.tailscale_configured.return_value = endpoints.get("tailscale_configured", False)
+    api._tailscale_get_config.return_value = profile.load("tailscale_get_config") or {}
+    connection_state = endpoints.get("tailscale_connection_state", "DISCONNECTED")
+    api.tailscale_connection_state.return_value = TailscaleConnection[connection_state]
+
+    api.wireguard_client_list.return_value = profile.load("wireguard_client_list") or []
+    api.wireguard_client_state.return_value = (
+        profile.load("wireguard_client_state") or []
+    )
+
     # Action endpoints (no useful return value).
     api.router_reboot.return_value = None
     api.wifi_iface_set_enabled.return_value = None
@@ -77,17 +180,15 @@ def build_mock_api() -> AsyncMock:
 
 
 @pytest.fixture
-def mock_api() -> AsyncMock:
-    """Return a fresh mock GLinet API client."""
-    return build_mock_api()
+def mock_api(profile: Profile) -> AsyncMock:
+    """Return a fresh mock GLinet API client for the active profile."""
+    return build_mock_api(profile)
 
 
 @pytest.fixture
 def mock_glinet(mock_api: AsyncMock) -> AsyncMock:
     """Patch the GLinet client used by the coordinator to the mock API."""
-    with patch(
-        "custom_components.glinet.coordinator.GLinet", return_value=mock_api
-    ):
+    with patch("custom_components.glinet.coordinator.GLinet", return_value=mock_api):
         yield mock_api
 
 

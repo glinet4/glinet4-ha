@@ -10,15 +10,18 @@ from custom_components.glinet.const import DOMAIN
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
-from .conftest import FACTORY_MAC
+from .conftest import Profile
 
 
 async def test_reboot_button_presses_api(
-    hass: HomeAssistant, init_integration: MockConfigEntry, mock_glinet: AsyncMock
+    hass: HomeAssistant,
+    init_integration: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
 ) -> None:
     """Pressing the reboot button calls the router reboot endpoint."""
     entity_id = er.async_get(hass).async_get_entity_id(
-        "button", DOMAIN, f"glinet_button/{FACTORY_MAC}/reboot"
+        "button", DOMAIN, f"glinet_button/{profile.factory_mac}/reboot"
     )
     assert entity_id is not None
 

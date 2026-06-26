@@ -2,14 +2,20 @@
 
 from __future__ import annotations
 
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, patch
 
 from gli4py.error_handling import AuthenticationError
+import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from custom_components.glinet.const import DOMAIN
 from custom_components.glinet.coordinator import GLinetUpdateCoordinator
+from homeassistant.components.device_tracker import CONF_CONSIDER_HOME
 from homeassistant.config_entries import SOURCE_REAUTH, ConfigEntryState
+from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
+
+from .conftest import build_mock_api, load_profile
 
 
 async def test_setup_and_unload(
@@ -54,3 +60,39 @@ async def test_auth_failure_aborts_setup(
     # ConfigEntryAuthFailed drives the reauth flow added in config_flow.py.
     flows = hass.config_entries.flow.async_progress()
     assert any(flow["context"]["source"] == SOURCE_REAUTH for flow in flows)
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason="WiFi7/MLO client interface-type index overflow crashes the refresh "
+    "(models.py ClientDevInfo.update). Remove this marker once the lookup is "
+    "made bounds-safe; this then asserts setup succeeds.",
+)
+async def test_wifi7_mlo_client_setup_succeeds(hass: HomeAssistant) -> None:
+    """REGRESSION: a client whose interface type index overflows must not crash.
+
+    The ``wifi7_mlo_client`` profile injects a client reporting an interface
+    ``type`` past the end of ``DeviceInterfaceType``; today the unguarded
+    ``list(DeviceInterfaceType)[type]`` lookup raises IndexError, the refresh
+    fails and the entry lands in SETUP_RETRY. This documents the crash and will
+    flip to a real pass (xpass -> strict failure) the moment the bug is fixed.
+    """
+    profile = load_profile("wifi7_mlo_client")
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        unique_id=profile.factory_mac,
+        data={
+            CONF_HOST: "http://192.168.8.1",
+            CONF_USERNAME: "root",
+            CONF_PASSWORD: "test-password",
+            CONF_API_TOKEN: "test-token",
+        },
+        options={CONF_CONSIDER_HOME: 180},
+    )
+    entry.add_to_hass(hass)
+    with patch(
+        "custom_components.glinet.coordinator.GLinet",
+        return_value=build_mock_api(profile),
+    ):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+    assert entry.state is ConfigEntryState.LOADED

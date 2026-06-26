@@ -1,4 +1,11 @@
-"""Tests for GL-iNet device trackers."""
+"""Behavioural tests for GL-iNet device trackers.
+
+Tracker states and registry entries are covered by ``tests/test_snapshots.py``;
+this module keeps the discovery behaviour - one tracker per named client,
+unnamed clients excluded, and clients appearing after setup picked up on the
+next refresh. ``ScannerEntity`` trackers are disabled by default, so these
+assert on the registry / coordinator snapshot rather than live states.
+"""
 
 from __future__ import annotations
 
@@ -11,26 +18,13 @@ from custom_components.glinet.coordinator import GLinetUpdateCoordinator
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
-from .conftest import load_json
-
-
-def _online_client() -> tuple[str, dict]:
-    clients = load_json("connected_clients")
-    for mac, info in clients.items():
-        if info.get("online"):
-            return mac, info
-    raise AssertionError("fixture has no online client")
+from .conftest import Profile
 
 
 async def test_trackers_created(
-    hass: HomeAssistant, init_integration: MockConfigEntry
+    hass: HomeAssistant, init_integration: MockConfigEntry, profile: Profile
 ) -> None:
-    """A tracker is registered for every named client from the router.
-
-    ``ScannerEntity`` trackers are disabled by default until the user enables
-    them (no ``device_info``/pre-existing device), so assert on the entity
-    registry rather than live states.
-    """
+    """A tracker is registered for every named client from the router."""
     registry = er.async_get(hass)
     trackers = [
         entry
@@ -39,25 +33,18 @@ async def test_trackers_created(
         )
         if entry.domain == "device_tracker"
     ]
-    assert len(trackers) == len(load_json("connected_clients"))
-
-
-async def test_online_client_is_home(
-    hass: HomeAssistant, init_integration: MockConfigEntry
-) -> None:
-    """An online client is reported as home."""
-    mac, _ = _online_client()
-    entity_id = er.async_get(hass).async_get_entity_id("device_tracker", DOMAIN, mac)
-    assert entity_id is not None
-    assert hass.states.get(entity_id).state == "home"
+    assert len(trackers) == profile.manifest["expected"]["tracked_device_count"]
 
 
 async def test_unnamed_client_excluded(
-    hass: HomeAssistant, init_integration: MockConfigEntry, mock_glinet: AsyncMock
+    hass: HomeAssistant,
+    init_integration: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
 ) -> None:
     """A client with neither alias nor name is not tracked."""
     unnamed_mac = "00:11:22:aa:bb:cc"
-    clients = load_json("connected_clients")
+    clients = profile.load("connected_clients")
     clients[unnamed_mac] = {
         "mac": unnamed_mac,
         "name": "",
@@ -78,11 +65,14 @@ async def test_unnamed_client_excluded(
 
 
 async def test_new_client_discovered_on_refresh(
-    hass: HomeAssistant, init_integration: MockConfigEntry, mock_glinet: AsyncMock
+    hass: HomeAssistant,
+    init_integration: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
 ) -> None:
     """A client appearing after setup is added on the next refresh."""
     new_mac = "00:11:22:99:99:99"
-    clients = load_json("connected_clients")
+    clients = profile.load("connected_clients")
     clients[new_mac] = {
         "mac": new_mac,
         "name": "new-device",

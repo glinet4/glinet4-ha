@@ -155,7 +155,8 @@ ignore = [
 # Tests annotate fixtures with runtime types and use helper functions freely;
 # the type-checking-import and docstring rules add noise without value here.
 "tests/**" = ["TC001", "TC002", "TC003", "D103", "SLF001"]
-# scripts/ are local dev helpers (git-ignored), not a package.
+# scripts/ are committed standalone CLIs, not an importable package (INP001),
+# and reach into the gli4py client internals to capture fixtures (SLF001).
 "scripts/**" = ["TC001", "TC002", "TC003", "INP001", "D103", "SLF001"]
 
 [tool.ruff.lint.flake8-pytest-style]

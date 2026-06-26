@@ -3,7 +3,7 @@
     "architecture": "REDACTED",
     "hostname": "hostname-1",
     "kernel_version": "REDACTED",
-    "model": "GL.iNet GL-MT6000",
+    "model": "GL.iNet GL-MT3000",
     "openwrt_version": "REDACTED"
   },
   "country_code": "REDACTED",
@@ -12,7 +12,7 @@
   "device_type": 2,
   "firmware_date": "REDACTED",
   "firmware_type": "REDACTED",
-  "firmware_version": "4.9.0",
+  "firmware_version": "4.7.0",
   "hardware_feature": {
     "bluetooth": false,
     "build_in_modem": "",
@@ -45,8 +45,8 @@
   },
   "hardware_version": "",
   "hidden_features": [],
-  "mac": "00:11:22:00:00:01",
-  "model": "mt6000",
+  "mac": "00:11:22:00:03:01",
+  "model": "mt3000",
   "sn": "REDACTED",
   "sn_bak": "REDACTED",
   "software_feature": {

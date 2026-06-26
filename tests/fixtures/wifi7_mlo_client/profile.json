@@ -1,0 +1,18 @@
+{
+  "id": "wifi7_mlo_client",
+  "model": "MT6000",
+  "firmware_version": "4.9.0",
+  "factory_mac": "00:11:22:00:00:01",
+  "title": "GL-iNet MT6000",
+  "description": "Derived from mt6000 with a WiFi7/MLO client whose interface type index overflows DeviceInterfaceType, crashing setup until models.py makes the lookup bounds-safe.",
+  "expect_setup_crash": true,
+  "capabilities": {
+    "has_wireguard": true,
+    "has_tailscale": true,
+    "tailscale_connected": true
+  },
+  "endpoints": {
+    "tailscale_configured": true,
+    "tailscale_connection_state": "CONNECTED"
+  }
+}
