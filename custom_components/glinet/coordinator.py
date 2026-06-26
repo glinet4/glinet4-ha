@@ -325,7 +325,9 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
 
         for device_mac, device in self._devices.items():
             dev_info = wrt_devices.get(device_mac)
-            device.update(dev_info, consider_home)
+            device.update(
+                dev_info, consider_home, model=self._model, firmware=self._sw_v
+            )
 
         for device_mac, dev_info in wrt_devices.items():
             if device_mac in self._devices:
@@ -337,7 +339,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 continue
 
             device = ClientDevInfo(device_mac)
-            device.update(dev_info)
+            device.update(dev_info, model=self._model, firmware=self._sw_v)
             self._devices[device_mac] = device
 
         self._connected_devices = len(wrt_devices)
