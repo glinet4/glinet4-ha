@@ -64,9 +64,10 @@ up automatically. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 - [ ] Enable support for `https` as well as `http` and consider enabling it by default.
 - [ ] Static type gli4py and then enable static typing on this repo
 - [ ] Add features:
-  - Upload/Download sensors
-  - Internet reachable sensors (remember that API timesout when internet not reachable)
-  - Public IP sensor
+  - [x] Upload/Download sensors (WAN throughput)
+  - [ ] Internet reachable sensors (remember that API timesout when internet not reachable)
+  - [x] Public IP sensor (WAN IP)
+  - [x] Tailscale status + re-auth URL, exit-node select
 - [ ] Features under consideration
   - Making changes to the VPN client policies would be cool to automate switching on/off VPN use per device in automations. Useful for bypassing geofilters for example
   - Firmware upgrades https://dev.gl-inet.com/api/#api-firmware (should have warnings)
@@ -80,6 +81,7 @@ up automatically. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 
 - Beryl MT3000
 - Convexa B1300
+- Flint 2 MT6000 (firmware 4.9.0)
 
 ## Depends on
 
