@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/glinet4/branding/main/assets/dark_logo.png">
+    <img alt="glinet4" src="https://raw.githubusercontent.com/glinet4/branding/main/assets/logo.png" width="300">
+  </picture>
+</p>
+
 # GL.iNet (glinet4) — Home Assistant integration
 
 A Home Assistant custom integration for GL.iNet routers running firmware 4.x, using their local [JSON-RPC API](https://dev.gl-inet.com/api/). Powered by the [`glinet4`](https://github.com/glinet4/glinet4) Python library.
