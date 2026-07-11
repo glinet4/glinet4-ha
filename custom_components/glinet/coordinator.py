@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 import logging
 from typing import TYPE_CHECKING, Any, TypeVar
 
@@ -31,6 +32,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, format_mac
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from .const import API_PATH, DOMAIN, SCAN_INTERVAL
 from .models import ClientDevInfo, WifiInterface, WireGuardClient
@@ -44,6 +46,10 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 T = TypeVar("T")
+
+# The online firmware check talks to GL.iNet's update servers, so it runs far
+# less often than the router poll.
+FIRMWARE_CHECK_INTERVAL = timedelta(hours=6)
 
 
 @dataclass
@@ -67,6 +73,7 @@ class GLinetData:
     tailscale_exit_nodes: list[dict] = field(default_factory=list)
     wan_status: dict = field(default_factory=dict)
     wan_speed: dict = field(default_factory=dict)
+    firmware_check: dict = field(default_factory=dict)
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -112,6 +119,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._tailscale_exit_nodes: list[dict] = []
         self._wan_status: dict = {}
         self._wan_speed: dict = {}
+        self._firmware_check: dict = {}
+        self._firmware_check_at: datetime | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -225,6 +234,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         await self.update_wireguard_client_state()
         await self.update_tailscale_state()
         await self.update_wan_state()
+        await self.update_firmware_check()
 
         # If any call hit a transport error this cycle, fail the whole refresh
         if self._cycle_failed:
@@ -246,6 +256,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             tailscale_exit_nodes=self._tailscale_exit_nodes,
             wan_status=self._wan_status,
             wan_speed=self._wan_speed,
+            firmware_check=self._firmware_check,
         )
 
     async def _update_platform(
@@ -472,6 +483,21 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._wan_status = status or {}
         if speed is not None:
             self._wan_speed = speed or {}
+
+    async def update_firmware_check(self) -> None:
+        """Check online for a firmware update, at most every 6 hours."""
+        now = dt_util.utcnow()
+        if (
+            self._firmware_check_at is not None
+            and now - self._firmware_check_at < FIRMWARE_CHECK_INTERVAL
+        ):
+            return
+        self._firmware_check_at = now
+        check = await self._call_optional(
+            "firmware_check_online", self._api.firmware_check_online
+        )
+        if check is not None:
+            self._firmware_check = check
 
     async def update_wireguard_client_state(self) -> None:
         """Make call to the API to get the wireguard client state."""

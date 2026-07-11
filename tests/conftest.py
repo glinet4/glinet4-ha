@@ -190,6 +190,9 @@ def build_mock_api(profile: Profile) -> AsyncMock:
     # NonZeroResponse there, which the coordinator treats as "unsupported".
     _wire_optional_endpoint(api.wan_status, profile.load("wan_status"))
     _wire_optional_endpoint(api.wan_speed, profile.load("wan_speed"))
+    _wire_optional_endpoint(
+        api.firmware_check_online, profile.load("firmware_check_online")
+    )
 
     # Action endpoints (no useful return value).
     api.router_reboot.return_value = None

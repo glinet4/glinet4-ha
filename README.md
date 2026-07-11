@@ -16,6 +16,7 @@ Contributions are welcome, for ideas see the TODO list below or the various `#TO
 - WAN sensors: public IP (with gateway/DNS/protocol attributes) and download/upload throughput (on firmware that exposes the WAN endpoints)
 - Tailscale status sensor (disconnected / login required / authorization required / connected / connecting) with the login URL as an attribute when the router needs re-authentication
 - Tailscale exit-node select: route the router's traffic through any exit node on your tailnet (or none)
+- Firmware update entity: shows when GL.iNet publishes a newer firmware (checked at most every 6 hours; read-only by design)
 - Coming soon:
   - On/off control of WiFi Networks
 
@@ -68,6 +69,7 @@ up automatically. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
   - [ ] Internet reachable sensors (remember that API timesout when internet not reachable)
   - [x] Public IP sensor (WAN IP)
   - [x] Tailscale status + re-auth URL, exit-node select
+  - [x] Firmware update available indicator (update entity)
 - [ ] Features under consideration
   - Making changes to the VPN client policies would be cool to automate switching on/off VPN use per device in automations. Useful for bypassing geofilters for example
   - Firmware upgrades https://dev.gl-inet.com/api/#api-firmware (should have warnings)

@@ -32,6 +32,7 @@ PLATFORMS = [
     Platform.SELECT,
     Platform.SENSOR,
     Platform.SWITCH,
+    Platform.UPDATE,
 ]
 
 
@@ -62,7 +63,7 @@ async def test_entities(
         # A platform may legitimately create nothing (e.g. select on a profile
         # without tailscale); snapshot_platform asserts non-empty, so assert
         # the absence explicitly instead.
-        assert platform is Platform.SELECT
+        assert platform in (Platform.SELECT, Platform.UPDATE)
         return
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)
