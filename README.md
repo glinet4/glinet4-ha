@@ -18,6 +18,7 @@ Contributions are welcome, for ideas see the TODO list below or the various `#TO
 - Tailscale exit-node select: route the router's traffic through any exit node on your tailnet (or none)
 - Firmware update entity: shows when GL.iNet publishes a newer firmware (checked at most every 6 hours; read-only by design)
 - LED switch: turn the router's LEDs on or off
+- Internet connectivity binary sensor (from the router's own per-interface online state)
 - Coming soon:
   - On/off control of WiFi Networks
 
@@ -67,7 +68,7 @@ up automatically. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 - [ ] Static type gli4py and then enable static typing on this repo
 - [ ] Add features:
   - [x] Upload/Download sensors (WAN throughput)
-  - [ ] Internet reachable sensors (remember that API timesout when internet not reachable)
+  - [x] Internet reachable sensor (binary_sensor from system get_network_status)
   - [x] Public IP sensor (WAN IP)
   - [x] Tailscale status + re-auth URL, exit-node select
   - [x] Firmware update available indicator (update entity)

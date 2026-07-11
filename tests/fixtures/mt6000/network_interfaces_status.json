@@ -1,0 +1,12 @@
+[
+  { "online": true, "up": false, "interface": "modem_1_1_2_6" },
+  { "online": true, "up": false, "interface": "modem_1_1_2" },
+  { "online": true, "up": false, "interface": "tethering" },
+  { "online": true, "up": false, "interface": "wan6" },
+  { "online": true, "up": false, "interface": "wwan6" },
+  { "online": true, "up": false, "interface": "tethering6" },
+  { "online": true, "up": false, "interface": "wwan" },
+  { "online": true, "up": false, "interface": "secondwan" },
+  { "online": true, "up": true, "interface": "wan" },
+  { "online": true, "up": false, "interface": "secondwan6" }
+]

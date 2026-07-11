@@ -27,6 +27,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
 PLATFORMS = [
+    Platform.BINARY_SENSOR,
     Platform.BUTTON,
     Platform.DEVICE_TRACKER,
     Platform.SELECT,
@@ -63,7 +64,11 @@ async def test_entities(
         # A platform may legitimately create nothing (e.g. select on a profile
         # without tailscale); snapshot_platform asserts non-empty, so assert
         # the absence explicitly instead.
-        assert platform in (Platform.SELECT, Platform.UPDATE)
+        assert platform in (
+            Platform.BINARY_SENSOR,
+            Platform.SELECT,
+            Platform.UPDATE,
+        )
         return
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)

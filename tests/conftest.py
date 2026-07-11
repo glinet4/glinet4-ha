@@ -194,6 +194,9 @@ def build_mock_api(profile: Profile) -> AsyncMock:
         api.firmware_check_online, profile.load("firmware_check_online")
     )
     _wire_optional_endpoint(api.led_config, profile.load("led_config"))
+    _wire_optional_endpoint(
+        api.network_interfaces_status, profile.load("network_interfaces_status")
+    )
 
     # Action endpoints (no useful return value).
     api.router_reboot.return_value = None

@@ -11,7 +11,15 @@ if TYPE_CHECKING:
 
     from .coordinator import GlinetConfigEntry
 
-PLATFORMS = ["button", "device_tracker", "select", "sensor", "switch", "update"]
+PLATFORMS = [
+    "binary_sensor",
+    "button",
+    "device_tracker",
+    "select",
+    "sensor",
+    "switch",
+    "update",
+]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: GlinetConfigEntry) -> bool:

@@ -75,6 +75,7 @@ class GLinetData:
     wan_speed: dict = field(default_factory=dict)
     firmware_check: dict = field(default_factory=dict)
     led_config: dict = field(default_factory=dict)
+    network_interfaces: list[dict] = field(default_factory=list)
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -123,6 +124,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._firmware_check: dict = {}
         self._firmware_check_at: datetime | None = None
         self._led_config: dict = {}
+        self._network_interfaces: list[dict] = []
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -261,6 +263,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             wan_speed=self._wan_speed,
             firmware_check=self._firmware_check,
             led_config=self._led_config,
+            network_interfaces=self._network_interfaces,
         )
 
     async def _update_platform(
@@ -479,14 +482,19 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         The endpoints only exist on newer firmware and are probed
         independently; on transient errors the previous values are kept.
         """
-        status, speed = await asyncio.gather(
+        status, speed, interfaces = await asyncio.gather(
             self._call_optional("wan_status", self._api.wan_status),
             self._call_optional("wan_speed", self._api.wan_speed),
+            self._call_optional(
+                "network_interfaces_status", self._api.network_interfaces_status
+            ),
         )
         if status is not None:
             self._wan_status = status or {}
         if speed is not None:
             self._wan_speed = speed or {}
+        if interfaces is not None:
+            self._network_interfaces = interfaces or []
 
     async def update_led_state(self) -> None:
         """Poll the LED configuration; absent on some firmware."""
