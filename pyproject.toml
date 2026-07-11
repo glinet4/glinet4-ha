@@ -26,7 +26,7 @@ dev = [
     "pylint>=3.3.7",
     "pytest>=8.3.5",
     "ruff>=0.12.0",
-    "types-requests<2.32.4.20260108",
+    "types-requests<2.33.0.20260519",
     "voluptuous-stubs>=0.1.1",
     # `dev` branch only: run `scripts/develop` (a live HA against the MT6000)
     # against our glinet4 library so the integration + library iterate together.
