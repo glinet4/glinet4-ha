@@ -1,16 +1,18 @@
-[build-system]
-requires = ["hatchling", "hatch-vcs"]
-build-backend = "hatchling.build"
-
 [project]
-name = "glinet"
-description = "Home Assistant Google Home community integration"
+name = "glinet4-ha"
+version = "0.1.0"
+description = "GL.iNet (glinet4) Home Assistant integration"
 readme = "README.md"
 requires-python = ">=3.13.2"
-dynamic = ["version"]
 dependencies = [
     "homeassistant>=2025.9.0",
 ]
+
+# This repo is a Home Assistant custom integration installed by copying
+# custom_components/glinet4; it is never built or pip-installed, so tell uv not
+# to treat it as a buildable package (it only provides the dev/test env).
+[tool.uv]
+package = false
 
 [dependency-groups]
 # Pin homeassistant-stubs to the SAME Home Assistant core version that the test
@@ -51,8 +53,6 @@ asyncio_mode = "auto"
 pythonpath = ["."]
 testpaths = ["tests"]
 
-[tool.hatch.version]
-source = "vcs"
 
 [tool.ruff]
 required-version = ">=0.11.0"
@@ -175,6 +175,11 @@ mark-parentheses = false
 max-complexity = 25
 
 [tool.pylint.main]
+# Integration package (custom_components/glinet4) shares a basename with the
+# glinet4 library. Anchor the source root at the repo so modules are named
+# "custom_components.glinet4.*" and a bare "glinet4" import resolves to the
+# library (mirrors mypy explicit_package_bases).
+source-roots = ["."]
 py-version = "3.13"
 load-plugins = [
     "pylint.extensions.code_style",

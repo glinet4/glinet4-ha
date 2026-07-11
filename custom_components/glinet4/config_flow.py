@@ -119,7 +119,7 @@ class TestingHub:
             )
 
         else:
-            self.router_mac = res[CONF_MAC]
+            self.router_mac = res["mac"]
             self.router_model = res["model"]
         return bool(self.router.logged_in)
 

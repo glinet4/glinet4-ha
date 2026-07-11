@@ -7,8 +7,13 @@ from datetime import datetime, timedelta
 from enum import StrEnum
 from functools import cache
 import logging
+from typing import TYPE_CHECKING
 
 from homeassistant.util import dt as dt_util
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from typing import Any
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -114,7 +119,7 @@ def _log_unrecognised_interface(
 
 
 def interface_type_from_client(
-    dev_info: dict, *, model: str = "", firmware: str = ""
+    dev_info: Mapping[str, Any], *, model: str = "", firmware: str = ""
 ) -> DeviceInterfaceType:
     """Best-effort interface resolution from a client's dev_info, never raising.
 
@@ -185,7 +190,7 @@ class ClientDevInfo:
 
     def update(
         self,
-        dev_info: dict | None = None,
+        dev_info: Mapping[str, Any] | None = None,
         consider_home: int = 0,
         *,
         model: str = "",

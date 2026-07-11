@@ -6,7 +6,7 @@ import asyncio
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 import logging
-from typing import TYPE_CHECKING, Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 from uplink import AiohttpClient
 
@@ -19,13 +19,7 @@ from homeassistant.components.device_tracker import (
     DOMAIN as TRACKER_DOMAIN,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import (
-    CONF_HOST,
-    CONF_MAC,
-    CONF_MODEL,
-    CONF_PASSWORD,
-    CONF_USERNAME,
-)
+from homeassistant.const import CONF_HOST, CONF_PASSWORD, CONF_USERNAME
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers import entity_registry as er, issue_registry as ir
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -193,9 +187,9 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             raise ConfigEntryNotReady from exc
 
         _LOGGER.debug("Router info retrieved: %s", router_info)
-        self._model = router_info[CONF_MODEL]
+        self._model = router_info["model"]
         self._sw_v = router_info["firmware_version"]
-        self._factory_mac = router_info[CONF_MAC]
+        self._factory_mac = router_info["mac"]
         self._late_init_complete = True
 
     async def get_api(self) -> GLinet:
@@ -391,8 +385,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             if device_mac in self._devices:
                 continue
 
-            alias = dev_info.get("alias", "").strip()
-            name = dev_info.get("name", "").strip()
+            alias = str(dev_info.get("alias", "")).strip()
+            name = str(dev_info.get("name", "")).strip()
             if not alias and not name:
                 continue
 
@@ -438,13 +432,11 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._tailscale_auth_url = None
             self._tailscale_exit_nodes = []
             return
-        self._tailscale_config = (
-            await self._update_platform(
-                self._api._tailscale_get_config  # pylint: disable=protected-access  # noqa: SLF001
-            )
-            or {}
+        ts_config = await self._update_platform(
+            self._api._tailscale_get_config  # pylint: disable=protected-access  # noqa: SLF001
         )
-        response: TailscaleConnection = await self._update_platform(
+        self._tailscale_config = dict(ts_config) if isinstance(ts_config, dict) else {}
+        response: TailscaleConnection | None = await self._update_platform(
             self._api.tailscale_connection_state
         )
         self._tailscale_connection = response == TailscaleConnection.CONNECTED
@@ -453,7 +445,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             "tailscale_exit_node_list", self._api.tailscale_exit_node_list
         )
         if exit_nodes is not None:
-            self._tailscale_exit_nodes = exit_nodes
+            self._tailscale_exit_nodes = [dict(n) for n in exit_nodes]
         self._tailscale_auth_url = None
         if response in (
             TailscaleConnection.LOGIN_REQUIRED,
@@ -510,11 +502,11 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._call_optional("network_mode", self._api.network_mode),
         )
         if status is not None:
-            self._wan_status = status or {}
+            self._wan_status = dict(status)
         if speed is not None:
-            self._wan_speed = speed or {}
+            self._wan_speed = dict(speed)
         if interfaces is not None:
-            self._network_interfaces = interfaces or []
+            self._network_interfaces = [dict(i) for i in interfaces]
         if mode is not None:
             self._network_mode = mode or ""
 
@@ -522,7 +514,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         """Poll the LED configuration; absent on some firmware."""
         led = await self._call_optional("led_config", self._api.led_config)
         if led is not None:
-            self._led_config = led or {}
+            self._led_config = dict(led)
 
     async def update_flow_statistics_state(self) -> None:
         """Poll the flow-statistics rule and NAT-acceleration state.
@@ -536,9 +528,9 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._call_optional("network_acceleration", self._api.network_acceleration),
         )
         if rule is not None:
-            self._flow_stats_rule = rule or {}
+            self._flow_stats_rule = dict(rule)
         if accel is not None:
-            self._network_acceleration = accel or {}
+            self._network_acceleration = dict(accel)
 
     async def update_firmware_check(self) -> None:
         """Check online for a firmware update, at most every 6 hours."""
@@ -553,7 +545,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             "firmware_check_online", self._api.firmware_check_online
         )
         if check is not None:
-            self._firmware_check = check
+            self._firmware_check = dict(check)
 
     async def update_wireguard_client_state(self) -> None:
         """Make call to the API to get the wireguard client state."""
@@ -569,7 +561,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 connected=False,
                 group_id=config["group_id"],
                 peer_id=config["peer_id"],
-                tunnel_id=config.get("tunnel_id", None),
+                tunnel_id=cast("int | None", dict(config).get("tunnel_id")),
             )
             for config in response
         }
