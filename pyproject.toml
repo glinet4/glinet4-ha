@@ -22,7 +22,7 @@ package = false
 # lockstep when you target a newer HA.
 dev = [
     "codespell>=2.4.1",
-    "homeassistant-stubs==2026.2.0",
+    "homeassistant-stubs==2026.2.3",
     "mypy>=1.16.1",
     "PyGithub>=2.6",
     "pylint>=3.3.7",
