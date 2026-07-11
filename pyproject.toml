@@ -1,0 +1,243 @@
+[project]
+name = "glinet4-ha"
+version = "0.1.0"
+description = "GL.iNet (glinet4) Home Assistant integration"
+readme = "README.md"
+requires-python = ">=3.13.2"
+dependencies = [
+    "homeassistant>=2025.9.0",
+]
+
+# This repo is a Home Assistant custom integration installed by copying
+# custom_components/glinet4; it is never built or pip-installed, so tell uv not
+# to treat it as a buildable package (it only provides the dev/test env).
+[tool.uv]
+package = false
+
+[dependency-groups]
+# Pin homeassistant-stubs to the SAME Home Assistant core version that the test
+# group resolves to (pytest-homeassistant-custom-component==0.13.313 -> HA
+# 2026.2.0). uv resolves all dependency groups together, so a mismatch here
+# makes `uv run` (and every pre-commit hook) fail to resolve. Bump both in
+# lockstep when you target a newer HA.
+dev = [
+    "codespell>=2.4.1",
+    "homeassistant-stubs==2026.2.0",
+    "mypy>=1.16.1",
+    "PyGithub>=2.6",
+    "pylint>=3.3.7",
+    "pytest>=8.3.5",
+    "ruff>=0.12.0",
+    "types-requests<2.32.4.20260108",
+    "voluptuous-stubs>=0.1.1",
+    # `dev` branch only: run `scripts/develop` (a live HA against the MT6000)
+    # against our glinet4 library so the integration + library iterate together.
+    "glinet4 @ git+https://github.com/glinet4/glinet4@main",
+]
+# Test group pulls Home Assistant's test helpers. pytest-homeassistant-custom-
+# component pins an exact HA core version (0.13.313 -> HA 2026.2.0); bump it in
+# lockstep with the HA version you target.
+#
+# `dev` branch only: glinet4 is installed from the library repo so the
+# integration and the library iterate together (see issue #12). The fork's
+# version is still 0.0.17b3, which matches manifest.json; bump the manifest pin
+# in lockstep when the fork's version changes. On the upstream-bound branches
+# (#150/#151) this stays a plain PyPI pin.
+test = [
+    "pytest-homeassistant-custom-component==0.13.313",
+    "glinet4 @ git+https://github.com/glinet4/glinet4@main",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+pythonpath = ["."]
+testpaths = ["tests"]
+
+
+[tool.ruff]
+required-version = ">=0.11.0"
+target-version = "py313"
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+combine-as-imports = true
+split-on-trailing-comma = false
+known-first-party = [
+    "homeassistant",
+]
+
+[tool.ruff.lint]
+select = [
+    "A001", # Variable {name} is shadowing a Python builtin
+    "ASYNC", # flake8-async
+    "B", # flake8-bugbear
+    "BLE",
+    "C", # complexity, including flake8-comprehensions
+    "COM818", # Trailing comma on bare tuple prohibited
+    "D", # flake8-docstrings
+    "DTZ003", # Use datetime.now(tz=) instead of datetime.utcnow()
+    "DTZ004", # Use datetime.fromtimestamp(ts, tz=) instead of datetime.utcfromtimestamp(ts)
+    "E", # pycodestyle
+    "F", # pyflakes/autoflake
+    "FLY", # flynt
+    "FURB", # refurb
+    "G", # flake8-logging-format
+    "I", # isort
+    "INP", # flake8-no-pep420
+    "ISC", # flake8-implicit-str-concat
+    "ICN001", # import concentions; {name} should be imported as {asname}
+    "LOG", # flake8-logging
+    "N804", # First argument of a class method should be named cls
+    "N805", # First argument of a method should be named self
+    "N815", # Variable {name} in class scope should not be mixedCase
+    "PERF", # Perflint
+    "PGH", # pygrep-hooks
+    "PIE", # flake8-pie
+    "PL", # pylint
+    "PT", # flake8-pytest-style
+    "PTH", # flake8-use-pathlib
+    "PYI", # flake8-pyi
+    "RET", # flake8-return
+    "RSE", # flake8-raise
+    "RUF005", # Consider iterable unpacking instead of concatenation
+    "RUF006", # Store a reference to the return value of asyncio.create_task
+    "RUF010", # Use explicit conversion flag
+    "RUF013", # PEP 484 prohibits implicit Optional
+    "RUF017", # Avoid quadratic list summation
+    "RUF018", # Avoid assignment expressions in assert statements
+    "RUF019", # Unnecessary key check before dictionary access
+    # "RUF100", # Unused `noqa` directive; temporarily every now and then to clean them up
+    "S102", # Use of exec detected
+    "S103", # bad-file-permissions
+    "S108", # hardcoded-temp-file
+    "S306", # suspicious-mktemp-usage
+    "S307", # suspicious-eval-usage
+    "S313", # suspicious-xmlc-element-tree-usage
+    "S314", # suspicious-xml-element-tree-usage
+    "S315", # suspicious-xml-expat-reader-usage
+    "S316", # suspicious-xml-expat-builder-usage
+    "S317", # suspicious-xml-sax-usage
+    "S318", # suspicious-xml-mini-dom-usage
+    "S319", # suspicious-xml-pull-dom-usage
+    "S601", # paramiko-call
+    "S602", # subprocess-popen-with-shell-equals-true
+    "S604", # call-with-shell-equals-true
+    "S608", # hardcoded-sql-expression
+    "S609", # unix-command-wildcard-injection
+    "SIM", # flake8-simplify
+    "SLF", # flake8-self
+    "SLOT", # flake8-slots
+    "T100", # Trace found: {name} used
+    "TCH", # flake8-type-checking
+    "TID251", # Banned imports
+    "TRY", # tryceratops
+    "UP", # pyupgrade
+    "W", # pycodestyle
+]
+ignore = [
+    "D202", # No blank lines allowed after function docstring
+    "D203", # 1 blank line required before class docstring
+    "D213", # Multi-line docstring summary should start at the second line
+    "E501", # line too long
+    "PLR0911", # Too many return statements ({returns} > {max_returns})
+    "PLR0912", # Too many branches ({branches} > {max_branches})
+    "PLR0913", # Too many arguments to function call ({c_args} > {max_args})
+    "PLR0915", # Too many statements ({statements} > {max_statements})
+    "PLR2004", # Magic value used in comparison, consider replacing {value} with a constant variable
+    "PLW2901", # Outer {outer_kind} variable {name} overwritten by inner {inner_kind} target
+    "TRY003", # Avoid specifying long messages outside the exception class
+    # May conflict with the formatter, https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+    "W191",
+    "E111",
+    "E114",
+    "E117",
+    "D206",
+    "D300",
+    "Q",
+    "COM812",
+    "COM819",
+    "ISC001",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests annotate fixtures with runtime types and use helper functions freely;
+# the type-checking-import and docstring rules add noise without value here.
+"tests/**" = ["TC001", "TC002", "TC003", "D103", "SLF001"]
+# scripts/ are committed standalone CLIs, not an importable package (INP001),
+# and reach into the glinet4 client internals to capture fixtures (SLF001).
+"scripts/**" = ["TC001", "TC002", "TC003", "INP001", "D103", "SLF001"]
+
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+mark-parentheses = false
+
+[tool.ruff.lint.mccabe]
+max-complexity = 25
+
+[tool.pylint.main]
+# Integration package (custom_components/glinet4) shares a basename with the
+# glinet4 library. Anchor the source root at the repo so modules are named
+# "custom_components.glinet4.*" and a bare "glinet4" import resolves to the
+# library (mirrors mypy explicit_package_bases).
+source-roots = ["."]
+py-version = "3.13"
+load-plugins = [
+    "pylint.extensions.code_style",
+    "pylint.extensions.typing",
+]
+
+[tool.pylint.messages_control]
+# Reasons disabled:
+# too-many-* - not enforced for the sake of readability
+# too-few-* - same as too-many-*
+# ---
+# Pylint CodeStyle plugin
+# consider-using-assignment-expr - decision to use := better left to devs
+# consider-using-assignment-expr - too opinionated
+# ---
+# wrong-import-order - ruff's isort treats `homeassistant` as first-party
+#   (known-first-party); ruff is the authority for import ordering.
+# unused-argument / redefined-outer-name / protected-access - pytest fixtures
+#   are passed for their side effects, shadow the fixture function name, and
+#   reach into client internals in conftest; ruff (SLF001) still guards source.
+disable = [
+    "duplicate-code",
+    "line-too-long",
+    "too-few-public-methods",
+    "too-many-ancestors",
+    "too-many-arguments",
+    "too-many-instance-attributes",
+    "too-many-locals",
+    "too-many-positional-arguments",
+    "consider-using-assignment-expr",
+    "consider-using-tuple",
+    "wrong-import-order",
+    "unused-argument",
+    "redefined-outer-name",
+    "protected-access",
+]
+
+[tool.pylint.format]
+expected-line-ending-format = "LF"
+max-line-length = 100
+min-similarity-lines = 7
+
+[tool.mypy]
+python_version = "3.13"
+# The integration package lives under custom_components/ (a namespace package
+# with no __init__.py). Without explicit_package_bases, passing a source file by
+# path lets mypy name it both "glinet.const" and "custom_components.glinet.const"
+# and abort with "source file found twice". This anchors module names to the
+# repo root so the package is always "custom_components.glinet.*".
+explicit_package_bases = true
+show_error_codes = true
+strict = true
+disallow_any_explicit = true
+disallow_any_unimported = true
+warn_no_return = true
+warn_unreachable = true
+
+[tool.codespell]
+quiet-level = 2
+skip = "uv.lock,./.git/*,./.mypy_cache/*,*.json"
+ignore-words-list = "hass"
