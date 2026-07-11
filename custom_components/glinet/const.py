@@ -12,3 +12,7 @@ GLINET_DEFAULT_PW = "goodlife"
 GLINET_DEFAULT_USERNAME = "root"
 
 CONF_TITLE = "title"
+
+# Repair-issue translation key; the per-entry issue id is
+# f"{ISSUE_STATISTICS_NOT_COLLECTING}_{entry_id}".
+ISSUE_STATISTICS_NOT_COLLECTING = "statistics_not_collecting"

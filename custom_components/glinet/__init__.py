@@ -44,4 +44,5 @@ async def async_unload_entry(hass: HomeAssistant, entry: GlinetConfigEntry) -> b
     The coordinator's polling timer is owned by Home Assistant and torn down
     automatically with the config entry, so only the platforms need unloading.
     """
+    entry.runtime_data.async_clear_issues()
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)

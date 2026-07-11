@@ -57,5 +57,11 @@
         }
       }
     }
+  },
+  "issues": {
+    "statistics_not_collecting": {
+      "title": "Flow statistics are not collecting per-app data",
+      "description": "Flow statistics are enabled on {device}, but NAT acceleration is turned off, so per-application data is not being recorded.\n\nNAT acceleration and QoS/SQM (Smart Queue Management) cannot run at the same time on this router. To collect per-application statistics, disable QoS/SQM on the router's admin page. To keep QoS/SQM, turn off the Flow statistics switch to dismiss this notice."
+    }
   }
 }

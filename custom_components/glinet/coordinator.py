@@ -27,14 +27,14 @@ from homeassistant.const import (
     CONF_USERNAME,
 )
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
-from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers import entity_registry as er, issue_registry as ir
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, format_mac
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
 
-from .const import API_PATH, DOMAIN, SCAN_INTERVAL
+from .const import API_PATH, DOMAIN, ISSUE_STATISTICS_NOT_COLLECTING, SCAN_INTERVAL
 from .models import ClientDevInfo, WifiInterface, WireGuardClient
 from .utils import adjust_mac
 
@@ -251,6 +251,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             raise UpdateFailed(
                 f"One or more calls to GL-iNet router {self._host} failed"
             )
+
+        self._async_manage_statistics_issue()
 
         return GLinetData(
             system_status=self._system_status,
@@ -577,6 +579,39 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
 
         self._wireguard_clients = clients
         self._wireguard_connections = connections
+
+    @property
+    def _statistics_issue_id(self) -> str:
+        """Return the per-entry repair-issue id for the statistics conflict."""
+        return f"{ISSUE_STATISTICS_NOT_COLLECTING}_{self.config_entry.entry_id}"
+
+    def _async_manage_statistics_issue(self) -> None:
+        """Raise or clear the flow-statistics repair issue.
+
+        Flow statistics are enabled but not collecting per-app data when the
+        rule is on while NAT acceleration is off (acceleration and QoS/SQM are
+        mutually exclusive). This is a device-side trade-off the user must
+        decide, so the issue is informational (``is_fixable=False``); it is
+        cleared automatically once the condition resolves.
+        """
+        stats_on = bool(self._flow_stats_rule.get("enable"))
+        accel_on = bool(self._network_acceleration.get("enable"))
+        if stats_on and not accel_on:
+            ir.async_create_issue(
+                self.hass,
+                DOMAIN,
+                self._statistics_issue_id,
+                is_fixable=False,
+                severity=ir.IssueSeverity.WARNING,
+                translation_key=ISSUE_STATISTICS_NOT_COLLECTING,
+                translation_placeholders={"device": self.device_name},
+            )
+        else:
+            ir.async_delete_issue(self.hass, DOMAIN, self._statistics_issue_id)
+
+    def async_clear_issues(self) -> None:
+        """Remove this entry's repair issues (called on unload)."""
+        ir.async_delete_issue(self.hass, DOMAIN, self._statistics_issue_id)
 
     @property
     def device_info(self) -> DeviceInfo:
