@@ -16,7 +16,7 @@ package = false
 
 [dependency-groups]
 # Pin homeassistant-stubs to the SAME Home Assistant core version that the test
-# group resolves to (pytest-homeassistant-custom-component==0.13.313 -> HA
+# group resolves to (pytest-homeassistant-custom-component==0.13.316 -> HA
 # 2026.2.0). uv resolves all dependency groups together, so a mismatch here
 # makes `uv run` (and every pre-commit hook) fail to resolve. Bump both in
 # lockstep when you target a newer HA.
@@ -44,7 +44,7 @@ dev = [
 # in lockstep when the fork's version changes. On the upstream-bound branches
 # (#150/#151) this stays a plain PyPI pin.
 test = [
-    "pytest-homeassistant-custom-component==0.13.313",
+    "pytest-homeassistant-custom-component==0.13.316",
     "glinet4 @ git+https://github.com/glinet4/glinet4@main",
 ]
 
