@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock
 
+from gli4py.error_handling import TokenError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet.coordinator import GLinetData, GLinetUpdateCoordinator
@@ -66,3 +67,47 @@ async def test_update_failed_marks_unsuccessful(
     await coordinator.async_refresh()
 
     assert coordinator.last_update_success is False
+
+
+async def test_wan_token_error_is_transient(
+    hass: HomeAssistant,
+    init_integration: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """A token error must not permanently disable WAN polling.
+
+    TokenError subclasses NonZeroResponse, so a mis-ordered except chain would
+    treat an expired token as "endpoints unsupported" and never poll again.
+    """
+    wan_status = profile.load("wan_status")
+    if wan_status is None:
+        return  # profile's firmware has no WAN endpoints; nothing to protect
+    coordinator = _coordinator(init_integration)
+    assert coordinator.data.wan_status == wan_status
+
+    mock_glinet.wan_status.side_effect = TokenError("token expired")
+    await coordinator.async_refresh()
+    mock_glinet.wan_status.side_effect = None
+    mock_glinet.wan_status.return_value = wan_status
+    await coordinator.async_refresh()
+    assert coordinator.data.wan_status == wan_status
+
+
+async def test_wan_absence_probed_once(
+    hass: HomeAssistant,
+    init_integration: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """Firmware without WAN endpoints is probed once, then left alone."""
+    wan_status = profile.load("wan_status")
+    if wan_status is not None:
+        return  # covered by the supported-path tests
+    coordinator = _coordinator(init_integration)
+    assert coordinator.data.wan_status == {}
+    calls_after_setup = mock_glinet.wan_status.call_count
+
+    await coordinator.async_refresh()
+    await coordinator.async_refresh()
+    assert mock_glinet.wan_status.call_count == calls_after_setup

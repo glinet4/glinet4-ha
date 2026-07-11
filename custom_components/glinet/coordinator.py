@@ -61,6 +61,8 @@ class GLinetData:
     wireguard_connections: list[WireGuardClient] = field(default_factory=list)
     tailscale_config: dict = field(default_factory=dict)
     tailscale_connection: bool | None = None
+    wan_status: dict = field(default_factory=dict)
+    wan_speed: dict = field(default_factory=dict)
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -101,6 +103,10 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._wireguard_connections: list[WireGuardClient] = []
         self._tailscale_config: dict = {}
         self._tailscale_connection: bool | None = None
+        self._wan_status: dict = {}
+        self._wan_speed: dict = {}
+        # None = not yet probed; False = this firmware lacks the WAN endpoints
+        self._wan_endpoints_supported: bool | None = None
 
         self._late_init_complete: bool = False
         self._connect_error: bool = False
@@ -209,6 +215,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         await self.update_wifi_ifaces_state()
         await self.update_wireguard_client_state()
         await self.update_tailscale_state()
+        await self.update_wan_state()
 
         # If any call hit a transport error this cycle, fail the whole refresh
         if self._cycle_failed:
@@ -225,6 +232,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             wireguard_connections=self._wireguard_connections,
             tailscale_config=self._tailscale_config,
             tailscale_connection=self._tailscale_connection,
+            wan_status=self._wan_status,
+            wan_speed=self._wan_speed,
         )
 
     async def _update_platform(
@@ -386,6 +395,33 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._api.tailscale_connection_state
         )
         self._tailscale_connection = response == TailscaleConnection.CONNECTED
+
+    async def update_wan_state(self) -> None:
+        """Poll WAN status and throughput; degrade gracefully when unsupported.
+
+        These endpoints only exist on newer firmware. NonZeroResponse on the
+        first probe marks them unsupported for the lifetime of the entry, and
+        transient errors must not fail the whole refresh.
+        """
+        if self._wan_endpoints_supported is False:
+            return
+        try:
+            self._wan_status = await self._api.wan_status() or {}
+            self._wan_speed = await self._api.wan_speed() or {}
+            self._wan_endpoints_supported = True
+        except (TimeoutError, TokenError, OSError) as err:
+            # TokenError first: it subclasses NonZeroResponse, and an expired
+            # token must not mark the endpoints permanently unsupported.
+            _LOGGER.debug("WAN status poll failed transiently: %s", err)
+        except NonZeroResponse:
+            if self._wan_endpoints_supported is None:
+                _LOGGER.info(
+                    "GL-iNet router %s does not expose WAN status endpoints",
+                    self._host,
+                )
+                self._wan_endpoints_supported = False
+            self._wan_status = {}
+            self._wan_speed = {}
 
     async def update_wireguard_client_state(self) -> None:
         """Make call to the API to get the wireguard client state."""

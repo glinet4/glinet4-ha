@@ -43,6 +43,56 @@ async def _setup_at(
     return entry.runtime_data
 
 
+async def test_wan_ip_sensor_reports_address_without_prefix(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """The WAN IP sensor reports the bare address; absent on old firmware."""
+    await _setup_at(hass, mock_config_entry, freezer)
+    entity_id = er.async_get(hass).async_get_entity_id(
+        "sensor", DOMAIN, f"glinet_sensor/{profile.factory_mac}/wan_ip"
+    )
+    wan_status = profile.load("wan_status")
+    if wan_status is None:
+        assert entity_id is None
+        return
+    assert entity_id is not None
+    state = hass.states.get(entity_id)
+    assert state.state == wan_status["ipv4"]["ip"].split("/")[0]
+    assert state.attributes["gateway"] == wan_status["ipv4"]["gateway"]
+    assert state.attributes["protocol"] == wan_status["protocol"]
+
+
+async def test_wan_speed_sensors_report_rates(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """WAN download/upload sensors report bytes per second; absent otherwise."""
+    await _setup_at(hass, mock_config_entry, freezer)
+    registry = er.async_get(hass)
+    download_id = registry.async_get_entity_id(
+        "sensor", DOMAIN, f"glinet_sensor/{profile.factory_mac}/wan_download_speed"
+    )
+    upload_id = registry.async_get_entity_id(
+        "sensor", DOMAIN, f"glinet_sensor/{profile.factory_mac}/wan_upload_speed"
+    )
+    wan_speed = profile.load("wan_speed")
+    if wan_speed is None:
+        assert download_id is None
+        assert upload_id is None
+        return
+    assert download_id is not None
+    assert upload_id is not None
+    assert hass.states.get(download_id).state == str(wan_speed["speed_rx"])
+    assert hass.states.get(upload_id).state == str(wan_speed["speed_tx"])
+
+
 async def test_uptime_is_stable_across_polls(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,

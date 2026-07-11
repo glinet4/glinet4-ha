@@ -21,6 +21,7 @@ from typing import Any
 from unittest.mock import AsyncMock, PropertyMock, patch
 
 from gli4py.enums import TailscaleConnection
+from gli4py.error_handling import NonZeroResponse
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
@@ -142,6 +143,18 @@ def mock_config_entry(profile: Profile) -> MockConfigEntry:
     )
 
 
+def _wire_optional_endpoint(mock: AsyncMock, fixture: Any | None) -> None:
+    """Back an endpoint that may not exist on the profile's firmware.
+
+    A missing fixture means the route is absent, which the real client
+    surfaces as NonZeroResponse.
+    """
+    if fixture is None:
+        mock.side_effect = NonZeroResponse("-32601 method not found")
+    else:
+        mock.return_value = fixture
+
+
 def build_mock_api(profile: Profile) -> AsyncMock:
     """Build an AsyncMock GLinet client backed by a profile's fixtures.
 
@@ -167,6 +180,11 @@ def build_mock_api(profile: Profile) -> AsyncMock:
     api.wireguard_client_state.return_value = (
         profile.load("wireguard_client_state") or []
     )
+
+    # WAN endpoints are absent on older firmware; the real client raises
+    # NonZeroResponse there, which the coordinator treats as "unsupported".
+    _wire_optional_endpoint(api.wan_status, profile.load("wan_status"))
+    _wire_optional_endpoint(api.wan_speed, profile.load("wan_speed"))
 
     # Action endpoints (no useful return value).
     api.router_reboot.return_value = None

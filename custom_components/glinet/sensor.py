@@ -12,7 +12,12 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.const import PERCENTAGE, EntityCategory, UnitOfTemperature
+from homeassistant.const import (
+    PERCENTAGE,
+    EntityCategory,
+    UnitOfDataRate,
+    UnitOfTemperature,
+)
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import dt as dt_util
 
@@ -22,7 +27,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import GlinetConfigEntry, GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetData, GLinetUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -159,6 +164,56 @@ SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
 ]
 
 
+class WanEntityDescription(SensorEntityDescription, frozen_or_thawed=True):
+    """Describes a GL-iNet WAN sensor entity (reads the whole snapshot)."""
+
+    value_fn: Callable[[GLinetData], str | int | float | None]
+    extra_attributes_fn: Callable[[GLinetData], dict[str, Any]] | None = None
+
+
+WAN_SENSORS: list[WanEntityDescription] = [
+    WanEntityDescription(
+        key="wan_ip",
+        name="WAN IP",
+        has_entity_name=True,
+        icon="mdi:ip-outline",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        value_fn=lambda data: (
+            ip.split("/")[0]
+            if (ip := data.wan_status.get("ipv4", {}).get("ip"))
+            else None
+        ),
+        extra_attributes_fn=lambda data: {
+            "gateway": data.wan_status.get("ipv4", {}).get("gateway"),
+            "dns": data.wan_status.get("ipv4", {}).get("dns"),
+            "protocol": data.wan_status.get("protocol"),
+        },
+    ),
+    WanEntityDescription(
+        key="wan_download_speed",
+        name="WAN download speed",
+        has_entity_name=True,
+        icon="mdi:download",
+        device_class=SensorDeviceClass.DATA_RATE,
+        native_unit_of_measurement=UnitOfDataRate.BYTES_PER_SECOND,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=lambda data: data.wan_speed.get("speed_rx"),
+    ),
+    WanEntityDescription(
+        key="wan_upload_speed",
+        name="WAN upload speed",
+        has_entity_name=True,
+        icon="mdi:upload",
+        device_class=SensorDeviceClass.DATA_RATE,
+        native_unit_of_measurement=UnitOfDataRate.BYTES_PER_SECOND,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=lambda data: data.wan_speed.get("speed_tx"),
+    ),
+]
+
+
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
@@ -166,10 +221,14 @@ async def async_setup_entry(
     _LOGGER.debug("Setting up GL-iNet Sensors")
 
     coordinator = entry.runtime_data
-    sensors: list[SystemStatusSensor | SystemUptimeSensor] = [
+    sensors: list[SystemStatusSensor | SystemUptimeSensor | WanSensor] = [
         SystemStatusSensor(coordinator=coordinator, entity_description=description)
         for description in SYSTEM_SENSORS
     ]
+    sensors.extend(
+        WanSensor(coordinator=coordinator, entity_description=description)
+        for description in WAN_SENSORS
+    )
     # Special case for uptime as it requires additional data processing
     sensors.append(
         SystemUptimeSensor(
@@ -247,6 +306,37 @@ class SystemStatusSensor(GliSensorBase):
     def native_value(self) -> int | float | None:
         """Return the native value of the sensor."""
         return self.entity_description.value_fn(self.coordinator.data.system_status)
+
+
+class WanSensor(CoordinatorEntity["GLinetUpdateCoordinator"], SensorEntity):
+    """GL-iNet WAN sensor: value derived from the full coordinator snapshot."""
+
+    entity_description: WanEntityDescription
+
+    def __init__(
+        self,
+        coordinator: GLinetUpdateCoordinator,
+        entity_description: WanEntityDescription,
+    ) -> None:
+        """Initialize the WAN sensor."""
+        super().__init__(coordinator)
+        self.entity_description = entity_description
+        self._attr_device_info = coordinator.device_info
+        self._attr_unique_id = (
+            f"glinet_sensor/{coordinator.factory_mac}/{entity_description.key}"
+        )
+
+    @property
+    def native_value(self) -> str | int | float | None:
+        """Return the native value of the sensor."""
+        return self.entity_description.value_fn(self.coordinator.data)
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any] | None:
+        """Return the state attributes."""
+        if self.entity_description.extra_attributes_fn is None:
+            return None
+        return self.entity_description.extra_attributes_fn(self.coordinator.data)
 
 
 class SystemUptimeSensor(GliSensorBase):

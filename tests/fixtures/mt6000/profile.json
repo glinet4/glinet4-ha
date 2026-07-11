@@ -4,7 +4,7 @@
   "firmware_version": "4.9.0",
   "factory_mac": "00:11:22:00:00:01",
   "title": "GL-iNet MT6000",
-  "description": "Real, sanitised capture from a live GL-iNet Flint 2 (MT6000). WireGuard and Tailscale were not active on this router, so those responses are hand-authored to exercise the code paths.",
+  "description": "Real, sanitised capture from a live GL-iNet Flint 2 (MT6000). WireGuard and Tailscale were not active on this router, so those responses are hand-authored to exercise the code paths. wan_status/wan_speed are hand-authored from the sanitised registry signature (glinet-registry mt6000_4.9.0) with documentation-range addresses.",
   "capabilities": {
     "has_wireguard": true,
     "has_tailscale": true,

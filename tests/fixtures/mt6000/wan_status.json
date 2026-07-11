@@ -1,0 +1,21 @@
+{
+  "ipv4": {
+    "dns": [
+      "192.0.2.2",
+      "192.0.2.3"
+    ],
+    "gateway": "192.0.2.4",
+    "ip": "192.0.2.1/21"
+  },
+  "mode": 0,
+  "protocol": "dhcp",
+  "secondwan": {
+    "mode": 1,
+    "status": 3
+  },
+  "status": 1,
+  "usbwan": {
+    "err_code": -4,
+    "err_msg": "Unsupported features!"
+  }
+}

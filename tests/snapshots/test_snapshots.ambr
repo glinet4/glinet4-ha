@@ -2573,6 +2573,178 @@
     'state': '2025-12-23T22:49:24+00:00',
   })
 # ---
+# name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_wan_download_speed-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': dict({
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.gl_inet_mt6000_wan_download_speed',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'WAN download speed',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.DATA_RATE: 'data_rate'>,
+    'original_icon': 'mdi:download',
+    'original_name': 'WAN download speed',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_sensor/00:11:22:00:00:01/wan_download_speed',
+    'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
+  })
+# ---
+# name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_wan_download_speed-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'data_rate',
+      'friendly_name': 'GL-iNet MT6000 WAN download speed',
+      'icon': 'mdi:download',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.gl_inet_mt6000_wan_download_speed',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '4582',
+  })
+# ---
+# name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_wan_ip-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.gl_inet_mt6000_wan_ip',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'WAN IP',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:ip-outline',
+    'original_name': 'WAN IP',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_sensor/00:11:22:00:00:01/wan_ip',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_wan_ip-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'dns': list([
+        '192.0.2.2',
+        '192.0.2.3',
+      ]),
+      'friendly_name': 'GL-iNet MT6000 WAN IP',
+      'gateway': '192.0.2.4',
+      'icon': 'mdi:ip-outline',
+      'protocol': 'dhcp',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.gl_inet_mt6000_wan_ip',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '192.0.2.1',
+  })
+# ---
+# name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_wan_upload_speed-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': dict({
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': None,
+    'entity_id': 'sensor.gl_inet_mt6000_wan_upload_speed',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'WAN upload speed',
+    'options': dict({
+      'sensor': dict({
+        'suggested_display_precision': 0,
+      }),
+    }),
+    'original_device_class': <SensorDeviceClass.DATA_RATE: 'data_rate'>,
+    'original_icon': 'mdi:upload',
+    'original_name': 'WAN upload speed',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_sensor/00:11:22:00:00:01/wan_upload_speed',
+    'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
+  })
+# ---
+# name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_wan_upload_speed-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'data_rate',
+      'friendly_name': 'GL-iNet MT6000 WAN upload speed',
+      'icon': 'mdi:upload',
+      'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
+      'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.gl_inet_mt6000_wan_upload_speed',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '2926',
+  })
+# ---
 # name: test_entities[mt6000-switch][switch.gl_inet_mt6000_ssid_10-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({

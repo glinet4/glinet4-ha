@@ -27,6 +27,7 @@ from typing import Any
 
 from gli4py import GLinet
 from gli4py.enums import TailscaleConnection
+from gli4py.error_handling import NonZeroResponse
 from uplink import AiohttpClient
 
 FIXTURES = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
@@ -157,6 +158,11 @@ async def fetch_raw(api: GLinet) -> dict[str, Any]:
     if wireguard:
         raw["wireguard_client_list"] = wireguard
         raw["wireguard_client_state"] = await api.wireguard_client_state()
+    try:
+        raw["wan_status"] = await api.wan_status()
+        raw["wan_speed"] = await api.wan_speed()
+    except NonZeroResponse:
+        pass  # older firmware: WAN endpoints absent; profile omits the fixtures
     return raw
 
 
