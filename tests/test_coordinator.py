@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock
 
-from gli4py.error_handling import AuthenticationError, NonZeroResponse, TokenError
+from glinet4.error_handling import AuthenticationError, NonZeroResponse, TokenError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.glinet.coordinator import GLinetData, GLinetUpdateCoordinator
+from custom_components.glinet4.coordinator import GLinetData, GLinetUpdateCoordinator
 from homeassistant.core import HomeAssistant
 
 from .conftest import Profile

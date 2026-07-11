@@ -94,7 +94,7 @@ class ClientInternetSwitch(GliSwitchBase):
         """Initialize the client internet switch."""
         super().__init__(coordinator)
         self._mac = mac
-        self._attr_unique_id = f"glinet_switch/{mac}/internet"
+        self._attr_unique_id = f"glinet4_switch/{mac}/internet"
         device = coordinator.data.devices.get(mac)
         self._attr_name = f"{device.name} internet" if device else "Internet"
 
@@ -139,7 +139,7 @@ class FlowStatisticsSwitch(GliSwitchBase):
         """Initialize the flow-statistics switch."""
         super().__init__(coordinator)
         self._attr_unique_id = (
-            f"glinet_switch/{coordinator.factory_mac}/flow_statistics"
+            f"glinet4_switch/{coordinator.factory_mac}/flow_statistics"
         )
 
     @property
@@ -202,7 +202,7 @@ class LedSwitch(GliSwitchBase):
     def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
         """Initialize the LED switch."""
         super().__init__(coordinator)
-        self._attr_unique_id = f"glinet_switch/{coordinator.factory_mac}/led"
+        self._attr_unique_id = f"glinet4_switch/{coordinator.factory_mac}/led"
 
     @property
     def icon(self) -> str:
@@ -248,7 +248,7 @@ class WifiApSwitch(GliSwitchBase):
         self._iface_name = iface_name
         self._iface_fallback = iface
         self._attr_unique_id = (
-            f"glinet_switch/{coordinator.factory_mac}/iface_{iface_name}"
+            f"glinet4_switch/{coordinator.factory_mac}/iface_{iface_name}"
         )
 
     @property
@@ -316,7 +316,7 @@ class TailscaleSwitch(GliSwitchBase):
     def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
         """Initialize the Tailscale switch."""
         super().__init__(coordinator)
-        self._attr_unique_id = f"glinet_switch/{coordinator.factory_mac}/tailscale"
+        self._attr_unique_id = f"glinet4_switch/{coordinator.factory_mac}/tailscale"
 
     @property
     def is_on(self) -> bool | None:
@@ -373,7 +373,7 @@ class WireGuardSwitch(GliSwitchBase):
         super().__init__(coordinator)
         self._client = client
         self._attr_unique_id = (
-            f"glinet_switch/{coordinator.factory_mac}/{client.name}/wireguard_client"
+            f"glinet4_switch/{coordinator.factory_mac}/{client.name}/wireguard_client"
         )
 
     @property

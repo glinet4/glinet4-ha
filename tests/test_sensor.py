@@ -10,11 +10,11 @@ from __future__ import annotations
 from unittest.mock import AsyncMock
 
 from freezegun.api import FrozenDateTimeFactory
-from gli4py.enums import TailscaleConnection
+from glinet4.enums import TailscaleConnection
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.glinet.const import DOMAIN
-from custom_components.glinet.coordinator import GLinetUpdateCoordinator
+from custom_components.glinet4.const import DOMAIN
+from custom_components.glinet4.coordinator import GLinetUpdateCoordinator
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
@@ -23,7 +23,7 @@ from .conftest import Profile
 
 def _entity_id(hass: HomeAssistant, mac: str, key: str) -> str | None:
     return er.async_get(hass).async_get_entity_id(
-        "sensor", DOMAIN, f"glinet_sensor/{mac}/system_{key}"
+        "sensor", DOMAIN, f"glinet4_sensor/{mac}/system_{key}"
     )
 
 
@@ -54,7 +54,7 @@ async def test_wan_ip_sensor_reports_address_without_prefix(
     """The WAN IP sensor reports the bare address; absent on old firmware."""
     await _setup_at(hass, mock_config_entry, freezer)
     entity_id = er.async_get(hass).async_get_entity_id(
-        "sensor", DOMAIN, f"glinet_sensor/{profile.factory_mac}/wan_ip"
+        "sensor", DOMAIN, f"glinet4_sensor/{profile.factory_mac}/wan_ip"
     )
     wan_status = profile.load("wan_status")
     if wan_status is None:
@@ -78,10 +78,10 @@ async def test_wan_speed_sensors_report_rates(
     await _setup_at(hass, mock_config_entry, freezer)
     registry = er.async_get(hass)
     download_id = registry.async_get_entity_id(
-        "sensor", DOMAIN, f"glinet_sensor/{profile.factory_mac}/wan_download_speed"
+        "sensor", DOMAIN, f"glinet4_sensor/{profile.factory_mac}/wan_download_speed"
     )
     upload_id = registry.async_get_entity_id(
-        "sensor", DOMAIN, f"glinet_sensor/{profile.factory_mac}/wan_upload_speed"
+        "sensor", DOMAIN, f"glinet4_sensor/{profile.factory_mac}/wan_upload_speed"
     )
     wan_speed = profile.load("wan_speed")
     if wan_speed is None:
@@ -104,7 +104,7 @@ async def test_tailscale_status_sensor_reflects_connection_state(
     """The tailscale status sensor mirrors the connection state enum."""
     coordinator = await _setup_at(hass, mock_config_entry, freezer)
     entity_id = er.async_get(hass).async_get_entity_id(
-        "sensor", DOMAIN, f"glinet_sensor/{profile.factory_mac}/tailscale_status"
+        "sensor", DOMAIN, f"glinet4_sensor/{profile.factory_mac}/tailscale_status"
     )
     if not profile.manifest["capabilities"]["has_tailscale"]:
         assert entity_id is None
@@ -238,7 +238,7 @@ async def test_wan_ip_sensor_survives_null_ipv4(
         return
     coordinator = await _setup_at(hass, mock_config_entry, freezer)
     entity_id = er.async_get(hass).async_get_entity_id(
-        "sensor", DOMAIN, f"glinet_sensor/{profile.factory_mac}/wan_ip"
+        "sensor", DOMAIN, f"glinet4_sensor/{profile.factory_mac}/wan_ip"
     )
     down = dict(wan_status)
     down["ipv4"] = None

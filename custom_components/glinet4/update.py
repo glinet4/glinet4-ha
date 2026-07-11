@@ -43,7 +43,7 @@ class GLinetFirmwareUpdate(CoordinatorEntity["GLinetUpdateCoordinator"], UpdateE
         """Initialize the update entity."""
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info
-        self._attr_unique_id = f"glinet_update/{coordinator.factory_mac}/firmware"
+        self._attr_unique_id = f"glinet4_update/{coordinator.factory_mac}/firmware"
 
     @property
     def installed_version(self) -> str | None:

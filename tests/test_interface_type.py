@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from custom_components.glinet.models import (
+from custom_components.glinet4.models import (
     DeviceInterfaceType,
     interface_type_from_client,
 )

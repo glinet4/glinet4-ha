@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Keep this fork's `master` a clean mirror of its upstream, so it stays a tidy
 # base for upstream PRs. Run it in each fork (this integration repo and the
-# gli4py fork).
+# glinet4 fork).
 #
 #   scripts/sync-upstream
 #

@@ -8,11 +8,11 @@ from datetime import datetime, timedelta
 import logging
 from typing import TYPE_CHECKING, Any, TypeVar
 
-from gli4py import GLinet
-from gli4py.enums import TailscaleConnection
-from gli4py.error_handling import AuthenticationError, NonZeroResponse, TokenError
 from uplink import AiohttpClient
 
+from glinet4 import GLinet
+from glinet4.enums import TailscaleConnection
+from glinet4.error_handling import AuthenticationError, NonZeroResponse, TokenError
 from homeassistant.components.device_tracker import (
     CONF_CONSIDER_HOME,
     DEFAULT_CONSIDER_HOME,
@@ -92,7 +92,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
     """Coordinate polling of a GL-iNet router and own its API client.
 
     Replaces the old ``GLinetRouter``: it holds the device identity and the
-    gli4py client, and produces a ``GLinetData`` snapshot every ``SCAN_INTERVAL``
+    glinet4 client, and produces a ``GLinetData`` snapshot every ``SCAN_INTERVAL``
     which all entities consume via ``CoordinatorEntity``.
     """
 

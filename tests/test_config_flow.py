@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.glinet.const import DOMAIN
+from custom_components.glinet4.const import DOMAIN
 from homeassistant.components.device_tracker import CONF_CONSIDER_HOME
 from homeassistant.config_entries import SOURCE_USER
 from homeassistant.const import (
@@ -51,7 +51,7 @@ def mock_flow_api() -> Iterator[AsyncMock]:
     api.router_info.return_value = {CONF_MAC: "00:11:22:00:00:01", "model": "mt6000"}
     api.logged_in = True
     api.sid = "test-token"
-    with patch("custom_components.glinet.config_flow.GLinet", return_value=api):
+    with patch("custom_components.glinet4.config_flow.GLinet", return_value=api):
         yield api
 
 

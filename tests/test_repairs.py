@@ -6,10 +6,10 @@ import json
 from pathlib import Path
 from unittest.mock import AsyncMock
 
-from gli4py.enums import TailscaleConnection
+from glinet4.enums import TailscaleConnection
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.glinet.const import DOMAIN, ISSUE_STATISTICS_NOT_COLLECTING
+from custom_components.glinet4.const import DOMAIN, ISSUE_STATISTICS_NOT_COLLECTING
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import issue_registry as ir
 
@@ -116,7 +116,7 @@ def test_issue_translations_present_and_consistent() -> None:
     async_create_issue must exist under 'issues' in strings.json, and
     translations/en.json must match.
     """
-    base = Path("custom_components/glinet")
+    base = Path("custom_components/glinet4")
     strings = json.loads((base / "strings.json").read_text())
     en = json.loads((base / "translations" / "en.json").read_text())
 

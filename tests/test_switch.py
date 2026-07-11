@@ -10,11 +10,11 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock
 
-from gli4py.error_handling import NonZeroResponse
+from glinet4.error_handling import NonZeroResponse
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.glinet.const import DOMAIN
+from custom_components.glinet4.const import DOMAIN
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
@@ -24,7 +24,7 @@ from .conftest import Profile
 
 def _switch_id(hass: HomeAssistant, mac: str, unique_suffix: str) -> str | None:
     return er.async_get(hass).async_get_entity_id(
-        "switch", DOMAIN, f"glinet_switch/{mac}/{unique_suffix}"
+        "switch", DOMAIN, f"glinet4_switch/{mac}/{unique_suffix}"
     )
 
 
@@ -104,7 +104,7 @@ async def test_led_switch_reflects_and_controls_led_state(
     await hass.async_block_till_done()
 
     entity_id = er.async_get(hass).async_get_entity_id(
-        "switch", DOMAIN, f"glinet_switch/{profile.factory_mac}/led"
+        "switch", DOMAIN, f"glinet4_switch/{profile.factory_mac}/led"
     )
     led_config = profile.load("led_config")
     if led_config is None:
@@ -147,7 +147,7 @@ async def test_client_internet_switch_blocks_and_unblocks(
         return
     mac = next(iter(named))
     entity_id = registry.async_get_entity_id(
-        "switch", DOMAIN, f"glinet_switch/{mac}/internet"
+        "switch", DOMAIN, f"glinet4_switch/{mac}/internet"
     )
     assert entity_id is not None
     # A non-blocked client shows internet access on.
@@ -175,7 +175,7 @@ async def test_flow_statistics_switch_toggles_and_explains(
     await hass.async_block_till_done()
 
     entity_id = er.async_get(hass).async_get_entity_id(
-        "switch", DOMAIN, f"glinet_switch/{profile.factory_mac}/flow_statistics"
+        "switch", DOMAIN, f"glinet4_switch/{profile.factory_mac}/flow_statistics"
     )
     rule = profile.load("flow_stats_rule")
     if rule is None:
@@ -226,7 +226,7 @@ async def test_led_switch_raises_home_assistant_error_on_failure(
     await hass.async_block_till_done()
 
     entity_id = er.async_get(hass).async_get_entity_id(
-        "switch", DOMAIN, f"glinet_switch/{profile.factory_mac}/led"
+        "switch", DOMAIN, f"glinet4_switch/{profile.factory_mac}/led"
     )
     mock_glinet.led_set_enabled.side_effect = NonZeroResponse("router said no")
     with pytest.raises(HomeAssistantError):

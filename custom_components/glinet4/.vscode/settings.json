@@ -3,5 +3,5 @@
   "python.testing.pytestArgs": ["tests"],
   "python.testing.pytestEnabled": true,
   "python.testing.unittestEnabled": false,
-  "python.analysis.extraPaths": ["/workspaces/gli4py/"]
+  "python.analysis.extraPaths": ["/workspaces/glinet4/"]
 }

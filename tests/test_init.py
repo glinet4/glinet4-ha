@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock, patch
 
-from gli4py.error_handling import AuthenticationError
+from glinet4.error_handling import AuthenticationError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.glinet.const import DOMAIN
-from custom_components.glinet.coordinator import GLinetUpdateCoordinator
-from custom_components.glinet.models import DeviceInterfaceType
+from custom_components.glinet4.const import DOMAIN
+from custom_components.glinet4.coordinator import GLinetUpdateCoordinator
+from custom_components.glinet4.models import DeviceInterfaceType
 from homeassistant.components.device_tracker import CONF_CONSIDER_HOME
 from homeassistant.config_entries import SOURCE_REAUTH, ConfigEntryState
 from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_PASSWORD, CONF_USERNAME
@@ -84,7 +84,7 @@ async def test_wifi7_mlo_client_setup_succeeds(hass: HomeAssistant) -> None:
     )
     entry.add_to_hass(hass)
     with patch(
-        "custom_components.glinet.coordinator.GLinet",
+        "custom_components.glinet4.coordinator.GLinet",
         return_value=build_mock_api(profile),
     ):
         assert await hass.config_entries.async_setup(entry.entry_id)

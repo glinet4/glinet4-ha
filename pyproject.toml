@@ -29,21 +29,21 @@ dev = [
     "types-requests<2.32.4.20260108",
     "voluptuous-stubs>=0.1.1",
     # `dev` branch only: run `scripts/develop` (a live HA against the MT6000)
-    # against our forked gli4py so the integration + library iterate together.
-    "gli4py @ git+https://github.com/shauneccles/gli4py@dev",
+    # against our glinet4 library so the integration + library iterate together.
+    "glinet4 @ git+https://github.com/glinet4/glinet4@main",
 ]
 # Test group pulls Home Assistant's test helpers. pytest-homeassistant-custom-
 # component pins an exact HA core version (0.13.313 -> HA 2026.2.0); bump it in
 # lockstep with the HA version you target.
 #
-# `dev` branch only: gli4py is installed from our fork's `dev` branch so the
+# `dev` branch only: glinet4 is installed from the library repo so the
 # integration and the library iterate together (see issue #12). The fork's
 # version is still 0.0.17b3, which matches manifest.json; bump the manifest pin
 # in lockstep when the fork's version changes. On the upstream-bound branches
 # (#150/#151) this stays a plain PyPI pin.
 test = [
     "pytest-homeassistant-custom-component==0.13.313",
-    "gli4py @ git+https://github.com/shauneccles/gli4py@dev",
+    "glinet4 @ git+https://github.com/glinet4/glinet4@main",
 ]
 
 [tool.pytest.ini_options]
@@ -164,7 +164,7 @@ ignore = [
 # the type-checking-import and docstring rules add noise without value here.
 "tests/**" = ["TC001", "TC002", "TC003", "D103", "SLF001"]
 # scripts/ are committed standalone CLIs, not an importable package (INP001),
-# and reach into the gli4py client internals to capture fixtures (SLF001).
+# and reach into the glinet4 client internals to capture fixtures (SLF001).
 "scripts/**" = ["TC001", "TC002", "TC003", "INP001", "D103", "SLF001"]
 
 [tool.ruff.lint.flake8-pytest-style]

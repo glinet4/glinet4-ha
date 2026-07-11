@@ -20,14 +20,14 @@ from pathlib import Path
 from typing import Any
 from unittest.mock import AsyncMock, PropertyMock, patch
 
-from gli4py.enums import TailscaleConnection
-from gli4py.error_handling import NonZeroResponse
+from glinet4.enums import TailscaleConnection
+from glinet4.error_handling import NonZeroResponse
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 from pytest_homeassistant_custom_component.syrupy import HomeAssistantSnapshotExtension
 from syrupy.assertion import SnapshotAssertion
 
-from custom_components.glinet.const import DOMAIN
+from custom_components.glinet4.const import DOMAIN
 from homeassistant.components.device_tracker import CONF_CONSIDER_HOME
 from homeassistant.const import CONF_API_TOKEN, CONF_HOST, CONF_PASSWORD, CONF_USERNAME
 from homeassistant.core import HomeAssistant
@@ -227,7 +227,7 @@ def mock_api(profile: Profile) -> AsyncMock:
 @pytest.fixture
 def mock_glinet(mock_api: AsyncMock) -> AsyncMock:
     """Patch the GLinet client used by the coordinator to the mock API."""
-    with patch("custom_components.glinet.coordinator.GLinet", return_value=mock_api):
+    with patch("custom_components.glinet4.coordinator.GLinet", return_value=mock_api):
         yield mock_api
 
 

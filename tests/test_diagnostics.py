@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.glinet.diagnostics import async_get_config_entry_diagnostics
+from custom_components.glinet4.diagnostics import async_get_config_entry_diagnostics
 from homeassistant.core import HomeAssistant
 
 from .conftest import Profile

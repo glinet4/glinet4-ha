@@ -25,9 +25,9 @@ from pathlib import Path
 import re
 from typing import Any
 
-from gli4py import GLinet
-from gli4py.enums import TailscaleConnection
-from gli4py.error_handling import NonZeroResponse
+from glinet4 import GLinet
+from glinet4.enums import TailscaleConnection
+from glinet4.error_handling import NonZeroResponse
 from uplink import AiohttpClient
 
 FIXTURES = Path(__file__).resolve().parent.parent / "tests" / "fixtures"

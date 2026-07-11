@@ -52,7 +52,7 @@ async def test_entities(
     # Freeze time so the uptime sensor's derived boot timestamp is deterministic.
     freezer.move_to("2026-01-01 00:00:00+00:00")
 
-    with patch("custom_components.glinet.PLATFORMS", [platform]):
+    with patch("custom_components.glinet4.PLATFORMS", [platform]):
         mock_config_entry.add_to_hass(hass)
         await hass.config_entries.async_setup(mock_config_entry.entry_id)
         await hass.async_block_till_done()

@@ -48,7 +48,7 @@ class InternetBinarySensor(
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info
         self._attr_unique_id = (
-            f"glinet_binary_sensor/{coordinator.factory_mac}/internet"
+            f"glinet4_binary_sensor/{coordinator.factory_mac}/internet"
         )
 
     @property

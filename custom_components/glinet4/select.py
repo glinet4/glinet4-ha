@@ -49,7 +49,7 @@ class TailscaleExitNodeSelect(
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info
         self._attr_unique_id = (
-            f"glinet_select/{coordinator.factory_mac}/tailscale_exit_node"
+            f"glinet4_select/{coordinator.factory_mac}/tailscale_exit_node"
         )
 
     def _labels(self) -> dict[str, str]:

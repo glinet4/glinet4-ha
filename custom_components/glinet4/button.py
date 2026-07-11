@@ -40,7 +40,7 @@ class RebootButton(CoordinatorEntity["GLinetUpdateCoordinator"], ButtonEntity):
         """Initialize a GLinet device."""
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info
-        self._attr_unique_id = f"glinet_button/{coordinator.factory_mac}/reboot"
+        self._attr_unique_id = f"glinet4_button/{coordinator.factory_mac}/reboot"
 
     @property
     def name(self) -> str:

@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from gli4py.error_handling import APIClientError
-
+from glinet4.error_handling import APIClientError
 from homeassistant.exceptions import HomeAssistantError
 
 from .const import DOMAIN

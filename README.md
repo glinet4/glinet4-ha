@@ -1,8 +1,10 @@
-# ha-glinet4-integration
+# GL.iNet (glinet4) — Home Assistant integration
 
-A HomeAssistant custom component for GL-iNet routers that uses [their API version 4](https://dev.gl-inet.com/api/).
+A Home Assistant custom integration for GL.iNet routers running firmware 4.x, using their local [JSON-RPC API](https://dev.gl-inet.com/api/). Powered by the [`glinet4`](https://github.com/glinet4/glinet4) Python library.
 
-Disclaimer: GL-iNet no longer publicly documents their API, so the longevity of this integration is unknown and may well break in future firmware versions.
+> This project (domain `glinet4`) began as a fork of [HarvsG/ha-glinet4-integration](https://github.com/HarvsG/ha-glinet4-integration) and its `gli4py` library, and has since grown a much larger feature set. It uses a distinct domain so it can be installed independently. See [NOTICE](NOTICE) for attribution.
+
+Disclaimer: GL.iNet no longer publicly documents their API, so the longevity of this integration is unknown and may break with future firmware.
 
 Contributions are welcome, for ideas see the TODO list below or the various `#TODO`s in the code.
 
@@ -29,7 +31,7 @@ Contributions are welcome, for ideas see the TODO list below or the various `#TO
 
 1. [Install HACS](https://www.youtube.com/watch?v=a4lSlN6EI04)
 2. Open the HACS page in home assistant
-3. Search for GL-iNet and download the latest release
+3. Search for GL.iNet (glinet4) and download the latest release
 
 ## Dev set up
 
@@ -41,9 +43,9 @@ Contributions are welcome, for ideas see the TODO list below or the various `#TO
 3. Create a new directory `/workspaces/glinet`
 4. Cntr Shift P, `add folder to workspace` and then add the above folder
 5. `cd` into that directory
-6. `git clone https://github.com/HarvsG/ha-glinet4-integration.git . `
+6. `git clone https://github.com/glinet4/ha-glinet4.git . `
 7. `mkdir -p /workspaces/core/config/custom_components && cd /workspaces/core/config/custom_components`
-8. `ln -s /workspaces/glinet/custom_components/glinet`
+8. `ln -s /workspaces/glinet/custom_components/glinet4`
 9. You may need to config a new ssh key inside the container. [Use this](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) - this will be overwritten if you rebuild the container
 
 ## Testing
@@ -68,7 +70,7 @@ up automatically. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 - [x] Add tests - will need to mock the API
 - [x] Detect and create a re-configure entry if the password changes (reauth flow)
 - [ ] Enable support for `https` as well as `http` and consider enabling it by default.
-- [ ] Static type gli4py and then enable static typing on this repo
+- [ ] Static type glinet4 and then enable static typing on this repo
 - [ ] Add features:
   - [x] Upload/Download sensors (WAN throughput)
   - [x] Internet reachable sensor (binary_sensor from system get_network_status)
@@ -92,4 +94,4 @@ up automatically. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 
 ## Depends on
 
-https://github.com/HarvsG/gli4py
+https://github.com/glinet4/glinet4

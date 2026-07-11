@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock
 from freezegun.api import FrozenDateTimeFactory
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.glinet.const import DOMAIN
+from custom_components.glinet4.const import DOMAIN
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
@@ -16,7 +16,7 @@ from .conftest import Profile
 
 def _entity_id(hass: HomeAssistant, mac: str) -> str | None:
     return er.async_get(hass).async_get_entity_id(
-        "update", DOMAIN, f"glinet_update/{mac}/firmware"
+        "update", DOMAIN, f"glinet4_update/{mac}/firmware"
     )
 
 

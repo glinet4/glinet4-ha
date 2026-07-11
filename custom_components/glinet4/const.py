@@ -2,7 +2,7 @@
 
 from datetime import timedelta
 
-DOMAIN = "glinet"
+DOMAIN = "glinet4"
 SCAN_INTERVAL = timedelta(seconds=30)
 DATA_GLINET = "glinet"
 API_PATH = "/rpc"

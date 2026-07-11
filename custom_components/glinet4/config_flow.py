@@ -5,11 +5,11 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-from gli4py import GLinet
-from gli4py.error_handling import NonZeroResponse
 from uplink import AiohttpClient
 import voluptuous as vol
 
+from glinet4 import GLinet
+from glinet4.error_handling import NonZeroResponse
 from homeassistant import config_entries
 from homeassistant.components.device_tracker import (
     CONF_CONSIDER_HOME,
