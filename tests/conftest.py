@@ -207,6 +207,7 @@ def build_mock_api(profile: Profile) -> AsyncMock:
     api.wireguard_client_stop.return_value = None
     api.tailscale_set_exit_node.return_value = None
     api.led_set_enabled.return_value = None
+    api.client_set_blocked.return_value = []
     api.logged_in = True
     return api
 

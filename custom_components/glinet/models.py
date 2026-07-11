@@ -181,6 +181,7 @@ class ClientDevInfo:
         self._last_activity: datetime = dt_util.utcnow() - timedelta(days=1)
         self._connected: bool = False
         self._if_type: DeviceInterfaceType = DeviceInterfaceType.UNKNOWN
+        self._blocked: bool = False
 
     def update(
         self,
@@ -210,6 +211,7 @@ class ClientDevInfo:
             self._if_type = interface_type_from_client(
                 dev_info, model=model, firmware=firmware
             )
+            self._blocked = bool(dev_info.get("blocked", False))
         # a device might not actually be online but we want to consider it home
         elif self._connected:
             self._connected = (
@@ -226,6 +228,11 @@ class ClientDevInfo:
     def interface_type(self) -> DeviceInterfaceType:
         """Return device interface type."""
         return self._if_type
+
+    @property
+    def blocked(self) -> bool:
+        """Return whether the client is blocked from the network."""
+        return self._blocked
 
     @property
     def mac(self) -> str:

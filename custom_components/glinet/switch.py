@@ -29,7 +29,13 @@ async def async_setup_entry(
     """Set up the GL-iNet switches."""
     coordinator = entry.runtime_data
     data = coordinator.data
-    switches: list[WifiApSwitch | WireGuardSwitch | TailscaleSwitch | LedSwitch] = []
+    switches: list[
+        WifiApSwitch
+        | WireGuardSwitch
+        | TailscaleSwitch
+        | LedSwitch
+        | ClientInternetSwitch
+    ] = []
     if data.wireguard_clients:
         # TODO detect all configured wireguard, openvpn, shadowsocks and
         # TOR clients & servers with router/vpn/status? and gen a switch for each
@@ -41,6 +47,11 @@ async def async_setup_entry(
         switches.append(TailscaleSwitch(coordinator))
     if data.led_config:
         switches.append(LedSwitch(coordinator))
+    switches.extend(
+        ClientInternetSwitch(coordinator, mac)
+        for mac, device in data.devices.items()
+        if device.name
+    )
     for iface_name, iface in data.wifi_ifaces.items():
         switches.append(WifiApSwitch(coordinator, iface_name, iface))
     if switches:
@@ -62,6 +73,43 @@ class GliSwitchBase(CoordinatorEntity["GLinetUpdateCoordinator"], SwitchEntity):
         """Initialize a GLinet switch."""
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info
+
+
+class ClientInternetSwitch(GliSwitchBase):
+    """Allow or block a client's network access (issue #95).
+
+    On = access allowed, off = blocked. Disabled by default because a router
+    can have many clients; users enable the few they want to control.
+    """
+
+    _attr_icon = "mdi:web"
+    _attr_entity_registry_enabled_default = False
+
+    def __init__(self, coordinator: GLinetUpdateCoordinator, mac: str) -> None:
+        """Initialize the client internet switch."""
+        super().__init__(coordinator)
+        self._mac = mac
+        self._attr_unique_id = f"glinet_switch/{mac}/internet"
+        device = coordinator.data.devices.get(mac)
+        self._attr_name = f"{device.name} internet" if device else "Internet"
+
+    @property
+    def is_on(self) -> bool | None:
+        """Return True when the client is allowed network access."""
+        device = self.coordinator.data.devices.get(self._mac)
+        if device is None:
+            return None
+        return not device.blocked
+
+    async def async_turn_on(self, **_: Any) -> None:
+        """Allow the client's network access."""
+        await self.coordinator.api.client_set_blocked(self._mac, False)
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **_: Any) -> None:
+        """Block the client's network access."""
+        await self.coordinator.api.client_set_blocked(self._mac, True)
+        await self.coordinator.async_request_refresh()
 
 
 class LedSwitch(GliSwitchBase):

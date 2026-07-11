@@ -1231,6 +1231,706 @@
     'state': '2025-12-23T22:49:24+00:00',
   })
 # ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_alias_38_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_alias_38_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'alias-38 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'alias-38 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0e/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_alias_38_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 alias-38 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_alias_38_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_24_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_24_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-24 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-24 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:02/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_24_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-24 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_24_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_25_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_25_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-25 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-25 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:03/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_25_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-25 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_25_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_26_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_26_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-26 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-26 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:04/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_26_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-26 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_26_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_27_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_27_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-27 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-27 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:05/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_27_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-27 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_27_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_28_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_28_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-28 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-28 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:06/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_28_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-28 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_28_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_29_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_29_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-29 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-29 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:07/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_29_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-29 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_29_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_31_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_31_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-31 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-31 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:08/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_31_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-31 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_31_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_32_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_32_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-32 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-32 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:09/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_32_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-32 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_32_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_33_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_33_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-33 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-33 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0a/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_33_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-33 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_33_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_35_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_35_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-35 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-35 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0b/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_35_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-35 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_35_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_36_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_36_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-36 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-36 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0c/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_36_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-36 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_36_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_37_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_37_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-37 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-37 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0d/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_37_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-37 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_37_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_40_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt3000_name_40_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-40 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-40 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0f/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_name_40_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT3000 name-40 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt3000_name_40_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
 # name: test_entities[mt3000_beryl_ax-switch][switch.gl_inet_mt3000_ssid_2-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
@@ -2923,6 +3623,56 @@
     'state': '2926',
   })
 # ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_alias_38_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'alias-38 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'alias-38 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0e/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_alias_38_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 alias-38 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
 # name: test_entities[mt6000-switch][switch.gl_inet_mt6000_leds-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
@@ -2971,6 +3721,656 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': 'off',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_24_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-24 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-24 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:02/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_24_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-24 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_25_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-25 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-25 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:03/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_25_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-25 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_26_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-26 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-26 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:04/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_26_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-26 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_27_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-27 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-27 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:05/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_27_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-27 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_28_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-28 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-28 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:06/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_28_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-28 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_29_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-29 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-29 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:07/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_29_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-29 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_31_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-31 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-31 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:08/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_31_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-31 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_32_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-32 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-32 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:09/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_32_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-32 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_33_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-33 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-33 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0a/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_33_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-33 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_35_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-35 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-35 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0b/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_35_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-35 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_36_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-36 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-36 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0c/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_36_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-36 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_37_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-37 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-37 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0d/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_37_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-37 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_40_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-40 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-40 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0f/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-switch][switch.gl_inet_mt6000_name_40_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-40 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
   })
 # ---
 # name: test_entities[mt6000-switch][switch.gl_inet_mt6000_ssid_10-entry]
@@ -4695,6 +6095,706 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '2025-12-23T22:49:24+00:00',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_alias_38_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'alias-38 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'alias-38 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0e/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_alias_38_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 alias-38 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_24_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-24 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-24 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:02/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_24_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-24 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_25_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-25 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-25 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:03/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_25_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-25 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_26_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-26 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-26 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:04/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_26_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-26 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_27_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-27 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-27 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:05/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_27_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-27 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_28_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-28 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-28 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:06/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_28_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-28 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_29_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-29 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-29 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:07/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_29_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-29 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_31_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-31 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-31 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:08/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_31_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-31 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_32_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-32 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-32 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:09/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_32_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-32 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_33_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-33 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-33 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0a/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_33_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-33 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_35_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-35 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-35 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0b/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_35_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-35 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_36_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-36 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-36 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0c/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_36_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-36 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_37_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-37 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-37 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0d/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_37_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-37 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_40_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-40 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-40 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0f/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_name_40_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-40 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
   })
 # ---
 # name: test_entities[mt6000_no_tailscale-switch][switch.gl_inet_mt6000_ssid_10-entry]
@@ -6430,6 +8530,706 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '2025-12-23T22:49:24+00:00',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_alias_38_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'alias-38 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'alias-38 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0e/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_alias_38_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 alias-38 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_24_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-24 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-24 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:02/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_24_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-24 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_25_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-25 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-25 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:03/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_25_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-25 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_26_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-26 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-26 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:04/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_26_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-26 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_27_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-27 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-27 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:05/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_27_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-27 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_28_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-28 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-28 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:06/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_28_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-28 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_29_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-29 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-29 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:07/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_29_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-29 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_31_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-31 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-31 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:08/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_31_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-31 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_32_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-32 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-32 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:09/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_32_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-32 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_33_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-33 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-33 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0a/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_33_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-33 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_35_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-35 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-35 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0b/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_35_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-35 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_36_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-36 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-36 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0c/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_36_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-36 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_37_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-37 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-37 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0d/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_37_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-37 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_40_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-40 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-40 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0f/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_name_40_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-40 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
   })
 # ---
 # name: test_entities[mt6000_no_wireguard-switch][switch.gl_inet_mt6000_ssid_10-entry]
@@ -8221,6 +11021,756 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '2025-12-23T22:49:24+00:00',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_alias_38_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'alias-38 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'alias-38 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0e/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_alias_38_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 alias-38 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_24_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-24 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-24 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:02/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_24_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-24 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_25_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-25 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-25 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:03/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_25_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-25 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_26_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-26 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-26 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:04/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_26_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-26 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_27_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-27 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-27 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:05/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_27_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-27 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_28_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-28 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-28 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:06/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_28_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-28 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_29_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-29 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-29 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:07/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_29_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-29 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_31_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-31 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-31 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:08/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_31_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-31 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_32_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-32 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-32 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:09/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_32_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-32 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_33_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-33 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-33 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0a/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_33_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-33 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_35_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-35 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-35 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0b/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_35_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-35 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_36_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-36 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-36 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0c/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_36_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-36 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_37_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-37 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-37 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0d/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_37_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-37 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_40_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-40 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-40 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:0f/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_40_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-40 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_wifi7_internet-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'switch',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'switch.gl_inet_mt6000_name_wifi7_internet',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'name-wifi7 internet',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:web',
+    'original_name': 'name-wifi7 internet',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_switch/00:11:22:00:00:99/internet',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_name_wifi7_internet-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 name-wifi7 internet',
+      'icon': 'mdi:web',
+    }),
+    'context': <ANY>,
+    'entity_id': 'switch.gl_inet_mt6000_name_wifi7_internet',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'on',
   })
 # ---
 # name: test_entities[wifi7_mlo_client-switch][switch.gl_inet_mt6000_ssid_10-entry]

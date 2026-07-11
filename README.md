@@ -19,6 +19,7 @@ Contributions are welcome, for ideas see the TODO list below or the various `#TO
 - Firmware update entity: shows when GL.iNet publishes a newer firmware (checked at most every 6 hours; read-only by design)
 - LED switch: turn the router's LEDs on or off
 - Internet connectivity binary sensor (from the router's own per-interface online state)
+- Per-client internet switch: block or allow any client's network access by MAC (disabled by default; enable per client)
 - Coming soon:
   - On/off control of WiFi Networks
 

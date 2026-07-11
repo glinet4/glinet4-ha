@@ -120,3 +120,42 @@ async def test_led_switch_reflects_and_controls_led_state(
         "switch", "turn_off", {"entity_id": entity_id}, blocking=True
     )
     mock_glinet.led_set_enabled.assert_awaited_with(False)
+
+
+async def test_client_internet_switch_blocks_and_unblocks(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    entity_registry_enabled_by_default: None,
+) -> None:
+    """Per-client internet switch: on = allowed, turn_off blocks by MAC."""
+    mock_config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    registry = er.async_get(hass)
+    clients = profile.load("connected_clients") or {}
+    named = {
+        mac: c
+        for mac, c in clients.items()
+        if (c.get("alias") or "").strip() or (c.get("name") or "").strip()
+    }
+    if not named:
+        return
+    mac = next(iter(named))
+    entity_id = registry.async_get_entity_id(
+        "switch", DOMAIN, f"glinet_switch/{mac}/internet"
+    )
+    assert entity_id is not None
+    # A non-blocked client shows internet access on.
+    assert hass.states.get(entity_id).state == "on"
+
+    await hass.services.async_call(
+        "switch", "turn_off", {"entity_id": entity_id}, blocking=True
+    )
+    mock_glinet.client_set_blocked.assert_awaited_with(mac, True)
+    await hass.services.async_call(
+        "switch", "turn_on", {"entity_id": entity_id}, blocking=True
+    )
+    mock_glinet.client_set_blocked.assert_awaited_with(mac, False)
