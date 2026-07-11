@@ -10,6 +10,7 @@ from __future__ import annotations
 from unittest.mock import AsyncMock
 
 from freezegun.api import FrozenDateTimeFactory
+from gli4py.enums import TailscaleConnection
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet.const import DOMAIN
@@ -91,6 +92,42 @@ async def test_wan_speed_sensors_report_rates(
     assert upload_id is not None
     assert hass.states.get(download_id).state == str(wan_speed["speed_rx"])
     assert hass.states.get(upload_id).state == str(wan_speed["speed_tx"])
+
+
+async def test_tailscale_status_sensor_reflects_connection_state(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """The tailscale status sensor mirrors the connection state enum."""
+    coordinator = await _setup_at(hass, mock_config_entry, freezer)
+    entity_id = er.async_get(hass).async_get_entity_id(
+        "sensor", DOMAIN, f"glinet_sensor/{profile.factory_mac}/tailscale_status"
+    )
+    if not profile.manifest["capabilities"]["has_tailscale"]:
+        assert entity_id is None
+        return
+    assert entity_id is not None
+    expected = profile.manifest["endpoints"]["tailscale_connection_state"].lower()
+    state = hass.states.get(entity_id)
+    assert state.state == expected
+    assert "auth_url" not in state.attributes
+
+    # The router drops to LOGIN_REQUIRED (e.g. after the firmware's
+    # 'tailscale up --reset' discards node auth) and offers a login URL.
+    mock_glinet.tailscale_connection_state.return_value = (
+        TailscaleConnection.LOGIN_REQUIRED
+    )
+    mock_glinet.tailscale_auth_url.return_value = (
+        "https://login.tailscale.com/a/testtest"
+    )
+    await coordinator.async_refresh()
+    await hass.async_block_till_done()
+    state = hass.states.get(entity_id)
+    assert state.state == "login_required"
+    assert state.attributes["auth_url"] == "https://login.tailscale.com/a/testtest"
 
 
 async def test_uptime_is_stable_across_polls(

@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 import logging
 from typing import TYPE_CHECKING, Any
 
+from gli4py.enums import TailscaleConnection
+
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
@@ -164,15 +166,15 @@ SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
 ]
 
 
-class WanEntityDescription(SensorEntityDescription, frozen_or_thawed=True):
-    """Describes a GL-iNet WAN sensor entity (reads the whole snapshot)."""
+class GLinetDataEntityDescription(SensorEntityDescription, frozen_or_thawed=True):
+    """Describes a sensor deriving its value from the whole GLinetData snapshot."""
 
     value_fn: Callable[[GLinetData], str | int | float | None]
-    extra_attributes_fn: Callable[[GLinetData], dict[str, Any]] | None = None
+    extra_attributes_fn: Callable[[GLinetData], dict[str, Any] | None] | None = None
 
 
-WAN_SENSORS: list[WanEntityDescription] = [
-    WanEntityDescription(
+WAN_SENSORS: list[GLinetDataEntityDescription] = [
+    GLinetDataEntityDescription(
         key="wan_ip",
         name="WAN IP",
         has_entity_name=True,
@@ -189,7 +191,7 @@ WAN_SENSORS: list[WanEntityDescription] = [
             "protocol": data.wan_status.get("protocol"),
         },
     ),
-    WanEntityDescription(
+    GLinetDataEntityDescription(
         key="wan_download_speed",
         name="WAN download speed",
         has_entity_name=True,
@@ -200,7 +202,7 @@ WAN_SENSORS: list[WanEntityDescription] = [
         suggested_display_precision=0,
         value_fn=lambda data: data.wan_speed.get("speed_rx"),
     ),
-    WanEntityDescription(
+    GLinetDataEntityDescription(
         key="wan_upload_speed",
         name="WAN upload speed",
         has_entity_name=True,
@@ -213,6 +215,24 @@ WAN_SENSORS: list[WanEntityDescription] = [
     ),
 ]
 
+TAILSCALE_SENSORS: list[GLinetDataEntityDescription] = [
+    GLinetDataEntityDescription(
+        key="tailscale_status",
+        name="Tailscale status",
+        has_entity_name=True,
+        icon="mdi:vpn",
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=SensorDeviceClass.ENUM,
+        options=[state.name.lower() for state in TailscaleConnection],
+        value_fn=lambda data: (
+            data.tailscale_state.lower() if data.tailscale_state else None
+        ),
+        extra_attributes_fn=lambda data: (
+            {"auth_url": data.tailscale_auth_url} if data.tailscale_auth_url else None
+        ),
+    ),
+]
+
 
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
@@ -221,13 +241,13 @@ async def async_setup_entry(
     _LOGGER.debug("Setting up GL-iNet Sensors")
 
     coordinator = entry.runtime_data
-    sensors: list[SystemStatusSensor | SystemUptimeSensor | WanSensor] = [
+    sensors: list[SystemStatusSensor | SystemUptimeSensor | GLinetDataSensor] = [
         SystemStatusSensor(coordinator=coordinator, entity_description=description)
         for description in SYSTEM_SENSORS
     ]
     sensors.extend(
-        WanSensor(coordinator=coordinator, entity_description=description)
-        for description in WAN_SENSORS
+        GLinetDataSensor(coordinator=coordinator, entity_description=description)
+        for description in (*WAN_SENSORS, *TAILSCALE_SENSORS)
     )
     # Special case for uptime as it requires additional data processing
     sensors.append(
@@ -308,17 +328,17 @@ class SystemStatusSensor(GliSensorBase):
         return self.entity_description.value_fn(self.coordinator.data.system_status)
 
 
-class WanSensor(CoordinatorEntity["GLinetUpdateCoordinator"], SensorEntity):
-    """GL-iNet WAN sensor: value derived from the full coordinator snapshot."""
+class GLinetDataSensor(CoordinatorEntity["GLinetUpdateCoordinator"], SensorEntity):
+    """GL-iNet sensor whose value derives from the full coordinator snapshot."""
 
-    entity_description: WanEntityDescription
+    entity_description: GLinetDataEntityDescription
 
     def __init__(
         self,
         coordinator: GLinetUpdateCoordinator,
-        entity_description: WanEntityDescription,
+        entity_description: GLinetDataEntityDescription,
     ) -> None:
-        """Initialize the WAN sensor."""
+        """Initialize the sensor from its description."""
         super().__init__(coordinator)
         self.entity_description = entity_description
         self._attr_device_info = coordinator.device_info

@@ -61,6 +61,8 @@ class GLinetData:
     wireguard_connections: list[WireGuardClient] = field(default_factory=list)
     tailscale_config: dict = field(default_factory=dict)
     tailscale_connection: bool | None = None
+    tailscale_state: str | None = None
+    tailscale_auth_url: str | None = None
     wan_status: dict = field(default_factory=dict)
     wan_speed: dict = field(default_factory=dict)
 
@@ -103,6 +105,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._wireguard_connections: list[WireGuardClient] = []
         self._tailscale_config: dict = {}
         self._tailscale_connection: bool | None = None
+        self._tailscale_state: str | None = None
+        self._tailscale_auth_url: str | None = None
         self._wan_status: dict = {}
         self._wan_speed: dict = {}
         # None = not yet probed; False = this firmware lacks the WAN endpoints
@@ -232,6 +236,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             wireguard_connections=self._wireguard_connections,
             tailscale_config=self._tailscale_config,
             tailscale_connection=self._tailscale_connection,
+            tailscale_state=self._tailscale_state,
+            tailscale_auth_url=self._tailscale_auth_url,
             wan_status=self._wan_status,
             wan_speed=self._wan_speed,
         )
@@ -384,6 +390,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             return
         if not configured:
             self._tailscale_config = {}
+            self._tailscale_state = None
+            self._tailscale_auth_url = None
             return
         self._tailscale_config = (
             await self._update_platform(
@@ -395,6 +403,18 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._api.tailscale_connection_state
         )
         self._tailscale_connection = response == TailscaleConnection.CONNECTED
+        self._tailscale_state = response.name if response is not None else None
+        self._tailscale_auth_url = None
+        if response in (
+            TailscaleConnection.LOGIN_REQUIRED,
+            TailscaleConnection.AUTHORIZATION_REQUIRED,
+        ):
+            # The firmware's own toggle path ('tailscale up --reset') can drop
+            # node auth; the login URL lets the user recover from HA.
+            try:
+                self._tailscale_auth_url = await self._api.tailscale_auth_url()
+            except (TimeoutError, TokenError, OSError, NonZeroResponse) as err:
+                _LOGGER.debug("Could not fetch the tailscale auth url: %s", err)
 
     async def update_wan_state(self) -> None:
         """Poll WAN status and throughput; degrade gracefully when unsupported.

@@ -13,6 +13,8 @@ Contributions are welcome, for ideas see the TODO list below or the various `#TO
 - Control all configured wireguard and tailscale clients with a switch.
 - Reboot your router
 - System device sensors including CPU temperature (if supported by your device), CPU load and Uptime
+- WAN sensors: public IP (with gateway/DNS/protocol attributes) and download/upload throughput (on firmware that exposes the WAN endpoints)
+- Tailscale status sensor (disconnected / login required / authorization required / connected / connecting) with the login URL as an attribute when the router needs re-authentication
 - Coming soon:
   - On/off control of WiFi Networks
 

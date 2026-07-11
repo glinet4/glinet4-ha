@@ -2522,6 +2522,72 @@
     'state': '40.877846169639',
   })
 # ---
+# name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_tailscale_status-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': dict({
+      'options': list([
+        'disconnected',
+        'login_required',
+        'authorization_required',
+        'connected',
+        'connecting',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.gl_inet_mt6000_tailscale_status',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Tailscale status',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': 'mdi:vpn',
+    'original_name': 'Tailscale status',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_sensor/00:11:22:00:00:01/tailscale_status',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_tailscale_status-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'GL-iNet MT6000 Tailscale status',
+      'icon': 'mdi:vpn',
+      'options': list([
+        'disconnected',
+        'login_required',
+        'authorization_required',
+        'connected',
+        'connecting',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.gl_inet_mt6000_tailscale_status',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'connected',
+  })
+# ---
 # name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_uptime-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
@@ -5968,6 +6034,72 @@
     'state': '40.877846169639',
   })
 # ---
+# name: test_entities[mt6000_no_wireguard-sensor][sensor.gl_inet_mt6000_tailscale_status-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': dict({
+      'options': list([
+        'disconnected',
+        'login_required',
+        'authorization_required',
+        'connected',
+        'connecting',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.gl_inet_mt6000_tailscale_status',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Tailscale status',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': 'mdi:vpn',
+    'original_name': 'Tailscale status',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_sensor/00:11:22:00:00:01/tailscale_status',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-sensor][sensor.gl_inet_mt6000_tailscale_status-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'GL-iNet MT6000 Tailscale status',
+      'icon': 'mdi:vpn',
+      'options': list([
+        'disconnected',
+        'login_required',
+        'authorization_required',
+        'connected',
+        'connecting',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.gl_inet_mt6000_tailscale_status',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'connected',
+  })
+# ---
 # name: test_entities[mt6000_no_wireguard-sensor][sensor.gl_inet_mt6000_uptime-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
@@ -7634,6 +7766,72 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '40.877846169639',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-sensor][sensor.gl_inet_mt6000_tailscale_status-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': dict({
+      'options': list([
+        'disconnected',
+        'login_required',
+        'authorization_required',
+        'connected',
+        'connecting',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.gl_inet_mt6000_tailscale_status',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Tailscale status',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': 'mdi:vpn',
+    'original_name': 'Tailscale status',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_sensor/00:11:22:00:00:01/tailscale_status',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-sensor][sensor.gl_inet_mt6000_tailscale_status-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'device_class': 'enum',
+      'friendly_name': 'GL-iNet MT6000 Tailscale status',
+      'icon': 'mdi:vpn',
+      'options': list([
+        'disconnected',
+        'login_required',
+        'authorization_required',
+        'connected',
+        'connecting',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.gl_inet_mt6000_tailscale_status',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'connected',
   })
 # ---
 # name: test_entities[wifi7_mlo_client-sensor][sensor.gl_inet_mt6000_uptime-entry]
