@@ -43,7 +43,7 @@ Contributions are welcome, for ideas see the TODO list below or the various `#TO
 3. Create a new directory `/workspaces/glinet`
 4. Cntr Shift P, `add folder to workspace` and then add the above folder
 5. `cd` into that directory
-6. `git clone https://github.com/glinet4/ha-glinet4.git . `
+6. `git clone https://github.com/glinet4/glinet4-ha.git . `
 7. `mkdir -p /workspaces/core/config/custom_components && cd /workspaces/core/config/custom_components`
 8. `ln -s /workspaces/glinet/custom_components/glinet4`
 9. You may need to config a new ssh key inside the container. [Use this](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) - this will be overwritten if you rebuild the container

@@ -1,21 +1,28 @@
 {
   "domain": "glinet4",
   "name": "GL.iNet (glinet4)",
-  "codeowners": ["@glinet4"],
+  "codeowners": [
+    "@glinet4"
+  ],
   "config_flow": true,
-  "dependencies": ["network", "http"],
+  "dependencies": [
+    "network",
+    "http"
+  ],
   "dhcp": [
     {
       "hostname": "*gl-*",
       "macaddress": "9483C4*"
     }
   ],
-  "documentation": "https://github.com/glinet4/ha-glinet4",
+  "documentation": "https://github.com/glinet4/glinet4-ha",
   "homekit": {},
   "integration_type": "hub",
   "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/glinet4/ha-glinet4/issues",
-  "requirements": ["glinet4>=0.1.0"],
+  "issue_tracker": "https://github.com/glinet4/glinet4-ha/issues",
+  "requirements": [
+    "glinet4>=0.1.0"
+  ],
   "ssdp": [],
   "version": "0.1.9"
 }
