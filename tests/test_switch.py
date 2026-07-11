@@ -159,3 +159,52 @@ async def test_client_internet_switch_blocks_and_unblocks(
         "switch", "turn_on", {"entity_id": entity_id}, blocking=True
     )
     mock_glinet.client_set_blocked.assert_awaited_with(mac, False)
+
+
+async def test_flow_statistics_switch_toggles_and_explains(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """Stats switch toggles the rule and surfaces why data may not collect."""
+    mock_config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    entity_id = er.async_get(hass).async_get_entity_id(
+        "switch", DOMAIN, f"glinet_switch/{profile.factory_mac}/flow_statistics"
+    )
+    rule = profile.load("flow_stats_rule")
+    if rule is None:
+        assert entity_id is None
+        return
+    assert entity_id is not None
+    coordinator = mock_config_entry.runtime_data
+    accel = profile.load("network_acceleration") or {}
+
+    # Baseline: stats off => not collecting; reason says so.
+    state = hass.states.get(entity_id)
+    assert state.state == "off"
+    assert state.attributes["network_acceleration"] == accel.get("enable", False)
+    assert state.attributes["collecting_app_data"] is False
+    assert "disabled" in state.attributes["reason"].lower()
+
+    # Stats on but acceleration off => enabled yet not collecting app data,
+    # and the reason names the acceleration prerequisite.
+    mock_glinet.flow_stats_rule.return_value = {**rule, "enable": True}
+    mock_glinet.network_acceleration.return_value = {**accel, "enable": False}
+    await coordinator.async_refresh()
+    await hass.async_block_till_done()
+    state = hass.states.get(entity_id)
+    assert state.state == "on"
+    assert state.attributes["collecting_app_data"] is False
+    assert "acceleration" in state.attributes["reason"].lower()
+
+    # Toggling only touches the statistics rule (never SQM/acceleration).
+    await hass.services.async_call(
+        "switch", "turn_off", {"entity_id": entity_id}, blocking=True
+    )
+    mock_glinet.flow_stats_set_enabled.assert_awaited_with(False)
+    assert mock_glinet.network_acceleration_set.await_count == 0
+    mock_glinet.flow_stats_set_enabled.assert_awaited_with(False)

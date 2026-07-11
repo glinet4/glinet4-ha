@@ -20,6 +20,7 @@ Contributions are welcome, for ideas see the TODO list below or the various `#TO
 - LED switch: turn the router's LEDs on or off
 - Internet connectivity binary sensor (from the router's own per-interface online state)
 - Per-client internet switch: block or allow any client's network access by MAC (disabled by default; enable per client)
+- Flow statistics switch: enable/disable per-application traffic statistics, with an attribute explaining when data won't collect (NAT acceleration off due to QoS/SQM)
 - Coming soon:
   - On/off control of WiFi Networks
 

@@ -35,6 +35,7 @@ async def async_setup_entry(
         | TailscaleSwitch
         | LedSwitch
         | ClientInternetSwitch
+        | FlowStatisticsSwitch
     ] = []
     if data.wireguard_clients:
         # TODO detect all configured wireguard, openvpn, shadowsocks and
@@ -47,6 +48,8 @@ async def async_setup_entry(
         switches.append(TailscaleSwitch(coordinator))
     if data.led_config:
         switches.append(LedSwitch(coordinator))
+    if data.flow_stats_rule:
+        switches.append(FlowStatisticsSwitch(coordinator))
     switches.extend(
         ClientInternetSwitch(coordinator, mac)
         for mac, device in data.devices.items()
@@ -109,6 +112,71 @@ class ClientInternetSwitch(GliSwitchBase):
     async def async_turn_off(self, **_: Any) -> None:
         """Block the client's network access."""
         await self.coordinator.api.client_set_blocked(self._mac, True)
+        await self.coordinator.async_request_refresh()
+
+
+class FlowStatisticsSwitch(GliSwitchBase):
+    """Enable or disable per-application traffic statistics.
+
+    Toggling only changes the statistics rule; it deliberately does NOT alter
+    NAT acceleration or QoS/SQM on the user's behalf (see async_turn_on). When
+    statistics are on but acceleration is off, the collector runs but the DPI
+    app accounting does not populate, so the reason is surfaced as an attribute.
+    """
+
+    _attr_icon = "mdi:chart-box"
+    _attr_name = "Flow statistics"
+
+    def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
+        """Initialize the flow-statistics switch."""
+        super().__init__(coordinator)
+        self._attr_unique_id = (
+            f"glinet_switch/{coordinator.factory_mac}/flow_statistics"
+        )
+
+    @property
+    def is_on(self) -> bool:
+        """Return whether statistics collection is enabled."""
+        return bool(self.coordinator.data.flow_stats_rule.get("enable"))
+
+    @property
+    def _acceleration_on(self) -> bool:
+        return bool(self.coordinator.data.network_acceleration.get("enable"))
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Explain whether statistics are effectively collecting app data."""
+        collecting = self.is_on and self._acceleration_on
+        if not self.is_on:
+            reason = "Statistics collection is disabled."
+        elif not self._acceleration_on:
+            reason = (
+                "Statistics are enabled but NAT acceleration is off, so per-app "
+                "data will not populate. Acceleration requires QoS/SQM to be "
+                "disabled on the router."
+            )
+        else:
+            reason = "Collecting per-app statistics."
+        return {
+            "network_acceleration": self._acceleration_on,
+            "collecting_app_data": collecting,
+            "reason": reason,
+        }
+
+    async def async_turn_on(self, **_: Any) -> None:
+        """Enable statistics collection.
+
+        Only the statistics rule is changed. The prerequisite (NAT
+        acceleration, which conflicts with QoS/SQM) is intentionally left to
+        the user: silently disabling their QoS would be surprising and is
+        surfaced via the reason attribute instead.
+        """
+        await self.coordinator.api.flow_stats_set_enabled(True)
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **_: Any) -> None:
+        """Disable statistics collection."""
+        await self.coordinator.api.flow_stats_set_enabled(False)
         await self.coordinator.async_request_refresh()
 
 

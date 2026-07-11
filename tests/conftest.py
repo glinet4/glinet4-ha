@@ -208,6 +208,11 @@ def build_mock_api(profile: Profile) -> AsyncMock:
     api.tailscale_set_exit_node.return_value = None
     api.led_set_enabled.return_value = None
     api.client_set_blocked.return_value = []
+    _wire_optional_endpoint(api.flow_stats_rule, profile.load("flow_stats_rule"))
+    _wire_optional_endpoint(
+        api.network_acceleration, profile.load("network_acceleration")
+    )
+    api.flow_stats_set_enabled.return_value = []
     api.logged_in = True
     return api
 

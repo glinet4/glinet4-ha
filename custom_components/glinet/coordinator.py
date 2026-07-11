@@ -76,6 +76,8 @@ class GLinetData:
     firmware_check: dict = field(default_factory=dict)
     led_config: dict = field(default_factory=dict)
     network_interfaces: list[dict] = field(default_factory=list)
+    flow_stats_rule: dict = field(default_factory=dict)
+    network_acceleration: dict = field(default_factory=dict)
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -125,6 +127,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._firmware_check_at: datetime | None = None
         self._led_config: dict = {}
         self._network_interfaces: list[dict] = []
+        self._flow_stats_rule: dict = {}
+        self._network_acceleration: dict = {}
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -239,6 +243,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         await self.update_tailscale_state()
         await self.update_wan_state()
         await self.update_led_state()
+        await self.update_flow_statistics_state()
         await self.update_firmware_check()
 
         # If any call hit a transport error this cycle, fail the whole refresh
@@ -264,6 +269,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             firmware_check=self._firmware_check,
             led_config=self._led_config,
             network_interfaces=self._network_interfaces,
+            flow_stats_rule=self._flow_stats_rule,
+            network_acceleration=self._network_acceleration,
         )
 
     async def _update_platform(
@@ -501,6 +508,22 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         led = await self._call_optional("led_config", self._api.led_config)
         if led is not None:
             self._led_config = led or {}
+
+    async def update_flow_statistics_state(self) -> None:
+        """Poll the flow-statistics rule and NAT-acceleration state.
+
+        Both are optional endpoints. Acceleration state is kept so consumers
+        can explain why statistics may not be collecting app data (the DPI
+        accounting rides on acceleration, which conflicts with QoS/SQM).
+        """
+        rule, accel = await asyncio.gather(
+            self._call_optional("flow_stats_rule", self._api.flow_stats_rule),
+            self._call_optional("network_acceleration", self._api.network_acceleration),
+        )
+        if rule is not None:
+            self._flow_stats_rule = rule or {}
+        if accel is not None:
+            self._network_acceleration = accel or {}
 
     async def update_firmware_check(self) -> None:
         """Check online for a firmware update, at most every 6 hours."""
