@@ -1,4 +1,4 @@
-"""Tests for GL-iNet integration setup and teardown."""
+"""Tests for GL.iNet integration setup and teardown."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Button platform for the GL-iNet integration."""
+"""Button platform for the GL.iNet integration."""
 
 from __future__ import annotations
 

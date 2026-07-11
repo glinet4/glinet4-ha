@@ -1,4 +1,4 @@
-"""Behavioural tests for GL-iNet sensors.
+"""Behavioural tests for GL.iNet sensors.
 
 Entity values and registry entries are covered by ``tests/test_snapshots.py``;
 this module keeps the behaviour snapshots can't express - the uptime-stability

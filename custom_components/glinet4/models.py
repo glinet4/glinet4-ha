@@ -1,4 +1,4 @@
-"""Data models shared across the GL-iNet integration."""
+"""Data models shared across the GL.iNet integration."""
 
 from __future__ import annotations
 
@@ -107,7 +107,7 @@ def _log_unrecognised_interface(
 ) -> None:
     """Warn once per distinct context so an unknown interface doesn't spam logs."""
     _LOGGER.warning(
-        "Unrecognised device interface (iface=%s type=%s) on GL-iNet model %s "
+        "Unrecognised device interface (iface=%s type=%s) on GL.iNet model %s "
         "(firmware %s; dev_info fields=%s). Using Unknown - please open an issue "
         "with this log so support can be added",
         iface or "<none>",

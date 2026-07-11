@@ -10,7 +10,7 @@ Contributions are welcome, for ideas see the TODO list below or the various `#TO
 
 ## Features
 
-- Device tracker for devices connected directly or indirectly to a Gl-inet router.
+- Device tracker for devices connected directly or indirectly to a GL.iNet router.
   - Note, modern phones use MAC address randomisation when they connect to WiFi, you will need to disable this for your home wifi only on [android](https://www.howtogeek.com/722653/how-to-disable-random-wi-fi-mac-address-on-android/) and [iphone](https://www.linksys.com/support-article?articleNum=317709)
 - Control all configured wireguard and tailscale clients with a switch.
 - Reboot your router
@@ -95,3 +95,7 @@ up automatically. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 ## Depends on
 
 https://github.com/glinet4/glinet4
+
+---
+
+Part of the **[glinet4](https://github.com/glinet4)** project — [glinet4](https://github.com/glinet4/glinet4) (Python library) · [glinet4-ha](https://github.com/glinet4/glinet4-ha) (Home Assistant) · [glinet4-profiler](https://github.com/glinet4/glinet4-profiler) · [glinet4-registry](https://github.com/glinet4/glinet4-registry)

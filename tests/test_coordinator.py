@@ -1,4 +1,4 @@
-"""Tests for the GL-iNet DataUpdateCoordinator."""
+"""Tests for the GL.iNet DataUpdateCoordinator."""
 
 from __future__ import annotations
 

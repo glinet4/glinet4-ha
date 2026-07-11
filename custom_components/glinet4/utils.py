@@ -1,4 +1,4 @@
-"""Utility functions for GL-iNet routers."""
+"""Utility functions for GL.iNet routers."""
 
 from __future__ import annotations
 
@@ -33,7 +33,7 @@ async def async_run_action[T](action: Awaitable[T], *, device: str) -> T:
 def adjust_mac(mac: str, delta: int, sep: str = ":") -> str:
     """Increment a MAC address by 1.
 
-    This is helpful because GL-iNet devices' LAN ports have a mac of factory_mac + 1
+    This is helpful because GL.iNet devices' LAN ports have a mac of factory_mac + 1
     but this is not found in the API
     :param mac: Original MAC address (e.g. "00:1A:2B:3C:4D:5E" or "00-1A-2B-3C-4D-5E").
     :param sep: Separator to use in the output (default is ':').

@@ -98,7 +98,7 @@ def no_wireguard(base: dict[str, Any]) -> None:
             "model": "MT6000",
             "firmware_version": "4.9.0",
             "factory_mac": "00:11:22:00:00:01",
-            "title": "GL-iNet MT6000",
+            "title": "GL.iNet MT6000",
             "description": "Derived from mt6000 with WireGuard absent.",
             "capabilities": {
                 "has_wireguard": False,
@@ -136,7 +136,7 @@ def no_tailscale(base: dict[str, Any]) -> None:
             "model": "MT6000",
             "firmware_version": "4.9.0",
             "factory_mac": "00:11:22:00:00:01",
-            "title": "GL-iNet MT6000",
+            "title": "GL.iNet MT6000",
             "description": "Derived from mt6000 with Tailscale absent.",
             "capabilities": {
                 "has_wireguard": True,
@@ -187,7 +187,7 @@ def beryl_ax(base: dict[str, Any]) -> None:
             "model": "MT3000",
             "firmware_version": "4.7.0",
             "factory_mac": "00:11:22:00:03:01",
-            "title": "GL-iNet MT3000",
+            "title": "GL.iNet MT3000",
             "description": "Synthetic Beryl AX (MT3000): dual-band, no VPN.",
             "capabilities": {
                 "has_wireguard": False,
@@ -231,7 +231,7 @@ def wifi7_mlo_client(base: dict[str, Any]) -> None:
             "model": "MT6000",
             "firmware_version": "4.9.0",
             "factory_mac": "00:11:22:00:00:01",
-            "title": "GL-iNet MT6000",
+            "title": "GL.iNet MT6000",
             "description": (
                 "Derived from mt6000 with a WiFi7/MLO client (iface 'MLO', an "
                 "out-of-range integer type). The interface resolver handles it "

@@ -1,4 +1,4 @@
-"""Binary sensors for GL-iNet component."""
+"""Binary sensors for GL.iNet component."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Select entities for GL-iNet component."""
+"""Select entities for GL.iNet component."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Behavioural tests for GL-iNet switches.
+"""Behavioural tests for GL.iNet switches.
 
 Switch states and registry entries are covered by ``tests/test_snapshots.py``;
 this module keeps the side effects snapshots can't express - that toggling a

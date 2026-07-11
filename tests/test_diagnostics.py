@@ -1,4 +1,4 @@
-"""Tests for GL-iNet diagnostics."""
+"""Tests for GL.iNet diagnostics."""
 
 from __future__ import annotations
 

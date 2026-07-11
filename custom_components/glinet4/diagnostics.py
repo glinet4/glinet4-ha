@@ -1,4 +1,4 @@
-"""Diagnostics support for the GL-iNet integration."""
+"""Diagnostics support for the GL.iNet integration."""
 
 from __future__ import annotations
 

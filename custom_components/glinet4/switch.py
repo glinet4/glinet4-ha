@@ -1,4 +1,4 @@
-"""Switch platform for the GL-iNet integration."""
+"""Switch platform for the GL.iNet integration."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ PARALLEL_UPDATES = 0
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Set up the GL-iNet switches."""
+    """Set up the GL.iNet switches."""
     coordinator = entry.runtime_data
     data = coordinator.data
     switches: list[
@@ -64,7 +64,7 @@ async def async_setup_entry(
 
 
 class GliSwitchBase(CoordinatorEntity["GLinetUpdateCoordinator"], SwitchEntity):
-    """GL-inet switch base class."""
+    """GL.iNet switch base class."""
 
     # Bind the concrete coordinator type so `self.coordinator.data` is typed as
     # GLinetData rather than Any (the generic parameter isn't propagated to the

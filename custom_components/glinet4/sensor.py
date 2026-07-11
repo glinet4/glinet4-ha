@@ -1,4 +1,4 @@
-"""Sensors for GL-iNet component."""
+"""Sensors for GL.iNet component."""
 
 from __future__ import annotations
 
@@ -43,7 +43,7 @@ UPTIME_DEVIATION = timedelta(seconds=120)
 
 
 class SystemStatusEntityDescription(SensorEntityDescription, frozen_or_thawed=True):
-    """Describes a GL-iNet system status sensor entity."""
+    """Describes a GL.iNet system status sensor entity."""
 
     value_fn: Callable[[dict], int | float | None]
     extra_attributes_fn: Callable[[dict], dict[str, Any]] | None = None
@@ -239,7 +239,7 @@ async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up sensors."""
-    _LOGGER.debug("Setting up GL-iNet Sensors")
+    _LOGGER.debug("Setting up GL.iNet Sensors")
 
     coordinator = entry.runtime_data
     sensors: list[SystemStatusSensor | SystemUptimeSensor | GLinetDataSensor] = [
@@ -293,7 +293,7 @@ def _boot_time_changed(old: datetime | None, new: datetime) -> bool:
 
 
 class GliSensorBase(CoordinatorEntity["GLinetUpdateCoordinator"], SensorEntity):
-    """GL-iNet sensor base class."""
+    """GL.iNet sensor base class."""
 
     entity_description: SystemStatusEntityDescription
 
@@ -321,7 +321,7 @@ class GliSensorBase(CoordinatorEntity["GLinetUpdateCoordinator"], SensorEntity):
 
 
 class SystemStatusSensor(GliSensorBase):
-    """GL-iNet system status sensor class."""
+    """GL.iNet system status sensor class."""
 
     @property
     def native_value(self) -> int | float | None:
@@ -330,7 +330,7 @@ class SystemStatusSensor(GliSensorBase):
 
 
 class GLinetDataSensor(CoordinatorEntity["GLinetUpdateCoordinator"], SensorEntity):
-    """GL-iNet sensor whose value derives from the full coordinator snapshot."""
+    """GL.iNet sensor whose value derives from the full coordinator snapshot."""
 
     entity_description: GLinetDataEntityDescription
 
@@ -361,7 +361,7 @@ class GLinetDataSensor(CoordinatorEntity["GLinetUpdateCoordinator"], SensorEntit
 
 
 class SystemUptimeSensor(GliSensorBase):
-    """GL-iNet system uptime sensor class.
+    """GL.iNet system uptime sensor class.
 
     The router exposes uptime as a seconds counter, so the boot timestamp is
     derived as ``now - uptime``. It is recomputed only when the coordinator

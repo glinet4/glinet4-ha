@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Capture and sanitise a router's API responses into a test profile.
 
-Connects to a live GL-iNet router, calls the read-only endpoints the
+Connects to a live GL.iNet router, calls the read-only endpoints the
 integration uses, deterministically sanitises the responses (MACs, IPs, SSIDs,
 hostnames and secrets), and writes a profile directory under ``tests/fixtures``
 that the test suite picks up automatically (see ``tests/conftest.py``).
@@ -185,7 +185,7 @@ def build_manifest(profile_id: str, clean: dict[str, Any]) -> dict[str, Any]:
         "model": str(info.get("model", "")).upper(),
         "firmware_version": info.get("firmware_version", ""),
         "factory_mac": info.get("mac", ""),
-        "title": f"GL-iNet {str(info.get('model', '')).upper()}",
+        "title": f"GL.iNet {str(info.get('model', '')).upper()}",
         "description": f"Captured and sanitised from a live {info.get('model')}.",
         "capabilities": {
             "has_wireguard": "wireguard_client_list" in clean,

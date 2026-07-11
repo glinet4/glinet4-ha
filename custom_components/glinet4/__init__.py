@@ -1,4 +1,4 @@
-"""The GL-iNet integration."""
+"""The GL.iNet integration."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ PLATFORMS = [
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: GlinetConfigEntry) -> bool:
-    """Set up GL-iNet from a config entry.
+    """Set up GL.iNet from a config entry.
 
     Called by home assistant on initial config, restart and
     component reload.

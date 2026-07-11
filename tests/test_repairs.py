@@ -1,4 +1,4 @@
-"""Tests for the GL-iNet repair issues."""
+"""Tests for the GL.iNet repair issues."""
 
 from __future__ import annotations
 

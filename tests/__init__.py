@@ -1,1 +1,1 @@
-"""Tests for the GL-iNet integration."""
+"""Tests for the GL.iNet integration."""

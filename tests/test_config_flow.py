@@ -1,4 +1,4 @@
-"""Tests for the GL-iNet config flow."""
+"""Tests for the GL.iNet config flow."""
 
 from __future__ import annotations
 
@@ -66,7 +66,7 @@ async def test_user_flow_success(hass: HomeAssistant, mock_flow_api: AsyncMock) 
         result["flow_id"], USER_INPUT
     )
     assert result["type"] is FlowResultType.CREATE_ENTRY
-    assert result["title"] == "GL-iNet MT6000"
+    assert result["title"] == "GL.iNet MT6000"
     assert result["data"][CONF_HOST] == "http://192.168.8.1"
 
 

@@ -1,4 +1,4 @@
-"""Common fixtures for the GL-iNet integration tests.
+"""Common fixtures for the GL.iNet integration tests.
 
 The suite is **profile-driven**: every directory under ``tests/fixtures`` that
 contains a ``profile.json`` is a router "profile" (a model + firmware + captured

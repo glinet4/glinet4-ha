@@ -1,4 +1,4 @@
-"""Behavioural tests for GL-iNet device trackers.
+"""Behavioural tests for GL.iNet device trackers.
 
 Tracker states and registry entries are covered by ``tests/test_snapshots.py``;
 this module keeps the discovery behaviour - one tracker per named client,

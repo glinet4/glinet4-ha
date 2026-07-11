@@ -1,4 +1,4 @@
-"""Tests for the GL-iNet reboot button."""
+"""Tests for the GL.iNet reboot button."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""DataUpdateCoordinator for the GL-iNet integration."""
+"""DataUpdateCoordinator for the GL.iNet integration."""
 
 from __future__ import annotations
 
@@ -83,7 +83,7 @@ class GLinetData:
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
-    """Coordinate polling of a GL-iNet router and own its API client.
+    """Coordinate polling of a GL.iNet router and own its API client.
 
     Replaces the old ``GLinetRouter``: it holds the device identity and the
     glinet4 client, and produces a ``GLinetData`` snapshot every ``SCAN_INTERVAL``
@@ -175,14 +175,14 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 self.config_entry.data[CONF_PASSWORD],
             )
         except OSError as exc:
-            _LOGGER.exception("Error connecting to GL-iNet router %s", self._host)
+            _LOGGER.exception("Error connecting to GL.iNet router %s", self._host)
             raise ConfigEntryNotReady from exc
         try:
             router_info = await self._update_platform(self._api.router_info)
             assert router_info is not None
         except Exception as exc:  # pylint: disable=broad-except
             _LOGGER.exception(
-                "Error getting basic device info from GL-iNet router %s", self._host
+                "Error getting basic device info from GL.iNet router %s", self._host
             )
             raise ConfigEntryNotReady from exc
 
@@ -205,7 +205,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             await router.login(conf[CONF_USERNAME], conf[CONF_PASSWORD])
             return router
         _LOGGER.error(
-            "Error setting up GL-iNet router, no auth details found in configuration"
+            "Error setting up GL.iNet router, no auth details found in configuration"
         )
         raise ConfigEntryAuthFailed
 
@@ -216,16 +216,16 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 self.config_entry.data[CONF_USERNAME],
                 self.config_entry.data[CONF_PASSWORD],
             )
-            _LOGGER.info("GL-iNet router %s token was renewed", self._host)
+            _LOGGER.info("GL.iNet router %s token was renewed", self._host)
         except (AuthenticationError, TokenError) as exc:
             _LOGGER.exception(
-                "GL-iNet %s failed to renew the token, have you changed your router password?",
+                "GL.iNet %s failed to renew the token, have you changed your router password?",
                 self._host,
             )
             raise ConfigEntryAuthFailed from exc
         except Exception as exc:
             _LOGGER.warning(
-                "Could not connect to GL-iNet router to renew token: %s", exc
+                "Could not connect to GL.iNet router to renew token: %s", exc
             )
             raise  # Let generic network/timeout exceptions bubble up normally
 
@@ -237,7 +237,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             # The core health call failed (router unreachable / token not yet
             # recovered). Surface it so entities go unavailable; the token error
             # flag triggers a renewal attempt on the next cycle.
-            raise UpdateFailed(f"Unable to reach GL-iNet router {self._host}")
+            raise UpdateFailed(f"Unable to reach GL.iNet router {self._host}")
         self._system_status = status.get("system", {})
 
         await self.update_device_trackers()
@@ -252,7 +252,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         # If any call hit a transport error this cycle, fail the whole refresh
         if self._cycle_failed:
             raise UpdateFailed(
-                f"One or more calls to GL-iNet router {self._host} failed"
+                f"One or more calls to GL.iNet router {self._host} failed"
             )
 
         self._async_manage_repair_issues()
@@ -304,7 +304,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             if not self._connect_error:
                 self._connect_error = True
                 _LOGGER.exception(
-                    "GL-iNet router %s did not respond in time", self._host
+                    "GL.iNet router %s did not respond in time", self._host
                 )
             return None
         except TokenError as exc:
@@ -313,7 +313,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             if not self._connect_error:
                 self._connect_error = True
                 _LOGGER.warning(
-                    "GL-iNet router %s token was refused %s, will try to re-autheticate before next poll",
+                    "GL.iNet router %s token was refused %s, will try to re-autheticate before next poll",
                     self._host,
                     exc,
                 )
@@ -323,7 +323,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             if not self._connect_error:
                 self._connect_error = True
                 _LOGGER.exception(
-                    "GL-iNet router %s responded, but with an error code", self._host
+                    "GL.iNet router %s responded, but with an error code", self._host
                 )
             return None
         except ConfigEntryAuthFailed:
@@ -334,7 +334,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             if not self._connect_error:
                 self._connect_error = True
             _LOGGER.exception(
-                "GL-iNet router %s responded with an unexpected error", self._host
+                "GL.iNet router %s responded with an unexpected error", self._host
             )
             return None
 
@@ -350,13 +350,13 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         if self._token_error:
             self._token_error = False
             _LOGGER.info(
-                "Gl-inet %s new token has successfully made an API call, token marked as valid",
+                "GL.iNet %s new token has successfully made an API call, token marked as valid",
                 self._host,
             )
 
         if self._connect_error:
             self._connect_error = False
-            _LOGGER.info("Reconnected to Gl-inet router %s", self._host)
+            _LOGGER.info("Reconnected to GL.iNet router %s", self._host)
         return response
 
     async def update_device_trackers(self) -> None:
@@ -481,7 +481,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             if name in self._confirmed_endpoints:
                 _LOGGER.debug("Optional endpoint %s failed transiently: %s", name, err)
             else:
-                _LOGGER.info("GL-iNet router %s does not expose %s", self._host, name)
+                _LOGGER.info("GL.iNet router %s does not expose %s", self._host, name)
                 self._unsupported_endpoints.add(name)
             return None
         self._confirmed_endpoints.add(name)
@@ -594,7 +594,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
     ) -> None:
         """Raise the issue when ``active``, otherwise clear it.
 
-        All GL-iNet repair issues are informational (``is_fixable=False``):
+        All GL.iNet repair issues are informational (``is_fixable=False``):
         each is resolved by a device-side change the user must choose, so we
         surface the requirement and let the condition clear the issue.
         """
@@ -659,8 +659,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 (CONNECTION_NETWORK_MAC, adjust_mac(self.factory_mac, 1)),
             },
             name=self.device_name,
-            model=self.model or "GL-iNet Router",
-            manufacturer="GL-iNet",
+            model=self.model or "GL.iNet Router",
+            manufacturer="GL.iNet",
             configuration_url=self._host,
             sw_version=self._sw_v,
         )
@@ -688,7 +688,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
     @property
     def device_name(self) -> str:
         """Return the router's display name (used for the device registry)."""
-        return f"GL-iNet {self._model.upper()}"
+        return f"GL.iNet {self._model.upper()}"
 
 
 type GlinetConfigEntry = ConfigEntry[GLinetUpdateCoordinator]
