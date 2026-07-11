@@ -71,5 +71,10 @@
       "title": "Router is not in router mode",
       "description": "{device} is currently in {mode} mode. Tailscale and VPN features require the router to be in router mode and are unavailable in the current mode.\n\nSwitch the device to router mode on its admin page to use these features, or ignore this notice if you intend to run it in {mode} mode."
     }
+  },
+  "exceptions": {
+    "action_failed": {
+      "message": "Could not apply the change to {device}. The router reported: {error}"
+    }
   }
 }

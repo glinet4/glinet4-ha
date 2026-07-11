@@ -121,6 +121,7 @@ def test_issue_translations_present_and_consistent() -> None:
     en = json.loads((base / "translations" / "en.json").read_text())
 
     assert strings["issues"] == en["issues"]
+    assert strings.get("exceptions") == en.get("exceptions")
     for key in (
         ISSUE_STATISTICS_NOT_COLLECTING,
         "tailscale_reauth_required",

@@ -1,5 +1,35 @@
 """Utility functions for GL-iNet routers."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from gli4py.error_handling import APIClientError
+
+from homeassistant.exceptions import HomeAssistantError
+
+from .const import DOMAIN
+
+if TYPE_CHECKING:
+    from collections.abc import Awaitable
+
+
+async def async_run_action[T](action: Awaitable[T], *, device: str) -> T:
+    """Await a router action, converting failures to HomeAssistantError.
+
+    A user-initiated action that fails should surface a clean, translated
+    error rather than a raw library/transport exception or a swallowed log
+    line, so the frontend shows why the action did not take effect.
+    """
+    try:
+        return await action
+    except (APIClientError, OSError, TimeoutError) as err:
+        raise HomeAssistantError(
+            translation_domain=DOMAIN,
+            translation_key="action_failed",
+            translation_placeholders={"device": device, "error": str(err)},
+        ) from err
+
 
 def adjust_mac(mac: str, delta: int, sep: str = ":") -> str:
     """Increment a MAC address by 1.

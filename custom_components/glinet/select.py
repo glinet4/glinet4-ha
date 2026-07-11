@@ -9,6 +9,8 @@ from homeassistant.components.select import SelectEntity
 from homeassistant.const import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from .utils import async_run_action
+
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -83,9 +85,8 @@ class TailscaleExitNodeSelect(
     async def async_select_option(self, option: str) -> None:
         """Set (or clear) the exit node."""
         ip = None if option == NO_EXIT_NODE else self._labels().get(option)
-        try:
-            await self.coordinator.api.tailscale_set_exit_node(ip)
-        except OSError:
-            _LOGGER.exception("Unable to set tailscale exit node")
-        else:
-            await self.coordinator.async_request_refresh()
+        await async_run_action(
+            self.coordinator.api.tailscale_set_exit_node(ip),
+            device=self.coordinator.device_name,
+        )
+        await self.coordinator.async_request_refresh()

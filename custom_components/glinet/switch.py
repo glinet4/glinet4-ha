@@ -9,6 +9,8 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.const import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from .utils import async_run_action
+
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -106,12 +108,18 @@ class ClientInternetSwitch(GliSwitchBase):
 
     async def async_turn_on(self, **_: Any) -> None:
         """Allow the client's network access."""
-        await self.coordinator.api.client_set_blocked(self._mac, False)
+        await async_run_action(
+            self.coordinator.api.client_set_blocked(self._mac, False),
+            device=self.coordinator.device_name,
+        )
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **_: Any) -> None:
         """Block the client's network access."""
-        await self.coordinator.api.client_set_blocked(self._mac, True)
+        await async_run_action(
+            self.coordinator.api.client_set_blocked(self._mac, True),
+            device=self.coordinator.device_name,
+        )
         await self.coordinator.async_request_refresh()
 
 
@@ -171,12 +179,18 @@ class FlowStatisticsSwitch(GliSwitchBase):
         the user: silently disabling their QoS would be surprising and is
         surfaced via the reason attribute instead.
         """
-        await self.coordinator.api.flow_stats_set_enabled(True)
+        await async_run_action(
+            self.coordinator.api.flow_stats_set_enabled(True),
+            device=self.coordinator.device_name,
+        )
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **_: Any) -> None:
         """Disable statistics collection."""
-        await self.coordinator.api.flow_stats_set_enabled(False)
+        await async_run_action(
+            self.coordinator.api.flow_stats_set_enabled(False),
+            device=self.coordinator.device_name,
+        )
         await self.coordinator.async_request_refresh()
 
 
@@ -205,12 +219,18 @@ class LedSwitch(GliSwitchBase):
 
     async def async_turn_on(self, **_: Any) -> None:
         """Enable the LEDs."""
-        await self.coordinator.api.led_set_enabled(True)
+        await async_run_action(
+            self.coordinator.api.led_set_enabled(True),
+            device=self.coordinator.device_name,
+        )
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **_: Any) -> None:
         """Disable the LEDs."""
-        await self.coordinator.api.led_set_enabled(False)
+        await async_run_action(
+            self.coordinator.api.led_set_enabled(False),
+            device=self.coordinator.device_name,
+        )
         await self.coordinator.async_request_refresh()
 
 
@@ -270,23 +290,21 @@ class WifiApSwitch(GliSwitchBase):
 
     async def async_turn_on(self, **_: Any) -> None:
         """Turn on the AP."""
-        try:
-            _LOGGER.debug("Enabling WiFi interface %s", self._iface_name)
-            await self.coordinator.api.wifi_iface_set_enabled(self._iface_name, True)
-        except OSError:
-            _LOGGER.exception("Unable to enable WiFi interface %s", self._iface_name)
-        else:
-            await self.coordinator.async_request_refresh()
+        _LOGGER.debug("Enabling WiFi interface %s", self._iface_name)
+        await async_run_action(
+            self.coordinator.api.wifi_iface_set_enabled(self._iface_name, True),
+            device=self.coordinator.device_name,
+        )
+        await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **_: Any) -> None:
         """Turn off the AP."""
-        try:
-            _LOGGER.debug("Disabling WiFi interface %s", self._iface_name)
-            await self.coordinator.api.wifi_iface_set_enabled(self._iface_name, False)
-        except OSError:
-            _LOGGER.exception("Unable to disable WiFi interface %s", self._iface_name)
-        else:
-            await self.coordinator.async_request_refresh()
+        _LOGGER.debug("Disabling WiFi interface %s", self._iface_name)
+        await async_run_action(
+            self.coordinator.api.wifi_iface_set_enabled(self._iface_name, False),
+            device=self.coordinator.device_name,
+        )
+        await self.coordinator.async_request_refresh()
 
 
 class TailscaleSwitch(GliSwitchBase):
@@ -325,23 +343,21 @@ class TailscaleSwitch(GliSwitchBase):
 
     async def async_turn_on(self, **_: Any) -> None:
         """Turn on the service."""
-        try:
-            _LOGGER.debug("Enabling tailscale")
-            await self.coordinator.api.tailscale_start()
-        except OSError:
-            _LOGGER.exception("Unable to enable tailscale connection")
-        else:
-            await self.coordinator.async_request_refresh()
+        _LOGGER.debug("Enabling tailscale")
+        await async_run_action(
+            self.coordinator.api.tailscale_start(),
+            device=self.coordinator.device_name,
+        )
+        await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **_: Any) -> None:
         """Turn off the service."""
-        try:
-            _LOGGER.debug("Disabling tailscale")
-            await self.coordinator.api.tailscale_stop()
-        except OSError:
-            _LOGGER.exception("Unable to stop tailscale connection")
-        else:
-            await self.coordinator.async_request_refresh()
+        _LOGGER.debug("Disabling tailscale")
+        await async_run_action(
+            self.coordinator.api.tailscale_stop(),
+            device=self.coordinator.device_name,
+        )
+        await self.coordinator.async_request_refresh()
 
 
 class WireGuardSwitch(GliSwitchBase):
@@ -381,7 +397,8 @@ class WireGuardSwitch(GliSwitchBase):
         """Turn on the service."""
         data = self.coordinator.data
         current = self._current
-        try:
+
+        async def _start() -> None:
             # On older firmware only one client may be connected at a time, so
             # stop any other active client first.
             if (
@@ -393,23 +410,20 @@ class WireGuardSwitch(GliSwitchBase):
             ):
                 for client in data.wireguard_connections:
                     await self.coordinator.api.wireguard_client_stop(client.peer_id)
-
             await self.coordinator.api.wireguard_client_start(
                 current.group_id, current.tunnel_id or current.peer_id
             )
-        except OSError:
-            _LOGGER.exception("Unable to enable WG client")
-        else:
-            await self.coordinator.async_request_refresh()
+
+        await async_run_action(_start(), device=self.coordinator.device_name)
+        await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **_: Any) -> None:
         """Turn off the service."""
         current = self._current
-        try:
-            await self.coordinator.api.wireguard_client_stop(
+        await async_run_action(
+            self.coordinator.api.wireguard_client_stop(
                 current.tunnel_id or current.peer_id
-            )
-        except OSError:
-            _LOGGER.exception("Unable to stop WG client")
-        else:
-            await self.coordinator.async_request_refresh()
+            ),
+            device=self.coordinator.device_name,
+        )
+        await self.coordinator.async_request_refresh()

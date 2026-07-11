@@ -10,11 +10,13 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock
 
+from gli4py.error_handling import NonZeroResponse
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet.const import DOMAIN
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
 
 from .conftest import Profile
@@ -208,3 +210,26 @@ async def test_flow_statistics_switch_toggles_and_explains(
     mock_glinet.flow_stats_set_enabled.assert_awaited_with(False)
     assert mock_glinet.network_acceleration_set.await_count == 0
     mock_glinet.flow_stats_set_enabled.assert_awaited_with(False)
+
+
+async def test_led_switch_raises_home_assistant_error_on_failure(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """A failed action surfaces as HomeAssistantError, not a raw exception."""
+    if profile.load("led_config") is None:
+        return
+    mock_config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    entity_id = er.async_get(hass).async_get_entity_id(
+        "switch", DOMAIN, f"glinet_switch/{profile.factory_mac}/led"
+    )
+    mock_glinet.led_set_enabled.side_effect = NonZeroResponse("router said no")
+    with pytest.raises(HomeAssistantError):
+        await hass.services.async_call(
+            "switch", "turn_on", {"entity_id": entity_id}, blocking=True
+        )
