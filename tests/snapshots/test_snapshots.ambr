@@ -24,13 +24,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:restart',
+    'original_icon': None,
     'original_name': 'Reboot',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'reboot',
     'unique_id': 'glinet4_button/00:11:22:00:03:01/reboot',
     'unit_of_measurement': None,
   })
@@ -39,7 +39,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 Reboot',
-      'icon': 'mdi:restart',
     }),
     'context': <ANY>,
     'entity_id': 'button.gl_inet_mt3000_reboot',
@@ -863,13 +862,13 @@
       }),
     }),
     'original_device_class': <SensorDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer',
+    'original_icon': None,
     'original_name': 'CPU temperature',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'cpu_temp',
     'unique_id': 'glinet4_sensor/00:11:22:00:03:01/system_cpu_temp',
     'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
   })
@@ -879,7 +878,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'GL.iNet MT3000 CPU temperature',
-      'icon': 'mdi:thermometer',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -921,13 +919,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:harddisk',
+    'original_icon': None,
     'original_name': 'Flash usage',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'flash_use',
     'unique_id': 'glinet4_sensor/00:11:22:00:03:01/system_flash_use',
     'unit_of_measurement': '%',
   })
@@ -938,7 +936,6 @@
       'flash_free': 7238369280,
       'flash_total': 7818182656,
       'friendly_name': 'GL.iNet MT3000 Flash usage',
-      'icon': 'mdi:harddisk',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': '%',
     }),
@@ -980,13 +977,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (15m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg15',
     'unique_id': 'glinet4_sensor/00:11:22:00:03:01/system_load_avg15',
     'unit_of_measurement': None,
   })
@@ -995,7 +992,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 Load avg (15m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -1036,13 +1032,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (1m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg1',
     'unique_id': 'glinet4_sensor/00:11:22:00:03:01/system_load_avg1',
     'unit_of_measurement': None,
   })
@@ -1051,7 +1047,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 Load avg (1m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -1092,13 +1087,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (5m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg5',
     'unique_id': 'glinet4_sensor/00:11:22:00:03:01/system_load_avg5',
     'unit_of_measurement': None,
   })
@@ -1107,7 +1102,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 Load avg (5m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -1148,13 +1142,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:memory',
+    'original_icon': None,
     'original_name': 'Memory usage',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'memory_use',
     'unique_id': 'glinet4_sensor/00:11:22:00:03:01/system_memory_use',
     'unit_of_measurement': '%',
   })
@@ -1163,7 +1157,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 Memory usage',
-      'icon': 'mdi:memory',
       'memory_available': 613351424,
       'memory_buff_cache': 284426240,
       'memory_free': 328925184,
@@ -1205,13 +1198,13 @@
     'options': dict({
     }),
     'original_device_class': <SensorDeviceClass.TIMESTAMP: 'timestamp'>,
-    'original_icon': 'mdi:clock',
+    'original_icon': None,
     'original_name': 'Uptime',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'uptime',
     'unique_id': 'glinet4_sensor/00:11:22:00:03:01/system_uptime',
     'unit_of_measurement': None,
   })
@@ -1221,7 +1214,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'timestamp',
       'friendly_name': 'GL.iNet MT3000 Uptime',
-      'icon': 'mdi:clock',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.gl_inet_mt3000_uptime',
@@ -1256,13 +1248,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'alias-38 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0e/internet',
     'unit_of_measurement': None,
   })
@@ -1271,7 +1263,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 alias-38 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_alias_38_internet',
@@ -1306,13 +1297,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-24 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:02/internet',
     'unit_of_measurement': None,
   })
@@ -1321,7 +1312,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-24 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_24_internet',
@@ -1356,13 +1346,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-25 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:03/internet',
     'unit_of_measurement': None,
   })
@@ -1371,7 +1361,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-25 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_25_internet',
@@ -1406,13 +1395,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-26 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:04/internet',
     'unit_of_measurement': None,
   })
@@ -1421,7 +1410,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-26 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_26_internet',
@@ -1456,13 +1444,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-27 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:05/internet',
     'unit_of_measurement': None,
   })
@@ -1471,7 +1459,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-27 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_27_internet',
@@ -1506,13 +1493,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-28 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:06/internet',
     'unit_of_measurement': None,
   })
@@ -1521,7 +1508,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-28 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_28_internet',
@@ -1556,13 +1542,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-29 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:07/internet',
     'unit_of_measurement': None,
   })
@@ -1571,7 +1557,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-29 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_29_internet',
@@ -1606,13 +1591,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-31 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:08/internet',
     'unit_of_measurement': None,
   })
@@ -1621,7 +1606,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-31 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_31_internet',
@@ -1656,13 +1640,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-32 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:09/internet',
     'unit_of_measurement': None,
   })
@@ -1671,7 +1655,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-32 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_32_internet',
@@ -1706,13 +1689,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-33 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0a/internet',
     'unit_of_measurement': None,
   })
@@ -1721,7 +1704,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-33 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_33_internet',
@@ -1756,13 +1738,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-35 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0b/internet',
     'unit_of_measurement': None,
   })
@@ -1771,7 +1753,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-35 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_35_internet',
@@ -1806,13 +1787,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-36 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0c/internet',
     'unit_of_measurement': None,
   })
@@ -1821,7 +1802,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-36 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_36_internet',
@@ -1856,13 +1836,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-37 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0d/internet',
     'unit_of_measurement': None,
   })
@@ -1871,7 +1851,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-37 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_37_internet',
@@ -1906,13 +1885,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-40 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0f/internet',
     'unit_of_measurement': None,
   })
@@ -1921,7 +1900,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT3000 name-40 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt3000_name_40_internet',
@@ -2072,7 +2050,7 @@
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'internet',
     'unique_id': 'glinet4_binary_sensor/00:11:22:00:00:01/internet',
     'unit_of_measurement': None,
   })
@@ -2119,13 +2097,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:restart',
+    'original_icon': None,
     'original_name': 'Reboot',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'reboot',
     'unique_id': 'glinet4_button/00:11:22:00:00:01/reboot',
     'unit_of_measurement': None,
   })
@@ -2134,7 +2112,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Reboot',
-      'icon': 'mdi:restart',
     }),
     'context': <ANY>,
     'entity_id': 'button.gl_inet_mt6000_reboot',
@@ -2958,13 +2935,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:server-network',
+    'original_icon': None,
     'original_name': 'Tailscale exit node',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'tailscale_exit_node',
     'unique_id': 'glinet4_select/00:11:22:00:00:01/tailscale_exit_node',
     'unit_of_measurement': None,
   })
@@ -2973,7 +2950,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Tailscale exit node',
-      'icon': 'mdi:server-network',
       'options': list([
         'none',
         'hostname-1 (100.64.0.2)',
@@ -3017,13 +2993,13 @@
       }),
     }),
     'original_device_class': <SensorDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer',
+    'original_icon': None,
     'original_name': 'CPU temperature',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'cpu_temp',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_cpu_temp',
     'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
   })
@@ -3033,7 +3009,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'GL.iNet MT6000 CPU temperature',
-      'icon': 'mdi:thermometer',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -3075,13 +3050,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:harddisk',
+    'original_icon': None,
     'original_name': 'Flash usage',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'flash_use',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_flash_use',
     'unit_of_measurement': '%',
   })
@@ -3092,7 +3067,6 @@
       'flash_free': 7238369280,
       'flash_total': 7818182656,
       'friendly_name': 'GL.iNet MT6000 Flash usage',
-      'icon': 'mdi:harddisk',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': '%',
     }),
@@ -3134,13 +3108,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (15m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg15',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg15',
     'unit_of_measurement': None,
   })
@@ -3149,7 +3123,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (15m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -3190,13 +3163,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (1m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg1',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg1',
     'unit_of_measurement': None,
   })
@@ -3205,7 +3178,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (1m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -3246,13 +3218,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (5m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg5',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg5',
     'unit_of_measurement': None,
   })
@@ -3261,7 +3233,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (5m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -3302,13 +3273,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:memory',
+    'original_icon': None,
     'original_name': 'Memory usage',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'memory_use',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_memory_use',
     'unit_of_measurement': '%',
   })
@@ -3317,7 +3288,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Memory usage',
-      'icon': 'mdi:memory',
       'memory_available': 613351424,
       'memory_buff_cache': 284426240,
       'memory_free': 328925184,
@@ -3367,13 +3337,13 @@
     'options': dict({
     }),
     'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
-    'original_icon': 'mdi:vpn',
+    'original_icon': None,
     'original_name': 'Tailscale status',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'tailscale_status',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/tailscale_status',
     'unit_of_measurement': None,
   })
@@ -3383,7 +3353,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'enum',
       'friendly_name': 'GL.iNet MT6000 Tailscale status',
-      'icon': 'mdi:vpn',
       'options': list([
         'disconnected',
         'login_required',
@@ -3425,13 +3394,13 @@
     'options': dict({
     }),
     'original_device_class': <SensorDeviceClass.TIMESTAMP: 'timestamp'>,
-    'original_icon': 'mdi:clock',
+    'original_icon': None,
     'original_name': 'Uptime',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'uptime',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_uptime',
     'unit_of_measurement': None,
   })
@@ -3441,7 +3410,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'timestamp',
       'friendly_name': 'GL.iNet MT6000 Uptime',
-      'icon': 'mdi:clock',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.gl_inet_mt6000_uptime',
@@ -3481,13 +3449,13 @@
       }),
     }),
     'original_device_class': <SensorDeviceClass.DATA_RATE: 'data_rate'>,
-    'original_icon': 'mdi:download',
+    'original_icon': None,
     'original_name': 'WAN download speed',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'wan_download_speed',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/wan_download_speed',
     'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
   })
@@ -3497,7 +3465,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'data_rate',
       'friendly_name': 'GL.iNet MT6000 WAN download speed',
-      'icon': 'mdi:download',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
     }),
@@ -3534,13 +3501,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:ip-outline',
+    'original_icon': None,
     'original_name': 'WAN IP',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'wan_ip',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/wan_ip',
     'unit_of_measurement': None,
   })
@@ -3554,7 +3521,6 @@
       ]),
       'friendly_name': 'GL.iNet MT6000 WAN IP',
       'gateway': '192.0.2.4',
-      'icon': 'mdi:ip-outline',
       'protocol': 'dhcp',
     }),
     'context': <ANY>,
@@ -3595,13 +3561,13 @@
       }),
     }),
     'original_device_class': <SensorDeviceClass.DATA_RATE: 'data_rate'>,
-    'original_icon': 'mdi:upload',
+    'original_icon': None,
     'original_name': 'WAN upload speed',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'wan_upload_speed',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/wan_upload_speed',
     'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
   })
@@ -3611,7 +3577,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'data_rate',
       'friendly_name': 'GL.iNet MT6000 WAN upload speed',
-      'icon': 'mdi:upload',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
     }),
@@ -3648,13 +3613,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'alias-38 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0e/internet',
     'unit_of_measurement': None,
   })
@@ -3663,7 +3628,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 alias-38 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
@@ -3698,13 +3662,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:chart-box',
+    'original_icon': None,
     'original_name': 'Flow statistics',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'flow_statistics',
     'unique_id': 'glinet4_switch/00:11:22:00:00:01/flow_statistics',
     'unit_of_measurement': None,
   })
@@ -3714,7 +3678,6 @@
     'attributes': ReadOnlyDict({
       'collecting_app_data': False,
       'friendly_name': 'GL.iNet MT6000 Flow statistics',
-      'icon': 'mdi:chart-box',
       'network_acceleration': False,
       'reason': 'Statistics collection is disabled.',
     }),
@@ -3751,13 +3714,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:led-off',
+    'original_icon': None,
     'original_name': 'LEDs',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'leds',
     'unique_id': 'glinet4_switch/00:11:22:00:00:01/led',
     'unit_of_measurement': None,
   })
@@ -3766,7 +3729,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 LEDs',
-      'icon': 'mdi:led-off',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_leds',
@@ -3801,13 +3763,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-24 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:02/internet',
     'unit_of_measurement': None,
   })
@@ -3816,7 +3778,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-24 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
@@ -3851,13 +3812,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-25 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:03/internet',
     'unit_of_measurement': None,
   })
@@ -3866,7 +3827,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-25 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
@@ -3901,13 +3861,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-26 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:04/internet',
     'unit_of_measurement': None,
   })
@@ -3916,7 +3876,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-26 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
@@ -3951,13 +3910,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-27 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:05/internet',
     'unit_of_measurement': None,
   })
@@ -3966,7 +3925,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-27 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
@@ -4001,13 +3959,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-28 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:06/internet',
     'unit_of_measurement': None,
   })
@@ -4016,7 +3974,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-28 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
@@ -4051,13 +4008,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-29 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:07/internet',
     'unit_of_measurement': None,
   })
@@ -4066,7 +4023,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-29 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
@@ -4101,13 +4057,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-31 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:08/internet',
     'unit_of_measurement': None,
   })
@@ -4116,7 +4072,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-31 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
@@ -4151,13 +4106,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-32 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:09/internet',
     'unit_of_measurement': None,
   })
@@ -4166,7 +4121,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-32 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
@@ -4201,13 +4155,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-33 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0a/internet',
     'unit_of_measurement': None,
   })
@@ -4216,7 +4170,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-33 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
@@ -4251,13 +4204,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-35 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0b/internet',
     'unit_of_measurement': None,
   })
@@ -4266,7 +4219,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-35 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
@@ -4301,13 +4253,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-36 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0c/internet',
     'unit_of_measurement': None,
   })
@@ -4316,7 +4268,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-36 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
@@ -4351,13 +4302,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-37 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0d/internet',
     'unit_of_measurement': None,
   })
@@ -4366,7 +4317,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-37 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
@@ -4401,13 +4351,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-40 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0f/internet',
     'unit_of_measurement': None,
   })
@@ -4416,7 +4366,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-40 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
@@ -4781,13 +4730,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:vpn',
+    'original_icon': None,
     'original_name': 'Tailscale',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'tailscale',
     'unique_id': 'glinet4_switch/00:11:22:00:00:01/tailscale',
     'unit_of_measurement': None,
   })
@@ -4796,7 +4745,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Tailscale',
-      'icon': 'mdi:vpn',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_tailscale',
@@ -4831,13 +4779,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:vpn',
+    'original_icon': None,
     'original_name': 'WG Client wg-test',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'wireguard_client',
     'unique_id': 'glinet4_switch/00:11:22:00:00:01/wg-test/wireguard_client',
     'unit_of_measurement': None,
   })
@@ -4846,7 +4794,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 WG Client wg-test',
-      'icon': 'mdi:vpn',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_wg_client_wg_test',
@@ -4887,7 +4834,7 @@
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'firmware',
     'unique_id': 'glinet4_update/00:11:22:00:00:01/firmware',
     'unit_of_measurement': None,
   })
@@ -4943,13 +4890,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:restart',
+    'original_icon': None,
     'original_name': 'Reboot',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'reboot',
     'unique_id': 'glinet4_button/00:11:22:00:00:01/reboot',
     'unit_of_measurement': None,
   })
@@ -4958,7 +4905,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Reboot',
-      'icon': 'mdi:restart',
     }),
     'context': <ANY>,
     'entity_id': 'button.gl_inet_mt6000_reboot',
@@ -5782,13 +5728,13 @@
       }),
     }),
     'original_device_class': <SensorDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer',
+    'original_icon': None,
     'original_name': 'CPU temperature',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'cpu_temp',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_cpu_temp',
     'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
   })
@@ -5798,7 +5744,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'GL.iNet MT6000 CPU temperature',
-      'icon': 'mdi:thermometer',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -5840,13 +5785,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:harddisk',
+    'original_icon': None,
     'original_name': 'Flash usage',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'flash_use',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_flash_use',
     'unit_of_measurement': '%',
   })
@@ -5857,7 +5802,6 @@
       'flash_free': 7238369280,
       'flash_total': 7818182656,
       'friendly_name': 'GL.iNet MT6000 Flash usage',
-      'icon': 'mdi:harddisk',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': '%',
     }),
@@ -5899,13 +5843,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (15m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg15',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg15',
     'unit_of_measurement': None,
   })
@@ -5914,7 +5858,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (15m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -5955,13 +5898,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (1m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg1',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg1',
     'unit_of_measurement': None,
   })
@@ -5970,7 +5913,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (1m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -6011,13 +5953,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (5m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg5',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg5',
     'unit_of_measurement': None,
   })
@@ -6026,7 +5968,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (5m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -6067,13 +6008,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:memory',
+    'original_icon': None,
     'original_name': 'Memory usage',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'memory_use',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_memory_use',
     'unit_of_measurement': '%',
   })
@@ -6082,7 +6023,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Memory usage',
-      'icon': 'mdi:memory',
       'memory_available': 613351424,
       'memory_buff_cache': 284426240,
       'memory_free': 328925184,
@@ -6124,13 +6064,13 @@
     'options': dict({
     }),
     'original_device_class': <SensorDeviceClass.TIMESTAMP: 'timestamp'>,
-    'original_icon': 'mdi:clock',
+    'original_icon': None,
     'original_name': 'Uptime',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'uptime',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_uptime',
     'unit_of_measurement': None,
   })
@@ -6140,7 +6080,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'timestamp',
       'friendly_name': 'GL.iNet MT6000 Uptime',
-      'icon': 'mdi:clock',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.gl_inet_mt6000_uptime',
@@ -6175,13 +6114,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'alias-38 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0e/internet',
     'unit_of_measurement': None,
   })
@@ -6190,7 +6129,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 alias-38 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
@@ -6225,13 +6163,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-24 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:02/internet',
     'unit_of_measurement': None,
   })
@@ -6240,7 +6178,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-24 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
@@ -6275,13 +6212,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-25 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:03/internet',
     'unit_of_measurement': None,
   })
@@ -6290,7 +6227,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-25 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
@@ -6325,13 +6261,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-26 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:04/internet',
     'unit_of_measurement': None,
   })
@@ -6340,7 +6276,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-26 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
@@ -6375,13 +6310,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-27 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:05/internet',
     'unit_of_measurement': None,
   })
@@ -6390,7 +6325,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-27 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
@@ -6425,13 +6359,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-28 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:06/internet',
     'unit_of_measurement': None,
   })
@@ -6440,7 +6374,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-28 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
@@ -6475,13 +6408,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-29 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:07/internet',
     'unit_of_measurement': None,
   })
@@ -6490,7 +6423,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-29 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
@@ -6525,13 +6457,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-31 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:08/internet',
     'unit_of_measurement': None,
   })
@@ -6540,7 +6472,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-31 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
@@ -6575,13 +6506,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-32 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:09/internet',
     'unit_of_measurement': None,
   })
@@ -6590,7 +6521,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-32 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
@@ -6625,13 +6555,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-33 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0a/internet',
     'unit_of_measurement': None,
   })
@@ -6640,7 +6570,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-33 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
@@ -6675,13 +6604,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-35 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0b/internet',
     'unit_of_measurement': None,
   })
@@ -6690,7 +6619,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-35 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
@@ -6725,13 +6653,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-36 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0c/internet',
     'unit_of_measurement': None,
   })
@@ -6740,7 +6668,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-36 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
@@ -6775,13 +6702,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-37 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0d/internet',
     'unit_of_measurement': None,
   })
@@ -6790,7 +6717,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-37 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
@@ -6825,13 +6751,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-40 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0f/internet',
     'unit_of_measurement': None,
   })
@@ -6840,7 +6766,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-40 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
@@ -7205,13 +7130,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:vpn',
+    'original_icon': None,
     'original_name': 'WG Client wg-test',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'wireguard_client',
     'unique_id': 'glinet4_switch/00:11:22:00:00:01/wg-test/wireguard_client',
     'unit_of_measurement': None,
   })
@@ -7220,7 +7145,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 WG Client wg-test',
-      'icon': 'mdi:vpn',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_wg_client_wg_test',
@@ -7255,13 +7179,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:restart',
+    'original_icon': None,
     'original_name': 'Reboot',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'reboot',
     'unique_id': 'glinet4_button/00:11:22:00:00:01/reboot',
     'unit_of_measurement': None,
   })
@@ -7270,7 +7194,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Reboot',
-      'icon': 'mdi:restart',
     }),
     'context': <ANY>,
     'entity_id': 'button.gl_inet_mt6000_reboot',
@@ -8093,13 +8016,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:server-network',
+    'original_icon': None,
     'original_name': 'Tailscale exit node',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'tailscale_exit_node',
     'unique_id': 'glinet4_select/00:11:22:00:00:01/tailscale_exit_node',
     'unit_of_measurement': None,
   })
@@ -8108,7 +8031,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Tailscale exit node',
-      'icon': 'mdi:server-network',
       'options': list([
         'none',
       ]),
@@ -8151,13 +8073,13 @@
       }),
     }),
     'original_device_class': <SensorDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer',
+    'original_icon': None,
     'original_name': 'CPU temperature',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'cpu_temp',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_cpu_temp',
     'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
   })
@@ -8167,7 +8089,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'GL.iNet MT6000 CPU temperature',
-      'icon': 'mdi:thermometer',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -8209,13 +8130,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:harddisk',
+    'original_icon': None,
     'original_name': 'Flash usage',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'flash_use',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_flash_use',
     'unit_of_measurement': '%',
   })
@@ -8226,7 +8147,6 @@
       'flash_free': 7238369280,
       'flash_total': 7818182656,
       'friendly_name': 'GL.iNet MT6000 Flash usage',
-      'icon': 'mdi:harddisk',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': '%',
     }),
@@ -8268,13 +8188,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (15m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg15',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg15',
     'unit_of_measurement': None,
   })
@@ -8283,7 +8203,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (15m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -8324,13 +8243,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (1m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg1',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg1',
     'unit_of_measurement': None,
   })
@@ -8339,7 +8258,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (1m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -8380,13 +8298,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (5m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg5',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg5',
     'unit_of_measurement': None,
   })
@@ -8395,7 +8313,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (5m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -8436,13 +8353,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:memory',
+    'original_icon': None,
     'original_name': 'Memory usage',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'memory_use',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_memory_use',
     'unit_of_measurement': '%',
   })
@@ -8451,7 +8368,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Memory usage',
-      'icon': 'mdi:memory',
       'memory_available': 613351424,
       'memory_buff_cache': 284426240,
       'memory_free': 328925184,
@@ -8501,13 +8417,13 @@
     'options': dict({
     }),
     'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
-    'original_icon': 'mdi:vpn',
+    'original_icon': None,
     'original_name': 'Tailscale status',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'tailscale_status',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/tailscale_status',
     'unit_of_measurement': None,
   })
@@ -8517,7 +8433,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'enum',
       'friendly_name': 'GL.iNet MT6000 Tailscale status',
-      'icon': 'mdi:vpn',
       'options': list([
         'disconnected',
         'login_required',
@@ -8559,13 +8474,13 @@
     'options': dict({
     }),
     'original_device_class': <SensorDeviceClass.TIMESTAMP: 'timestamp'>,
-    'original_icon': 'mdi:clock',
+    'original_icon': None,
     'original_name': 'Uptime',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'uptime',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_uptime',
     'unit_of_measurement': None,
   })
@@ -8575,7 +8490,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'timestamp',
       'friendly_name': 'GL.iNet MT6000 Uptime',
-      'icon': 'mdi:clock',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.gl_inet_mt6000_uptime',
@@ -8610,13 +8524,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'alias-38 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0e/internet',
     'unit_of_measurement': None,
   })
@@ -8625,7 +8539,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 alias-38 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
@@ -8660,13 +8573,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-24 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:02/internet',
     'unit_of_measurement': None,
   })
@@ -8675,7 +8588,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-24 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
@@ -8710,13 +8622,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-25 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:03/internet',
     'unit_of_measurement': None,
   })
@@ -8725,7 +8637,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-25 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
@@ -8760,13 +8671,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-26 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:04/internet',
     'unit_of_measurement': None,
   })
@@ -8775,7 +8686,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-26 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
@@ -8810,13 +8720,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-27 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:05/internet',
     'unit_of_measurement': None,
   })
@@ -8825,7 +8735,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-27 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
@@ -8860,13 +8769,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-28 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:06/internet',
     'unit_of_measurement': None,
   })
@@ -8875,7 +8784,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-28 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
@@ -8910,13 +8818,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-29 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:07/internet',
     'unit_of_measurement': None,
   })
@@ -8925,7 +8833,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-29 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
@@ -8960,13 +8867,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-31 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:08/internet',
     'unit_of_measurement': None,
   })
@@ -8975,7 +8882,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-31 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
@@ -9010,13 +8916,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-32 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:09/internet',
     'unit_of_measurement': None,
   })
@@ -9025,7 +8931,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-32 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
@@ -9060,13 +8965,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-33 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0a/internet',
     'unit_of_measurement': None,
   })
@@ -9075,7 +8980,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-33 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
@@ -9110,13 +9014,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-35 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0b/internet',
     'unit_of_measurement': None,
   })
@@ -9125,7 +9029,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-35 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
@@ -9160,13 +9063,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-36 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0c/internet',
     'unit_of_measurement': None,
   })
@@ -9175,7 +9078,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-36 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
@@ -9210,13 +9112,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-37 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0d/internet',
     'unit_of_measurement': None,
   })
@@ -9225,7 +9127,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-37 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
@@ -9260,13 +9161,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-40 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0f/internet',
     'unit_of_measurement': None,
   })
@@ -9275,7 +9176,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-40 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
@@ -9640,13 +9540,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:vpn',
+    'original_icon': None,
     'original_name': 'Tailscale',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'tailscale',
     'unique_id': 'glinet4_switch/00:11:22:00:00:01/tailscale',
     'unit_of_measurement': None,
   })
@@ -9655,7 +9555,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Tailscale',
-      'icon': 'mdi:vpn',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_tailscale',
@@ -9690,13 +9589,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:restart',
+    'original_icon': None,
     'original_name': 'Reboot',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'reboot',
     'unique_id': 'glinet4_button/00:11:22:00:00:01/reboot',
     'unit_of_measurement': None,
   })
@@ -9705,7 +9604,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Reboot',
-      'icon': 'mdi:restart',
     }),
     'context': <ANY>,
     'entity_id': 'button.gl_inet_mt6000_reboot',
@@ -10584,13 +10482,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:server-network',
+    'original_icon': None,
     'original_name': 'Tailscale exit node',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'tailscale_exit_node',
     'unique_id': 'glinet4_select/00:11:22:00:00:01/tailscale_exit_node',
     'unit_of_measurement': None,
   })
@@ -10599,7 +10497,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Tailscale exit node',
-      'icon': 'mdi:server-network',
       'options': list([
         'none',
       ]),
@@ -10642,13 +10539,13 @@
       }),
     }),
     'original_device_class': <SensorDeviceClass.TEMPERATURE: 'temperature'>,
-    'original_icon': 'mdi:thermometer',
+    'original_icon': None,
     'original_name': 'CPU temperature',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'cpu_temp',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_cpu_temp',
     'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
   })
@@ -10658,7 +10555,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'temperature',
       'friendly_name': 'GL.iNet MT6000 CPU temperature',
-      'icon': 'mdi:thermometer',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': <UnitOfTemperature.CELSIUS: '°C'>,
     }),
@@ -10700,13 +10596,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:harddisk',
+    'original_icon': None,
     'original_name': 'Flash usage',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'flash_use',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_flash_use',
     'unit_of_measurement': '%',
   })
@@ -10717,7 +10613,6 @@
       'flash_free': 7238369280,
       'flash_total': 7818182656,
       'friendly_name': 'GL.iNet MT6000 Flash usage',
-      'icon': 'mdi:harddisk',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
       'unit_of_measurement': '%',
     }),
@@ -10759,13 +10654,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (15m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg15',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg15',
     'unit_of_measurement': None,
   })
@@ -10774,7 +10669,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (15m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -10815,13 +10709,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (1m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg1',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg1',
     'unit_of_measurement': None,
   })
@@ -10830,7 +10724,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (1m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -10871,13 +10764,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:cpu-64-bit',
+    'original_icon': None,
     'original_name': 'Load avg (5m)',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'load_avg5',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_load_avg5',
     'unit_of_measurement': None,
   })
@@ -10886,7 +10779,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Load avg (5m)',
-      'icon': 'mdi:cpu-64-bit',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
     }),
     'context': <ANY>,
@@ -10927,13 +10819,13 @@
       }),
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:memory',
+    'original_icon': None,
     'original_name': 'Memory usage',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'memory_use',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_memory_use',
     'unit_of_measurement': '%',
   })
@@ -10942,7 +10834,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Memory usage',
-      'icon': 'mdi:memory',
       'memory_available': 613351424,
       'memory_buff_cache': 284426240,
       'memory_free': 328925184,
@@ -10992,13 +10883,13 @@
     'options': dict({
     }),
     'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
-    'original_icon': 'mdi:vpn',
+    'original_icon': None,
     'original_name': 'Tailscale status',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'tailscale_status',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/tailscale_status',
     'unit_of_measurement': None,
   })
@@ -11008,7 +10899,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'enum',
       'friendly_name': 'GL.iNet MT6000 Tailscale status',
-      'icon': 'mdi:vpn',
       'options': list([
         'disconnected',
         'login_required',
@@ -11050,13 +10940,13 @@
     'options': dict({
     }),
     'original_device_class': <SensorDeviceClass.TIMESTAMP: 'timestamp'>,
-    'original_icon': 'mdi:clock',
+    'original_icon': None,
     'original_name': 'Uptime',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'uptime',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/system_uptime',
     'unit_of_measurement': None,
   })
@@ -11066,7 +10956,6 @@
     'attributes': ReadOnlyDict({
       'device_class': 'timestamp',
       'friendly_name': 'GL.iNet MT6000 Uptime',
-      'icon': 'mdi:clock',
     }),
     'context': <ANY>,
     'entity_id': 'sensor.gl_inet_mt6000_uptime',
@@ -11101,13 +10990,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'alias-38 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0e/internet',
     'unit_of_measurement': None,
   })
@@ -11116,7 +11005,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 alias-38 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_alias_38_internet',
@@ -11151,13 +11039,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-24 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:02/internet',
     'unit_of_measurement': None,
   })
@@ -11166,7 +11054,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-24 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_24_internet',
@@ -11201,13 +11088,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-25 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:03/internet',
     'unit_of_measurement': None,
   })
@@ -11216,7 +11103,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-25 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_25_internet',
@@ -11251,13 +11137,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-26 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:04/internet',
     'unit_of_measurement': None,
   })
@@ -11266,7 +11152,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-26 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_26_internet',
@@ -11301,13 +11186,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-27 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:05/internet',
     'unit_of_measurement': None,
   })
@@ -11316,7 +11201,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-27 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_27_internet',
@@ -11351,13 +11235,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-28 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:06/internet',
     'unit_of_measurement': None,
   })
@@ -11366,7 +11250,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-28 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_28_internet',
@@ -11401,13 +11284,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-29 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:07/internet',
     'unit_of_measurement': None,
   })
@@ -11416,7 +11299,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-29 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_29_internet',
@@ -11451,13 +11333,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-31 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:08/internet',
     'unit_of_measurement': None,
   })
@@ -11466,7 +11348,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-31 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_31_internet',
@@ -11501,13 +11382,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-32 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:09/internet',
     'unit_of_measurement': None,
   })
@@ -11516,7 +11397,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-32 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_32_internet',
@@ -11551,13 +11431,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-33 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0a/internet',
     'unit_of_measurement': None,
   })
@@ -11566,7 +11446,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-33 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_33_internet',
@@ -11601,13 +11480,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-35 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0b/internet',
     'unit_of_measurement': None,
   })
@@ -11616,7 +11495,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-35 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_35_internet',
@@ -11651,13 +11529,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-36 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0c/internet',
     'unit_of_measurement': None,
   })
@@ -11666,7 +11544,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-36 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_36_internet',
@@ -11701,13 +11578,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-37 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0d/internet',
     'unit_of_measurement': None,
   })
@@ -11716,7 +11593,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-37 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_37_internet',
@@ -11751,13 +11627,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-40 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:0f/internet',
     'unit_of_measurement': None,
   })
@@ -11766,7 +11642,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-40 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_40_internet',
@@ -11801,13 +11676,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:web',
+    'original_icon': None,
     'original_name': 'name-wifi7 internet',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'client_internet',
     'unique_id': 'glinet4_switch/00:11:22:00:00:99/internet',
     'unit_of_measurement': None,
   })
@@ -11816,7 +11691,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 name-wifi7 internet',
-      'icon': 'mdi:web',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_name_wifi7_internet',
@@ -12181,13 +12055,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:vpn',
+    'original_icon': None,
     'original_name': 'Tailscale',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'tailscale',
     'unique_id': 'glinet4_switch/00:11:22:00:00:01/tailscale',
     'unit_of_measurement': None,
   })
@@ -12196,7 +12070,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 Tailscale',
-      'icon': 'mdi:vpn',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_tailscale',
@@ -12231,13 +12104,13 @@
     'options': dict({
     }),
     'original_device_class': None,
-    'original_icon': 'mdi:vpn',
+    'original_icon': None,
     'original_name': 'WG Client wg-test',
     'platform': 'glinet4',
     'previous_unique_id': None,
     'suggested_object_id': None,
     'supported_features': 0,
-    'translation_key': None,
+    'translation_key': 'wireguard_client',
     'unique_id': 'glinet4_switch/00:11:22:00:00:01/wg-test/wireguard_client',
     'unit_of_measurement': None,
   })
@@ -12246,7 +12119,6 @@
   StateSnapshot({
     'attributes': ReadOnlyDict({
       'friendly_name': 'GL.iNet MT6000 WG Client wg-test',
-      'icon': 'mdi:vpn',
     }),
     'context': <ANY>,
     'entity_id': 'switch.gl_inet_mt6000_wg_client_wg_test',

@@ -39,8 +39,7 @@ class TailscaleExitNodeSelect(
 ):
     """Route the router's traffic through a tailnet exit node."""
 
-    _attr_icon = "mdi:server-network"
-    _attr_name = "Tailscale exit node"
+    _attr_translation_key = "tailscale_exit_node"
     _attr_has_entity_name = True
     _attr_entity_category = EntityCategory.CONFIG
 

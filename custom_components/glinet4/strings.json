@@ -74,6 +74,40 @@
       }
     }
   },
+  "entity": {
+    "sensor": {
+      "cpu_temp": { "name": "CPU temperature" },
+      "load_avg1": { "name": "Load avg (1m)" },
+      "load_avg5": { "name": "Load avg (5m)" },
+      "load_avg15": { "name": "Load avg (15m)" },
+      "memory_use": { "name": "Memory usage" },
+      "flash_use": { "name": "Flash usage" },
+      "uptime": { "name": "Uptime" },
+      "wan_ip": { "name": "WAN IP" },
+      "wan_download_speed": { "name": "WAN download speed" },
+      "wan_upload_speed": { "name": "WAN upload speed" },
+      "tailscale_status": { "name": "Tailscale status" }
+    },
+    "switch": {
+      "flow_statistics": { "name": "Flow statistics" },
+      "leds": { "name": "LEDs" },
+      "tailscale": { "name": "Tailscale" },
+      "client_internet": { "name": "{client_name} internet" },
+      "wireguard_client": { "name": "WG Client {client_name}" }
+    },
+    "select": {
+      "tailscale_exit_node": { "name": "Tailscale exit node" }
+    },
+    "update": {
+      "firmware": { "name": "Firmware" }
+    },
+    "binary_sensor": {
+      "internet": { "name": "Internet" }
+    },
+    "button": {
+      "reboot": { "name": "Reboot" }
+    }
+  },
   "issues": {
     "statistics_not_collecting": {
       "title": "Flow statistics are not collecting per-app data",

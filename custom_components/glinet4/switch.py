@@ -87,7 +87,7 @@ class ClientInternetSwitch(GliSwitchBase):
     can have many clients; users enable the few they want to control.
     """
 
-    _attr_icon = "mdi:web"
+    _attr_translation_key = "client_internet"
     _attr_entity_registry_enabled_default = False
 
     def __init__(self, coordinator: GLinetUpdateCoordinator, mac: str) -> None:
@@ -96,7 +96,9 @@ class ClientInternetSwitch(GliSwitchBase):
         self._mac = mac
         self._attr_unique_id = f"glinet4_switch/{mac}/internet"
         device = coordinator.data.devices.get(mac)
-        self._attr_name = f"{device.name} internet" if device else "Internet"
+        self._attr_translation_placeholders = {
+            "client_name": (device.name if device else None) or ""
+        }
 
     @property
     def is_on(self) -> bool | None:
@@ -132,8 +134,7 @@ class FlowStatisticsSwitch(GliSwitchBase):
     app accounting does not populate, so the reason is surfaced as an attribute.
     """
 
-    _attr_icon = "mdi:chart-box"
-    _attr_name = "Flow statistics"
+    _attr_translation_key = "flow_statistics"
 
     def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
         """Initialize the flow-statistics switch."""
@@ -197,17 +198,12 @@ class FlowStatisticsSwitch(GliSwitchBase):
 class LedSwitch(GliSwitchBase):
     """Control the router's LEDs."""
 
-    _attr_name = "LEDs"
+    _attr_translation_key = "leds"
 
     def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
         """Initialize the LED switch."""
         super().__init__(coordinator)
         self._attr_unique_id = f"glinet4_switch/{coordinator.factory_mac}/led"
-
-    @property
-    def icon(self) -> str:
-        """Return the icon for the current state."""
-        return "mdi:led-on" if self.is_on else "mdi:led-off"
 
     @property
     def is_on(self) -> bool | None:
@@ -310,8 +306,7 @@ class WifiApSwitch(GliSwitchBase):
 class TailscaleSwitch(GliSwitchBase):
     """A tailscale switch."""
 
-    _attr_icon = "mdi:vpn"
-    _attr_name = "Tailscale"
+    _attr_translation_key = "tailscale"
 
     def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
         """Initialize the Tailscale switch."""
@@ -363,7 +358,7 @@ class TailscaleSwitch(GliSwitchBase):
 class WireGuardSwitch(GliSwitchBase):
     """Representation of a VPN switch."""
 
-    _attr_icon = "mdi:vpn"
+    _attr_translation_key = "wireguard_client"
 
     # TODO make class, client/server/VPN type agnostic and appreciate >1 can be configured of each
     def __init__(
@@ -372,14 +367,10 @@ class WireGuardSwitch(GliSwitchBase):
         """Initialize a GLinet device."""
         super().__init__(coordinator)
         self._client = client
+        self._attr_translation_placeholders = {"client_name": client.name}
         self._attr_unique_id = (
             f"glinet4_switch/{coordinator.factory_mac}/{client.name}/wireguard_client"
         )
-
-    @property
-    def name(self) -> str:
-        """Return the name of the switch."""
-        return f"WG Client {self._client.name}"
 
     @property
     def _current(self) -> WireGuardClient:

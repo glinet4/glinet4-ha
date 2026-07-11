@@ -52,9 +52,8 @@ class SystemStatusEntityDescription(SensorEntityDescription, frozen_or_thawed=Tr
 SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
     SystemStatusEntityDescription(
         key="cpu_temp",
-        name="CPU temperature",
+        translation_key="cpu_temp",
         has_entity_name=True,
-        icon="mdi:thermometer",
         entity_category=EntityCategory.DIAGNOSTIC,
         device_class=SensorDeviceClass.TEMPERATURE,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
@@ -66,9 +65,8 @@ SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
     ),
     SystemStatusEntityDescription(
         key="load_avg1",
-        name="Load avg (1m)",
+        translation_key="load_avg1",
         has_entity_name=True,
-        icon="mdi:cpu-64-bit",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
@@ -80,9 +78,8 @@ SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
     ),
     SystemStatusEntityDescription(
         key="load_avg5",
-        name="Load avg (5m)",
+        translation_key="load_avg5",
         has_entity_name=True,
-        icon="mdi:cpu-64-bit",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
@@ -94,9 +91,8 @@ SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
     ),
     SystemStatusEntityDescription(
         key="load_avg15",
-        name="Load avg (15m)",
+        translation_key="load_avg15",
         has_entity_name=True,
-        icon="mdi:cpu-64-bit",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
@@ -108,9 +104,8 @@ SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
     ),
     SystemStatusEntityDescription(
         key="memory_use",
-        name="Memory usage",
+        translation_key="memory_use",
         has_entity_name=True,
-        icon="mdi:memory",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
@@ -143,9 +138,8 @@ SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
     ),
     SystemStatusEntityDescription(
         key="flash_use",
-        name="Flash usage",
+        translation_key="flash_use",
         has_entity_name=True,
-        icon="mdi:harddisk",
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
@@ -179,9 +173,8 @@ class GLinetDataEntityDescription(SensorEntityDescription, frozen_or_thawed=True
 WAN_SENSORS: list[GLinetDataEntityDescription] = [
     GLinetDataEntityDescription(
         key="wan_ip",
-        name="WAN IP",
+        translation_key="wan_ip",
         has_entity_name=True,
-        icon="mdi:ip-outline",
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda data: (
             ip.split("/")[0]
@@ -196,9 +189,8 @@ WAN_SENSORS: list[GLinetDataEntityDescription] = [
     ),
     GLinetDataEntityDescription(
         key="wan_download_speed",
-        name="WAN download speed",
+        translation_key="wan_download_speed",
         has_entity_name=True,
-        icon="mdi:download",
         device_class=SensorDeviceClass.DATA_RATE,
         native_unit_of_measurement=UnitOfDataRate.BYTES_PER_SECOND,
         state_class=SensorStateClass.MEASUREMENT,
@@ -207,9 +199,8 @@ WAN_SENSORS: list[GLinetDataEntityDescription] = [
     ),
     GLinetDataEntityDescription(
         key="wan_upload_speed",
-        name="WAN upload speed",
+        translation_key="wan_upload_speed",
         has_entity_name=True,
-        icon="mdi:upload",
         device_class=SensorDeviceClass.DATA_RATE,
         native_unit_of_measurement=UnitOfDataRate.BYTES_PER_SECOND,
         state_class=SensorStateClass.MEASUREMENT,
@@ -221,9 +212,8 @@ WAN_SENSORS: list[GLinetDataEntityDescription] = [
 TAILSCALE_SENSORS: list[GLinetDataEntityDescription] = [
     GLinetDataEntityDescription(
         key="tailscale_status",
-        name="Tailscale status",
+        translation_key="tailscale_status",
         has_entity_name=True,
-        icon="mdi:vpn",
         entity_category=EntityCategory.DIAGNOSTIC,
         device_class=SensorDeviceClass.ENUM,
         options=[state.name.lower() for state in TailscaleConnection],
@@ -256,9 +246,8 @@ async def async_setup_entry(
             coordinator=coordinator,
             entity_description=SystemStatusEntityDescription(
                 key="uptime",
-                name="Uptime",
+                translation_key="uptime",
                 has_entity_name=True,
-                icon="mdi:clock",
                 device_class=SensorDeviceClass.TIMESTAMP,
                 entity_category=EntityCategory.DIAGNOSTIC,
                 value_fn=lambda a: None,
