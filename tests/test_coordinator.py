@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock
 
-from gli4py.error_handling import TokenError
+from gli4py.error_handling import AuthenticationError, NonZeroResponse, TokenError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet.coordinator import GLinetData, GLinetUpdateCoordinator
@@ -111,3 +111,81 @@ async def test_wan_absence_probed_once(
     await coordinator.async_refresh()
     await coordinator.async_refresh()
     assert mock_glinet.wan_status.call_count == calls_after_setup
+
+
+async def test_wan_auth_error_on_first_probe_is_transient(
+    hass: HomeAssistant,
+    init_integration: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """An auth error on the very first WAN probe must not disable the endpoints."""
+    wan_status = profile.load("wan_status")
+    if wan_status is None:
+        return
+    coordinator = _coordinator(init_integration)
+
+    # Simulate the entry starting during an auth hiccup: rebuild state as if
+    # the first poll had failed with -32000.
+    mock_glinet.wan_status.side_effect = AuthenticationError("-32000")
+    mock_glinet.wan_speed.side_effect = AuthenticationError("-32000")
+    await coordinator.async_refresh()
+    mock_glinet.wan_status.side_effect = None
+    mock_glinet.wan_speed.side_effect = None
+    await coordinator.async_refresh()
+    assert coordinator.data.wan_status == wan_status
+
+
+async def test_wan_transient_error_keeps_last_good_values(
+    hass: HomeAssistant,
+    init_integration: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """A transient router error after success must not wipe WAN data."""
+    wan_status = profile.load("wan_status")
+    if wan_status is None:
+        return
+    coordinator = _coordinator(init_integration)
+    assert coordinator.data.wan_status == wan_status
+
+    mock_glinet.wan_status.side_effect = NonZeroResponse("-7 transient")
+    mock_glinet.wan_speed.side_effect = NonZeroResponse("-7 transient")
+    await coordinator.async_refresh()
+    assert coordinator.data.wan_status == wan_status
+    assert coordinator.data.wan_speed == profile.load("wan_speed")
+
+
+async def test_wan_endpoints_probed_independently(
+    hass: HomeAssistant,
+    init_integration: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """A firmware missing only the speed endpoint still reports WAN status."""
+    wan_status = profile.load("wan_status")
+    if wan_status is None:
+        return
+    coordinator = _coordinator(init_integration)
+
+    mock_glinet.wan_speed.side_effect = NonZeroResponse("-32601 method not found")
+    await coordinator.async_refresh()
+    assert coordinator.data.wan_status == wan_status
+
+
+async def test_tailscale_connection_cleared_when_unconfigured(
+    hass: HomeAssistant,
+    init_integration: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """Unconfiguring tailscale must clear the stale connection flag."""
+    if not profile.manifest["capabilities"]["has_tailscale"]:
+        return
+    coordinator = _coordinator(init_integration)
+    assert coordinator.data.tailscale_connection is not None
+
+    mock_glinet.tailscale_configured.return_value = False
+    await coordinator.async_refresh()
+    assert coordinator.data.tailscale_connection is None
+    assert coordinator.data.tailscale_state is None

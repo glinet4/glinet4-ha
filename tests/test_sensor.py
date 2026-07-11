@@ -223,3 +223,26 @@ async def test_load_average_zero_is_reported(
     state = hass.states.get(load1).state
     assert state not in ("unavailable", "unknown")
     assert float(state) == 0
+
+
+async def test_wan_ip_sensor_survives_null_ipv4(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """Firmware reports ipv4 as null when the WAN link is down; no crash."""
+    wan_status = profile.load("wan_status")
+    if wan_status is None:
+        return
+    coordinator = await _setup_at(hass, mock_config_entry, freezer)
+    entity_id = er.async_get(hass).async_get_entity_id(
+        "sensor", DOMAIN, f"glinet_sensor/{profile.factory_mac}/wan_ip"
+    )
+    down = dict(wan_status)
+    down["ipv4"] = None
+    mock_glinet.wan_status.return_value = down
+    await coordinator.async_refresh()
+    await hass.async_block_till_done()
+    assert hass.states.get(entity_id).state == "unknown"

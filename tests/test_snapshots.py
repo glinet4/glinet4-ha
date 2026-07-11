@@ -29,6 +29,7 @@ from homeassistant.helpers import entity_registry as er
 PLATFORMS = [
     Platform.BUTTON,
     Platform.DEVICE_TRACKER,
+    Platform.SELECT,
     Platform.SENSOR,
     Platform.SWITCH,
 ]
@@ -53,5 +54,15 @@ async def test_entities(
         mock_config_entry.add_to_hass(hass)
         await hass.config_entries.async_setup(mock_config_entry.entry_id)
         await hass.async_block_till_done()
+
+    entries = er.async_entries_for_config_entry(
+        entity_registry, mock_config_entry.entry_id
+    )
+    if not entries:
+        # A platform may legitimately create nothing (e.g. select on a profile
+        # without tailscale); snapshot_platform asserts non-empty, so assert
+        # the absence explicitly instead.
+        assert platform is Platform.SELECT
+        return
 
     await snapshot_platform(hass, entity_registry, snapshot, mock_config_entry.entry_id)

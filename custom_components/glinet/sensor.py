@@ -182,12 +182,12 @@ WAN_SENSORS: list[GLinetDataEntityDescription] = [
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda data: (
             ip.split("/")[0]
-            if (ip := data.wan_status.get("ipv4", {}).get("ip"))
+            if (ip := (data.wan_status.get("ipv4") or {}).get("ip"))
             else None
         ),
         extra_attributes_fn=lambda data: {
-            "gateway": data.wan_status.get("ipv4", {}).get("gateway"),
-            "dns": data.wan_status.get("ipv4", {}).get("dns"),
+            "gateway": (data.wan_status.get("ipv4") or {}).get("gateway"),
+            "dns": (data.wan_status.get("ipv4") or {}).get("dns"),
             "protocol": data.wan_status.get("protocol"),
         },
     ),
@@ -224,9 +224,7 @@ TAILSCALE_SENSORS: list[GLinetDataEntityDescription] = [
         entity_category=EntityCategory.DIAGNOSTIC,
         device_class=SensorDeviceClass.ENUM,
         options=[state.name.lower() for state in TailscaleConnection],
-        value_fn=lambda data: (
-            data.tailscale_state.lower() if data.tailscale_state else None
-        ),
+        value_fn=lambda data: data.tailscale_state,
         extra_attributes_fn=lambda data: (
             {"auth_url": data.tailscale_auth_url} if data.tailscale_auth_url else None
         ),

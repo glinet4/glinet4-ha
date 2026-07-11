@@ -2175,6 +2175,65 @@
     'state': 'home',
   })
 # ---
+# name: test_entities[mt6000-select][select.gl_inet_mt6000_tailscale_exit_node-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': dict({
+      'options': list([
+        'none',
+        'hostname-1 (100.64.0.2)',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'select',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'select.gl_inet_mt6000_tailscale_exit_node',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Tailscale exit node',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:server-network',
+    'original_name': 'Tailscale exit node',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_select/00:11:22:00:00:01/tailscale_exit_node',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000-select][select.gl_inet_mt6000_tailscale_exit_node-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 Tailscale exit node',
+      'icon': 'mdi:server-network',
+      'options': list([
+        'none',
+        'hostname-1 (100.64.0.2)',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.gl_inet_mt6000_tailscale_exit_node',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'none',
+  })
+# ---
 # name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_cpu_temperature-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
@@ -5687,6 +5746,63 @@
     'state': 'home',
   })
 # ---
+# name: test_entities[mt6000_no_wireguard-select][select.gl_inet_mt6000_tailscale_exit_node-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': dict({
+      'options': list([
+        'none',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'select',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'select.gl_inet_mt6000_tailscale_exit_node',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Tailscale exit node',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:server-network',
+    'original_name': 'Tailscale exit node',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_select/00:11:22:00:00:01/tailscale_exit_node',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[mt6000_no_wireguard-select][select.gl_inet_mt6000_tailscale_exit_node-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 Tailscale exit node',
+      'icon': 'mdi:server-network',
+      'options': list([
+        'none',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.gl_inet_mt6000_tailscale_exit_node',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'none',
+  })
+# ---
 # name: test_entities[mt6000_no_wireguard-sensor][sensor.gl_inet_mt6000_cpu_temperature-entry]
   EntityRegistryEntrySnapshot({
     'aliases': set({
@@ -7419,6 +7535,63 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': 'home',
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-select][select.gl_inet_mt6000_tailscale_exit_node-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': set({
+    }),
+    'area_id': None,
+    'capabilities': dict({
+      'options': list([
+        'none',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': <ANY>,
+    'device_class': None,
+    'device_id': <ANY>,
+    'disabled_by': None,
+    'domain': 'select',
+    'entity_category': <EntityCategory.CONFIG: 'config'>,
+    'entity_id': 'select.gl_inet_mt6000_tailscale_exit_node',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Tailscale exit node',
+    'options': dict({
+    }),
+    'original_device_class': None,
+    'original_icon': 'mdi:server-network',
+    'original_name': 'Tailscale exit node',
+    'platform': 'glinet',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': None,
+    'unique_id': 'glinet_select/00:11:22:00:00:01/tailscale_exit_node',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_entities[wifi7_mlo_client-select][select.gl_inet_mt6000_tailscale_exit_node-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      'friendly_name': 'GL-iNet MT6000 Tailscale exit node',
+      'icon': 'mdi:server-network',
+      'options': list([
+        'none',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'select.gl_inet_mt6000_tailscale_exit_node',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'none',
   })
 # ---
 # name: test_entities[wifi7_mlo_client-sensor][sensor.gl_inet_mt6000_cpu_temperature-entry]

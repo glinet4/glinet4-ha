@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from dataclasses import dataclass, field
 import logging
 from typing import TYPE_CHECKING, Any, TypeVar
@@ -63,6 +64,7 @@ class GLinetData:
     tailscale_connection: bool | None = None
     tailscale_state: str | None = None
     tailscale_auth_url: str | None = None
+    tailscale_exit_nodes: list[dict] = field(default_factory=list)
     wan_status: dict = field(default_factory=dict)
     wan_speed: dict = field(default_factory=dict)
 
@@ -107,10 +109,13 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._tailscale_connection: bool | None = None
         self._tailscale_state: str | None = None
         self._tailscale_auth_url: str | None = None
+        self._tailscale_exit_nodes: list[dict] = []
         self._wan_status: dict = {}
         self._wan_speed: dict = {}
-        # None = not yet probed; False = this firmware lacks the WAN endpoints
-        self._wan_endpoints_supported: bool | None = None
+        # Optional-endpoint probe results: confirmed on first success,
+        # unsupported on a NonZeroResponse before any success.
+        self._confirmed_endpoints: set[str] = set()
+        self._unsupported_endpoints: set[str] = set()
 
         self._late_init_complete: bool = False
         self._connect_error: bool = False
@@ -238,6 +243,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             tailscale_connection=self._tailscale_connection,
             tailscale_state=self._tailscale_state,
             tailscale_auth_url=self._tailscale_auth_url,
+            tailscale_exit_nodes=self._tailscale_exit_nodes,
             wan_status=self._wan_status,
             wan_speed=self._wan_speed,
         )
@@ -390,8 +396,10 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             return
         if not configured:
             self._tailscale_config = {}
+            self._tailscale_connection = None
             self._tailscale_state = None
             self._tailscale_auth_url = None
+            self._tailscale_exit_nodes = []
             return
         self._tailscale_config = (
             await self._update_platform(
@@ -403,7 +411,12 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._api.tailscale_connection_state
         )
         self._tailscale_connection = response == TailscaleConnection.CONNECTED
-        self._tailscale_state = response.name if response is not None else None
+        self._tailscale_state = response.name.lower() if response is not None else None
+        exit_nodes = await self._call_optional(
+            "tailscale_exit_node_list", self._api.tailscale_exit_node_list
+        )
+        if exit_nodes is not None:
+            self._tailscale_exit_nodes = exit_nodes
         self._tailscale_auth_url = None
         if response in (
             TailscaleConnection.LOGIN_REQUIRED,
@@ -411,37 +424,54 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         ):
             # The firmware's own toggle path ('tailscale up --reset') can drop
             # node auth; the login URL lets the user recover from HA.
-            try:
-                self._tailscale_auth_url = await self._api.tailscale_auth_url()
-            except (TimeoutError, TokenError, OSError, NonZeroResponse) as err:
-                _LOGGER.debug("Could not fetch the tailscale auth url: %s", err)
+            self._tailscale_auth_url = await self._call_optional(
+                "tailscale_auth_url", self._api.tailscale_auth_url
+            )
+
+    async def _call_optional(
+        self, name: str, api_callable: Callable[[], Coroutine[Any, Any, T]]
+    ) -> T | None:
+        """Call an endpoint that may not exist on this firmware.
+
+        A NonZeroResponse before the endpoint has ever succeeded marks it
+        unsupported for the lifetime of the entry; afterwards (and for
+        auth/transport errors, which the mandatory calls in the same cycle
+        recover via renew_token) the failure is transient and returns None
+        so callers keep their last good value.
+        """
+        if name in self._unsupported_endpoints:
+            return None
+        try:
+            result = await api_callable()
+        except (TimeoutError, AuthenticationError, OSError) as err:
+            # AuthenticationError first: it subclasses NonZeroResponse, and an
+            # auth hiccup must not mark the endpoint permanently unsupported.
+            _LOGGER.debug("Optional endpoint %s failed transiently: %s", name, err)
+            return None
+        except NonZeroResponse as err:
+            if name in self._confirmed_endpoints:
+                _LOGGER.debug("Optional endpoint %s failed transiently: %s", name, err)
+            else:
+                _LOGGER.info("GL-iNet router %s does not expose %s", self._host, name)
+                self._unsupported_endpoints.add(name)
+            return None
+        self._confirmed_endpoints.add(name)
+        return result
 
     async def update_wan_state(self) -> None:
         """Poll WAN status and throughput; degrade gracefully when unsupported.
 
-        These endpoints only exist on newer firmware. NonZeroResponse on the
-        first probe marks them unsupported for the lifetime of the entry, and
-        transient errors must not fail the whole refresh.
+        The endpoints only exist on newer firmware and are probed
+        independently; on transient errors the previous values are kept.
         """
-        if self._wan_endpoints_supported is False:
-            return
-        try:
-            self._wan_status = await self._api.wan_status() or {}
-            self._wan_speed = await self._api.wan_speed() or {}
-            self._wan_endpoints_supported = True
-        except (TimeoutError, TokenError, OSError) as err:
-            # TokenError first: it subclasses NonZeroResponse, and an expired
-            # token must not mark the endpoints permanently unsupported.
-            _LOGGER.debug("WAN status poll failed transiently: %s", err)
-        except NonZeroResponse:
-            if self._wan_endpoints_supported is None:
-                _LOGGER.info(
-                    "GL-iNet router %s does not expose WAN status endpoints",
-                    self._host,
-                )
-                self._wan_endpoints_supported = False
-            self._wan_status = {}
-            self._wan_speed = {}
+        status, speed = await asyncio.gather(
+            self._call_optional("wan_status", self._api.wan_status),
+            self._call_optional("wan_speed", self._api.wan_speed),
+        )
+        if status is not None:
+            self._wan_status = status or {}
+        if speed is not None:
+            self._wan_speed = speed or {}
 
     async def update_wireguard_client_state(self) -> None:
         """Make call to the API to get the wireguard client state."""

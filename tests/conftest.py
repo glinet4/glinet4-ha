@@ -177,6 +177,9 @@ def build_mock_api(profile: Profile) -> AsyncMock:
     api.tailscale_connection_state.return_value = TailscaleConnection[connection_state]
     # None once the node is authenticated; a login URL while auth is pending.
     api.tailscale_auth_url.return_value = None
+    api.tailscale_exit_node_list.return_value = (
+        profile.load("tailscale_exit_node_list") or []
+    )
 
     api.wireguard_client_list.return_value = profile.load("wireguard_client_list") or []
     api.wireguard_client_state.return_value = (
@@ -195,6 +198,7 @@ def build_mock_api(profile: Profile) -> AsyncMock:
     api.tailscale_stop.return_value = None
     api.wireguard_client_start.return_value = None
     api.wireguard_client_stop.return_value = None
+    api.tailscale_set_exit_node.return_value = None
     api.logged_in = True
     return api
 
