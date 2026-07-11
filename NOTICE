@@ -9,4 +9,5 @@ It uses a distinct integration domain ("glinet4") and the independently
 published "glinet4" library so it can be installed alongside the original. It
 substantially extends the original with additional entities, platforms, repair
 issues, and tests. The original project's contributions are gratefully
-acknowledged. Licensed under the same terms as the upstream project.
+acknowledged. glinet4 is licensed under GPL-3.0-or-later (see LICENSE); the
+upstream integration did not carry an explicit licence.
