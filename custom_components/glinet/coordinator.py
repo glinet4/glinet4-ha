@@ -34,7 +34,14 @@ from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
 
-from .const import API_PATH, DOMAIN, ISSUE_STATISTICS_NOT_COLLECTING, SCAN_INTERVAL
+from .const import (
+    API_PATH,
+    DOMAIN,
+    ISSUE_ROUTER_MODE,
+    ISSUE_STATISTICS_NOT_COLLECTING,
+    ISSUE_TAILSCALE_REAUTH,
+    SCAN_INTERVAL,
+)
 from .models import ClientDevInfo, WifiInterface, WireGuardClient
 from .utils import adjust_mac
 
@@ -78,6 +85,7 @@ class GLinetData:
     network_interfaces: list[dict] = field(default_factory=list)
     flow_stats_rule: dict = field(default_factory=dict)
     network_acceleration: dict = field(default_factory=dict)
+    network_mode: str = ""
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -129,6 +137,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._network_interfaces: list[dict] = []
         self._flow_stats_rule: dict = {}
         self._network_acceleration: dict = {}
+        self._network_mode: str = ""
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -252,7 +261,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 f"One or more calls to GL-iNet router {self._host} failed"
             )
 
-        self._async_manage_statistics_issue()
+        self._async_manage_repair_issues()
 
         return GLinetData(
             system_status=self._system_status,
@@ -273,6 +282,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             network_interfaces=self._network_interfaces,
             flow_stats_rule=self._flow_stats_rule,
             network_acceleration=self._network_acceleration,
+            network_mode=self._network_mode,
         )
 
     async def _update_platform(
@@ -491,12 +501,13 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         The endpoints only exist on newer firmware and are probed
         independently; on transient errors the previous values are kept.
         """
-        status, speed, interfaces = await asyncio.gather(
+        status, speed, interfaces, mode = await asyncio.gather(
             self._call_optional("wan_status", self._api.wan_status),
             self._call_optional("wan_speed", self._api.wan_speed),
             self._call_optional(
                 "network_interfaces_status", self._api.network_interfaces_status
             ),
+            self._call_optional("network_mode", self._api.network_mode),
         )
         if status is not None:
             self._wan_status = status or {}
@@ -504,6 +515,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._wan_speed = speed or {}
         if interfaces is not None:
             self._network_interfaces = interfaces or []
+        if mode is not None:
+            self._network_mode = mode or ""
 
     async def update_led_state(self) -> None:
         """Poll the LED configuration; absent on some firmware."""
@@ -580,38 +593,69 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._wireguard_clients = clients
         self._wireguard_connections = connections
 
-    @property
-    def _statistics_issue_id(self) -> str:
-        """Return the per-entry repair-issue id for the statistics conflict."""
-        return f"{ISSUE_STATISTICS_NOT_COLLECTING}_{self.config_entry.entry_id}"
+    def _issue_id(self, key: str) -> str:
+        """Return a per-entry repair-issue id for a translation key."""
+        return f"{key}_{self.config_entry.entry_id}"
 
-    def _async_manage_statistics_issue(self) -> None:
-        """Raise or clear the flow-statistics repair issue.
+    def _async_apply_issue(
+        self, key: str, active: bool, placeholders: dict[str, str]
+    ) -> None:
+        """Raise the issue when ``active``, otherwise clear it.
 
-        Flow statistics are enabled but not collecting per-app data when the
-        rule is on while NAT acceleration is off (acceleration and QoS/SQM are
-        mutually exclusive). This is a device-side trade-off the user must
-        decide, so the issue is informational (``is_fixable=False``); it is
-        cleared automatically once the condition resolves.
+        All GL-iNet repair issues are informational (``is_fixable=False``):
+        each is resolved by a device-side change the user must choose, so we
+        surface the requirement and let the condition clear the issue.
         """
-        stats_on = bool(self._flow_stats_rule.get("enable"))
-        accel_on = bool(self._network_acceleration.get("enable"))
-        if stats_on and not accel_on:
+        if active:
             ir.async_create_issue(
                 self.hass,
                 DOMAIN,
-                self._statistics_issue_id,
+                self._issue_id(key),
                 is_fixable=False,
                 severity=ir.IssueSeverity.WARNING,
-                translation_key=ISSUE_STATISTICS_NOT_COLLECTING,
-                translation_placeholders={"device": self.device_name},
+                translation_key=key,
+                translation_placeholders=placeholders,
+                learn_more_url=self._host,
             )
         else:
-            ir.async_delete_issue(self.hass, DOMAIN, self._statistics_issue_id)
+            ir.async_delete_issue(self.hass, DOMAIN, self._issue_id(key))
+
+    def _async_manage_repair_issues(self) -> None:
+        """Raise or clear every repair issue from the current snapshot."""
+        # Flow statistics enabled but not collecting (NAT acceleration off,
+        # which is mutually exclusive with QoS/SQM).
+        stats_on = bool(self._flow_stats_rule.get("enable"))
+        accel_on = bool(self._network_acceleration.get("enable"))
+        self._async_apply_issue(
+            ISSUE_STATISTICS_NOT_COLLECTING,
+            stats_on and not accel_on,
+            {"device": self.device_name},
+        )
+
+        # Tailscale needs re-authentication (e.g. the firmware's toggle path ran
+        # 'tailscale up --reset' and dropped node auth).
+        self._async_apply_issue(
+            ISSUE_TAILSCALE_REAUTH,
+            self._tailscale_state in ("login_required", "authorization_required"),
+            {"device": self.device_name},
+        )
+
+        # Router is not in router mode, so Tailscale/VPN features are
+        # unavailable (the firmware rejects them outside router mode).
+        self._async_apply_issue(
+            ISSUE_ROUTER_MODE,
+            bool(self._network_mode) and self._network_mode != "router",
+            {"device": self.device_name, "mode": self._network_mode},
+        )
 
     def async_clear_issues(self) -> None:
         """Remove this entry's repair issues (called on unload)."""
-        ir.async_delete_issue(self.hass, DOMAIN, self._statistics_issue_id)
+        for key in (
+            ISSUE_STATISTICS_NOT_COLLECTING,
+            ISSUE_TAILSCALE_REAUTH,
+            ISSUE_ROUTER_MODE,
+        ):
+            ir.async_delete_issue(self.hass, DOMAIN, self._issue_id(key))
 
     @property
     def device_info(self) -> DeviceInfo:

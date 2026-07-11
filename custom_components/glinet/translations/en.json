@@ -62,6 +62,14 @@
     "statistics_not_collecting": {
       "title": "Flow statistics are not collecting per-app data",
       "description": "Flow statistics are enabled on {device}, but NAT acceleration is turned off, so per-application data is not being recorded.\n\nNAT acceleration and QoS/SQM (Smart Queue Management) cannot run at the same time on this router. To collect per-application statistics, disable QoS/SQM on the router's admin page. To keep QoS/SQM, turn off the Flow statistics switch to dismiss this notice."
+    },
+    "tailscale_reauth_required": {
+      "title": "Tailscale needs re-authentication",
+      "description": "Tailscale on {device} has dropped out of your tailnet and needs to be signed in again. This can happen when the Tailscale switch is toggled, because the router re-runs `tailscale up --reset`.\n\nOpen the router's Tailscale page (or the Tailscale status sensor's `auth_url` attribute) and sign in to reconnect. This notice clears automatically once the router is connected."
+    },
+    "router_mode": {
+      "title": "Router is not in router mode",
+      "description": "{device} is currently in {mode} mode. Tailscale and VPN features require the router to be in router mode and are unavailable in the current mode.\n\nSwitch the device to router mode on its admin page to use these features, or ignore this notice if you intend to run it in {mode} mode."
     }
   }
 }

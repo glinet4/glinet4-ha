@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from unittest.mock import AsyncMock
 
+from gli4py.enums import TailscaleConnection
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet.const import DOMAIN, ISSUE_STATISTICS_NOT_COLLECTING
@@ -120,8 +121,136 @@ def test_issue_translations_present_and_consistent() -> None:
     en = json.loads((base / "translations" / "en.json").read_text())
 
     assert strings["issues"] == en["issues"]
-    issue = strings["issues"][ISSUE_STATISTICS_NOT_COLLECTING]
-    # Non-fixable issues render a title + description; no fix_flow.
-    assert issue["title"]
-    assert issue["description"]
-    assert "fix_flow" not in issue
+    for key in (
+        ISSUE_STATISTICS_NOT_COLLECTING,
+        "tailscale_reauth_required",
+        "router_mode",
+    ):
+        issue = strings["issues"][key]
+        # Non-fixable issues render a title + description; no fix_flow.
+        assert issue["title"]
+        assert issue["description"]
+        assert "fix_flow" not in issue
+
+
+def _tailscale_issue_id(entry: MockConfigEntry) -> str:
+    return f"tailscale_reauth_required_{entry.entry_id}"
+
+
+def _router_mode_issue_id(entry: MockConfigEntry) -> str:
+    return f"router_mode_{entry.entry_id}"
+
+
+def _force_tailscale(mock_glinet: AsyncMock, state: str, url: str | None) -> None:
+    """Pin the tailscale connection state and auth url."""
+    mock_glinet.tailscale_configured.return_value = True
+    mock_glinet.tailscale_connection_state.return_value = TailscaleConnection[
+        state.upper()
+    ]
+    mock_glinet.tailscale_auth_url.return_value = url
+
+
+async def test_tailscale_reauth_issue_raised_when_login_required(
+    hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_glinet: AsyncMock
+) -> None:
+    """A login-required tailscale state raises the re-auth issue."""
+    _force_tailscale(mock_glinet, "login_required", "https://login.tailscale.com/a/x")
+    await _setup(hass, mock_config_entry)
+    issue = ir.async_get(hass).async_get_issue(
+        DOMAIN, _tailscale_issue_id(mock_config_entry)
+    )
+    assert issue is not None
+    assert issue.is_fixable is False
+    assert issue.severity == ir.IssueSeverity.WARNING
+    assert issue.translation_key == "tailscale_reauth_required"
+    assert issue.learn_more_url
+
+
+async def test_tailscale_reauth_issue_absent_when_connected(
+    hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_glinet: AsyncMock
+) -> None:
+    """No re-auth issue while tailscale is connected."""
+    _force_tailscale(mock_glinet, "connected", None)
+    await _setup(hass, mock_config_entry)
+    assert (
+        ir.async_get(hass).async_get_issue(
+            DOMAIN, _tailscale_issue_id(mock_config_entry)
+        )
+        is None
+    )
+
+
+async def test_tailscale_reauth_issue_cleared_on_reconnect(
+    hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_glinet: AsyncMock
+) -> None:
+    """Reconnecting clears a previously-raised re-auth issue."""
+    _force_tailscale(mock_glinet, "login_required", "https://login.tailscale.com/a/x")
+    await _setup(hass, mock_config_entry)
+    assert ir.async_get(hass).async_get_issue(
+        DOMAIN, _tailscale_issue_id(mock_config_entry)
+    )
+    _force_tailscale(mock_glinet, "connected", None)
+    await mock_config_entry.runtime_data.async_refresh()
+    await hass.async_block_till_done()
+    assert (
+        ir.async_get(hass).async_get_issue(
+            DOMAIN, _tailscale_issue_id(mock_config_entry)
+        )
+        is None
+    )
+
+
+async def test_router_mode_issue_raised_in_ap_mode(
+    hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_glinet: AsyncMock
+) -> None:
+    """A non-router operating mode raises the router-mode issue."""
+    mock_glinet.network_mode.side_effect = None
+    mock_glinet.network_mode.return_value = "ap"
+    await _setup(hass, mock_config_entry)
+    issue = ir.async_get(hass).async_get_issue(
+        DOMAIN, _router_mode_issue_id(mock_config_entry)
+    )
+    assert issue is not None
+    assert issue.translation_key == "router_mode"
+    assert issue.translation_placeholders.get("mode") == "ap"
+
+
+async def test_router_mode_issue_absent_in_router_mode(
+    hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_glinet: AsyncMock
+) -> None:
+    """No issue when the router is in router mode."""
+    mock_glinet.network_mode.side_effect = None
+    mock_glinet.network_mode.return_value = "router"
+    await _setup(hass, mock_config_entry)
+    assert (
+        ir.async_get(hass).async_get_issue(
+            DOMAIN, _router_mode_issue_id(mock_config_entry)
+        )
+        is None
+    )
+
+
+async def test_all_issues_removed_on_unload(
+    hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_glinet: AsyncMock
+) -> None:
+    """Unloading clears every repair issue this entry raised."""
+    _force(mock_glinet, stats_on=True, accel_on=False)
+    _force_tailscale(mock_glinet, "login_required", "https://login.tailscale.com/a/x")
+    mock_glinet.network_mode.side_effect = None
+    mock_glinet.network_mode.return_value = "ap"
+    await _setup(hass, mock_config_entry)
+    registry = ir.async_get(hass)
+    assert registry.async_get_issue(DOMAIN, _issue_id(mock_config_entry))
+    assert registry.async_get_issue(DOMAIN, _tailscale_issue_id(mock_config_entry))
+    assert registry.async_get_issue(DOMAIN, _router_mode_issue_id(mock_config_entry))
+
+    await hass.config_entries.async_unload(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+    assert registry.async_get_issue(DOMAIN, _issue_id(mock_config_entry)) is None
+    assert (
+        registry.async_get_issue(DOMAIN, _tailscale_issue_id(mock_config_entry)) is None
+    )
+    assert (
+        registry.async_get_issue(DOMAIN, _router_mode_issue_id(mock_config_entry))
+        is None
+    )

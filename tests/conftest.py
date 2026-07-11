@@ -213,6 +213,7 @@ def build_mock_api(profile: Profile) -> AsyncMock:
         api.network_acceleration, profile.load("network_acceleration")
     )
     api.flow_stats_set_enabled.return_value = []
+    _wire_optional_endpoint(api.network_mode, profile.load("network_mode"))
     api.logged_in = True
     return api
 

@@ -16,3 +16,5 @@ CONF_TITLE = "title"
 # Repair-issue translation key; the per-entry issue id is
 # f"{ISSUE_STATISTICS_NOT_COLLECTING}_{entry_id}".
 ISSUE_STATISTICS_NOT_COLLECTING = "statistics_not_collecting"
+ISSUE_TAILSCALE_REAUTH = "tailscale_reauth_required"
+ISSUE_ROUTER_MODE = "router_mode"
