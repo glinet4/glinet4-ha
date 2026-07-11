@@ -193,6 +193,7 @@ def build_mock_api(profile: Profile) -> AsyncMock:
     _wire_optional_endpoint(
         api.firmware_check_online, profile.load("firmware_check_online")
     )
+    _wire_optional_endpoint(api.led_config, profile.load("led_config"))
 
     # Action endpoints (no useful return value).
     api.router_reboot.return_value = None
@@ -202,6 +203,7 @@ def build_mock_api(profile: Profile) -> AsyncMock:
     api.wireguard_client_start.return_value = None
     api.wireguard_client_stop.return_value = None
     api.tailscale_set_exit_node.return_value = None
+    api.led_set_enabled.return_value = None
     api.logged_in = True
     return api
 

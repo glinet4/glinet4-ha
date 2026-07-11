@@ -74,6 +74,7 @@ class GLinetData:
     wan_status: dict = field(default_factory=dict)
     wan_speed: dict = field(default_factory=dict)
     firmware_check: dict = field(default_factory=dict)
+    led_config: dict = field(default_factory=dict)
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -121,6 +122,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._wan_speed: dict = {}
         self._firmware_check: dict = {}
         self._firmware_check_at: datetime | None = None
+        self._led_config: dict = {}
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -234,6 +236,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         await self.update_wireguard_client_state()
         await self.update_tailscale_state()
         await self.update_wan_state()
+        await self.update_led_state()
         await self.update_firmware_check()
 
         # If any call hit a transport error this cycle, fail the whole refresh
@@ -257,6 +260,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             wan_status=self._wan_status,
             wan_speed=self._wan_speed,
             firmware_check=self._firmware_check,
+            led_config=self._led_config,
         )
 
     async def _update_platform(
@@ -483,6 +487,12 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._wan_status = status or {}
         if speed is not None:
             self._wan_speed = speed or {}
+
+    async def update_led_state(self) -> None:
+        """Poll the LED configuration; absent on some firmware."""
+        led = await self._call_optional("led_config", self._api.led_config)
+        if led is not None:
+            self._led_config = led or {}
 
     async def update_firmware_check(self) -> None:
         """Check online for a firmware update, at most every 6 hours."""

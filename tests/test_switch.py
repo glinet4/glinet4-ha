@@ -88,3 +88,35 @@ async def test_wireguard_switch_turn_off_calls_api(
         "switch", "turn_off", {"entity_id": entity_id}, blocking=True
     )
     mock_glinet.wireguard_client_stop.assert_awaited()
+
+
+async def test_led_switch_reflects_and_controls_led_state(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """The LED switch mirrors led_config and drives led_set_enabled."""
+    mock_config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    entity_id = er.async_get(hass).async_get_entity_id(
+        "switch", DOMAIN, f"glinet_switch/{profile.factory_mac}/led"
+    )
+    led_config = profile.load("led_config")
+    if led_config is None:
+        assert entity_id is None
+        return
+    assert entity_id is not None
+    expected = "on" if led_config["led_enable"] else "off"
+    assert hass.states.get(entity_id).state == expected
+
+    await hass.services.async_call(
+        "switch", "turn_on", {"entity_id": entity_id}, blocking=True
+    )
+    mock_glinet.led_set_enabled.assert_awaited_with(True)
+    await hass.services.async_call(
+        "switch", "turn_off", {"entity_id": entity_id}, blocking=True
+    )
+    mock_glinet.led_set_enabled.assert_awaited_with(False)

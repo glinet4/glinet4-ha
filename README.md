@@ -17,6 +17,7 @@ Contributions are welcome, for ideas see the TODO list below or the various `#TO
 - Tailscale status sensor (disconnected / login required / authorization required / connected / connecting) with the login URL as an attribute when the router needs re-authentication
 - Tailscale exit-node select: route the router's traffic through any exit node on your tailnet (or none)
 - Firmware update entity: shows when GL.iNet publishes a newer firmware (checked at most every 6 hours; read-only by design)
+- LED switch: turn the router's LEDs on or off
 - Coming soon:
   - On/off control of WiFi Networks
 
@@ -73,7 +74,7 @@ up automatically. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow.
 - [ ] Features under consideration
   - Making changes to the VPN client policies would be cool to automate switching on/off VPN use per device in automations. Useful for bypassing geofilters for example
   - Firmware upgrades https://dev.gl-inet.com/api/#api-firmware (should have warnings)
-  - Switch for LED control https://dev.gl-inet.com/api/#api-cloud-PostLedEnable
+  - [x] Switch for LED control (done)
   - Tethering controls:https://dev.gl-inet.com/api/#api-tethering
   - Modem control (useful for failover internet automations)
   - ?SMS control - maybe a notify platform [see example](https://github.com/home-assistant/core/blob/dev/homeassistant/components/sms/notify.py)

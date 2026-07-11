@@ -29,7 +29,7 @@ async def async_setup_entry(
     """Set up the GL-iNet switches."""
     coordinator = entry.runtime_data
     data = coordinator.data
-    switches: list[WifiApSwitch | WireGuardSwitch | TailscaleSwitch] = []
+    switches: list[WifiApSwitch | WireGuardSwitch | TailscaleSwitch | LedSwitch] = []
     if data.wireguard_clients:
         # TODO detect all configured wireguard, openvpn, shadowsocks and
         # TOR clients & servers with router/vpn/status? and gen a switch for each
@@ -39,6 +39,8 @@ async def async_setup_entry(
         ]
     if data.tailscale_config:
         switches.append(TailscaleSwitch(coordinator))
+    if data.led_config:
+        switches.append(LedSwitch(coordinator))
     for iface_name, iface in data.wifi_ifaces.items():
         switches.append(WifiApSwitch(coordinator, iface_name, iface))
     if switches:
@@ -60,6 +62,40 @@ class GliSwitchBase(CoordinatorEntity["GLinetUpdateCoordinator"], SwitchEntity):
         """Initialize a GLinet switch."""
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info
+
+
+class LedSwitch(GliSwitchBase):
+    """Control the router's LEDs."""
+
+    _attr_name = "LEDs"
+
+    def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
+        """Initialize the LED switch."""
+        super().__init__(coordinator)
+        self._attr_unique_id = f"glinet_switch/{coordinator.factory_mac}/led"
+
+    @property
+    def icon(self) -> str:
+        """Return the icon for the current state."""
+        return "mdi:led-on" if self.is_on else "mdi:led-off"
+
+    @property
+    def is_on(self) -> bool | None:
+        """Return whether the LEDs are enabled."""
+        enabled = self.coordinator.data.led_config.get("led_enable")
+        if enabled is None:
+            return None
+        return bool(enabled)
+
+    async def async_turn_on(self, **_: Any) -> None:
+        """Enable the LEDs."""
+        await self.coordinator.api.led_set_enabled(True)
+        await self.coordinator.async_request_refresh()
+
+    async def async_turn_off(self, **_: Any) -> None:
+        """Disable the LEDs."""
+        await self.coordinator.api.led_set_enabled(False)
+        await self.coordinator.async_request_refresh()
 
 
 class WifiApSwitch(GliSwitchBase):
