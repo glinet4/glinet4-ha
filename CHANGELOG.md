@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1](https://github.com/glinet4/glinet4-ha/compare/v0.4.0...v0.4.1) (2026-07-12)
+
+
+### Bug Fixes
+
+* adopt the glinet4 0.2.0 API (renames, keyword-only mutators) and lift the version cap ([#23](https://github.com/glinet4/glinet4-ha/issues/23)) ([1bf1e94](https://github.com/glinet4/glinet4-ha/commit/1bf1e94cee397a25bd431b4715642f1c99ad50c8))
+* cap the glinet4 runtime pin below the upcoming 0.2.0 breaking series ([#21](https://github.com/glinet4/glinet4-ha/issues/21)) ([7455ba2](https://github.com/glinet4/glinet4-ha/commit/7455ba2fcb6ca43428c4d4f5dee7e5fcaa187edd))
+
 ## [0.4.0](https://github.com/glinet4/glinet4-ha/compare/v0.3.0...v0.4.0) (2026-07-12)
 
 
