@@ -5,12 +5,13 @@ from __future__ import annotations
 from collections.abc import Iterator
 from unittest.mock import AsyncMock, patch
 
+from glinet4.error_handling import AuthenticationError, UnsuccessfulRequest
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet4.const import DOMAIN
 from homeassistant.components.device_tracker import CONF_CONSIDER_HOME
-from homeassistant.config_entries import SOURCE_USER
+from homeassistant.config_entries import SOURCE_DHCP, SOURCE_USER
 from homeassistant.const import (
     CONF_API_TOKEN,
     CONF_HOST,
@@ -20,6 +21,7 @@ from homeassistant.const import (
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
+from homeassistant.helpers.service_info.dhcp import DhcpServiceInfo
 
 USER_INPUT = {
     CONF_USERNAME: "root",
@@ -100,6 +102,97 @@ async def test_user_flow_invalid_auth(
     )
     assert result["type"] is FlowResultType.FORM
     assert result["errors"] == {"base": "invalid_auth"}
+
+
+async def test_user_flow_cannot_connect_transport_error(
+    hass: HomeAssistant, mock_flow_api: AsyncMock
+) -> None:
+    """A transport failure while probing reachability surfaces cannot_connect.
+
+    Regression test for glinet4 0.2.0's error taxonomy: TestingHub.connect()
+    must catch UnsuccessfulRequest (not the dead builtin ConnectionError).
+    """
+    mock_flow_api.router_reachable.side_effect = UnsuccessfulRequest(
+        "connection refused"
+    )
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], USER_INPUT
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "cannot_connect"}
+
+
+async def test_user_flow_invalid_auth_authentication_error(
+    hass: HomeAssistant, mock_flow_api: AsyncMock
+) -> None:
+    """A rejected login surfaces invalid_auth via the new taxonomy.
+
+    Regression test for glinet4 0.2.0's error taxonomy: TestingHub.authenticate()
+    must catch AuthenticationError/TokenError (not the dead builtin
+    ConnectionRefusedError).
+    """
+    mock_flow_api.login.side_effect = AuthenticationError("bad credentials")
+    mock_flow_api.logged_in = False
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], USER_INPUT
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "invalid_auth"}
+
+
+async def test_user_flow_cannot_connect_transport_error_during_authenticate(
+    hass: HomeAssistant, mock_flow_api: AsyncMock
+) -> None:
+    """A transport failure during login surfaces cannot_connect, not invalid_auth.
+
+    The router answered connect()'s reachability probe but then dropped off
+    the network before login completed; that's a transport failure, so it
+    must not be misreported as bad credentials.
+
+    This mock shape (``login.side_effect = UnsuccessfulRequest``) only became
+    faithful to the real library with glinet4 0.2.1: under 0.2.0, login()
+    caught every non-``AuthenticationError`` ``APIClientError`` -- including
+    ``UnsuccessfulRequest`` from a dropped connection -- and re-raised it
+    flattened into a bare ``APIClientError``, so this exact type could never
+    actually come out of login(). 0.2.1 removed that flattening catch-all
+    (glinet4-ha PR #25), so login() now really does propagate
+    ``UnsuccessfulRequest`` unwrapped, and this test exercises a real
+    behavior rather than an unreachable mock shape.
+    """
+    mock_flow_api.login.side_effect = UnsuccessfulRequest("connection dropped")
+    mock_flow_api.logged_in = False
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], USER_INPUT
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "cannot_connect"}
+
+
+# NOTE: an earlier revision of this file had a
+# test_user_flow_unknown_error_on_feature_conflict test that mocked
+# `login.side_effect = FeatureConflictError(...)`. It's been dropped rather
+# than kept "now faithful under 0.2.1": glinet4's FeatureConflictError is
+# specifically the router reusing JSON-RPC error code -1 for
+# `set_netnat_config` conflicts (NAT acceleration vs Parental Control/QoS/
+# SQM/DPI) -- see glinet4.error_handling.FeatureConflictError's docstring.
+# Neither TestingHub.authenticate()'s login() call nor its router_info() call
+# touches NAT config, so no realistic router response makes either one raise
+# FeatureConflictError; mocking it there was theater regardless of which
+# glinet4 version's shape it matched. The `except FeatureConflictError: raise`
+# clause in TestingHub.authenticate() is kept as defensive code (see its
+# comment) but isn't exercised by a realistic test.
 
 
 async def test_reauth_flow_success(
@@ -185,3 +278,33 @@ async def test_reconfigure_flow_wrong_device(
     )
     assert result["type"] is FlowResultType.ABORT
     assert result["reason"] == "unique_id_mismatch"
+
+
+async def test_dhcp_flow_cannot_connect_transport_error_during_authenticate(
+    hass: HomeAssistant, mock_flow_api: AsyncMock
+) -> None:
+    """A DHCP-discovered router that drops mid-login aborts, it doesn't crash.
+
+    async_step_dhcp probes a freshly discovered router with the default
+    credentials (raise_on_invalid_auth=False). If that probe's login()
+    call hits a login-phase transport drop -- the same UnsuccessfulRequest
+    scenario as test_user_flow_cannot_connect_transport_error_during_authenticate,
+    just reached through the DHCP path instead of the user step -- validate_input
+    maps it to CannotConnect, and async_step_dhcp's `except CannotConnect`
+    must catch that and abort gracefully rather than let a bare exception
+    escape and crash the discovery flow.
+    """
+    mock_flow_api.login.side_effect = UnsuccessfulRequest("connection dropped")
+    mock_flow_api.logged_in = False
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": SOURCE_DHCP},
+        data=DhcpServiceInfo(
+            ip="192.168.8.1",
+            hostname="GL-MT6000",
+            macaddress="9483c4001122",
+        ),
+    )
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "cannot_connect"

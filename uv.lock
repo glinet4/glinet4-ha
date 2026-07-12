@@ -997,8 +997,8 @@ wheels = [
 
 [[package]]
 name = "glinet4"
-version = "0.2.0"
-source = { git = "https://github.com/glinet4/glinet4?rev=main#8c75e295df0c2e4eae1b93f19a74193a3257da07" }
+version = "0.2.1"
+source = { git = "https://github.com/glinet4/glinet4?rev=main#5372ad9967e4bdfd4e54e30879b12f8d572fd65a" }
 dependencies = [
     { name = "aiohttp" },
     { name = "libpass" },
