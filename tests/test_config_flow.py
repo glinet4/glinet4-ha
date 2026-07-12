@@ -5,6 +5,11 @@ from __future__ import annotations
 from collections.abc import Iterator
 from unittest.mock import AsyncMock, patch
 
+from glinet4.error_handling import (
+    AuthenticationError,
+    FeatureConflictError,
+    UnsuccessfulRequest,
+)
 import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
@@ -100,6 +105,89 @@ async def test_user_flow_invalid_auth(
     )
     assert result["type"] is FlowResultType.FORM
     assert result["errors"] == {"base": "invalid_auth"}
+
+
+async def test_user_flow_cannot_connect_transport_error(
+    hass: HomeAssistant, mock_flow_api: AsyncMock
+) -> None:
+    """A transport failure while probing reachability surfaces cannot_connect.
+
+    Regression test for glinet4 0.2.0's error taxonomy: TestingHub.connect()
+    must catch UnsuccessfulRequest (not the dead builtin ConnectionError).
+    """
+    mock_flow_api.router_reachable.side_effect = UnsuccessfulRequest(
+        "connection refused"
+    )
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], USER_INPUT
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "cannot_connect"}
+
+
+async def test_user_flow_invalid_auth_authentication_error(
+    hass: HomeAssistant, mock_flow_api: AsyncMock
+) -> None:
+    """A rejected login surfaces invalid_auth via the new taxonomy.
+
+    Regression test for glinet4 0.2.0's error taxonomy: TestingHub.authenticate()
+    must catch AuthenticationError/TokenError (not the dead builtin
+    ConnectionRefusedError).
+    """
+    mock_flow_api.login.side_effect = AuthenticationError("bad credentials")
+    mock_flow_api.logged_in = False
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], USER_INPUT
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "invalid_auth"}
+
+
+async def test_user_flow_cannot_connect_transport_error_during_authenticate(
+    hass: HomeAssistant, mock_flow_api: AsyncMock
+) -> None:
+    """A transport failure during login surfaces cannot_connect, not invalid_auth.
+
+    The router answered connect()'s reachability probe but then dropped off
+    the network before login completed; that's a transport failure, so it
+    must not be misreported as bad credentials.
+    """
+    mock_flow_api.login.side_effect = UnsuccessfulRequest("connection dropped")
+    mock_flow_api.logged_in = False
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], USER_INPUT
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "cannot_connect"}
+
+
+async def test_user_flow_unknown_error_on_feature_conflict(
+    hass: HomeAssistant, mock_flow_api: AsyncMock
+) -> None:
+    """A feature conflict during login is neither cannot_connect nor invalid_auth."""
+    mock_flow_api.login.side_effect = FeatureConflictError("conflict with QoS/SQM")
+    mock_flow_api.logged_in = False
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN, context={"source": SOURCE_USER}
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], USER_INPUT
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "unknown"}
 
 
 async def test_reauth_flow_success(

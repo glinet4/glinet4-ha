@@ -8,7 +8,13 @@ from typing import TYPE_CHECKING, Any
 import voluptuous as vol
 
 from glinet4 import GLinet
-from glinet4.error_handling import NonZeroResponse
+from glinet4.error_handling import (
+    AuthenticationError,
+    FeatureConflictError,
+    TokenError,
+    UnexpectedResponse,
+    UnsuccessfulRequest,
+)
 from homeassistant import config_entries
 from homeassistant.components.device_tracker import (
     CONF_CONSIDER_HOME,
@@ -89,14 +95,21 @@ class TestingHub:
         self.router_model: str = ""
 
     async def connect(self) -> bool:
-        """Test if we can communicate with the host."""
+        """Test if we can communicate with the host.
+
+        ``router_reachable()`` already swallows every ``APIClientError``
+        subclass internally and returns ``False``, so these except clauses
+        are defensive rather than live paths; they exist to log a useful
+        reason (instead of falling through silently) should that contract
+        ever change.
+        """
         try:
             res: bool = await self.router.router_reachable(self.username)
-        except ConnectionError:
+        except UnsuccessfulRequest:
             _LOGGER.exception(
                 "Failed to connect to %s, is it really a GL.iNet router?", self.host
             )
-        except TypeError:
+        except UnexpectedResponse:
             _LOGGER.exception(
                 "Failed to parse router response to %s, is it the right firmware version?",
                 self.host,
@@ -107,15 +120,28 @@ class TestingHub:
         return False
 
     async def authenticate(self, password: str) -> bool:
-        """Test if we can authenticate with the host."""
+        """Test if we can authenticate with the host.
+
+        Bad credentials (``AuthenticationError``/``TokenError``) are
+        swallowed: they're expected here, e.g. while probing a DHCP-discovered
+        router's default password. A transport failure
+        (``UnsuccessfulRequest``) is left to propagate to ``validate_input``,
+        which reports it as ``cannot_connect`` rather than a credentials
+        problem.
+        """
         try:
             await self.router.login(self.username, password)
             res = await self.router.router_info()
-        except (ConnectionRefusedError, NonZeroResponse):
+        except (AuthenticationError, TokenError):
             _LOGGER.info(
                 "Failed to authenticate with GL.iNet router during testing, this may be expected at times"
             )
-
+        except FeatureConflictError:
+            _LOGGER.exception(
+                "GL.iNet router %s reported a feature conflict while testing authentication",
+                self.host,
+            )
+            raise
         else:
             self.router_mac = res["mac"]
             self.router_model = res["model"]
@@ -138,7 +164,16 @@ async def validate_input(
         raise CannotConnect
 
     valid_auth = True
-    if not await hub.authenticate(data.get(CONF_PASSWORD, GLINET_DEFAULT_PW)):
+    try:
+        authenticated = await hub.authenticate(
+            data.get(CONF_PASSWORD, GLINET_DEFAULT_PW)
+        )
+    except UnsuccessfulRequest as err:
+        # The router answered connect()'s reachability check but dropped off
+        # the network before/during login; that's a transport failure, not
+        # bad credentials.
+        raise CannotConnect from err
+    if not authenticated:
         valid_auth = False
     if raise_on_invalid_auth and not valid_auth:
         raise InvalidAuth
