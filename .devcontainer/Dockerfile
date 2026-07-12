@@ -4,7 +4,7 @@
 FROM ghcr.io/astral-sh/uv:0.11.28 AS uv
 
 # Microsoft's Python devcontainer base
-FROM mcr.microsoft.com/devcontainers/python:3.13-bookworm
+FROM mcr.microsoft.com/devcontainers/python:3.14-bookworm
 
 # System libraries some Home Assistant dependencies expect to be present.
 RUN apt-get update \
