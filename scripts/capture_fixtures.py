@@ -28,7 +28,6 @@ from typing import Any
 from glinet4 import GLinet
 from glinet4.enums import TailscaleConnection
 from glinet4.error_handling import NonZeroResponse
-from uplink import AiohttpClient
 
 FIXTURES = Path(__file__).resolve().parent.parent / "tests" / "fixtures"
 API_PATH = "/rpc"
@@ -145,9 +144,9 @@ async def fetch_raw(api: GLinet) -> dict[str, Any]:
     """Call the read-only endpoints the integration consumes. No mutations."""
     raw: dict[str, Any] = {
         "router_info": await api.router_info(),
-        "router_get_status": await api.router_get_status(),
+        "router_get_status": await api.router_status(),
         "connected_clients": await api.connected_clients(),
-        "wifi_ifaces_get": await api.wifi_ifaces_get(),
+        "wifi_ifaces_get": await api.wifi_ifaces(),
     }
     if await api.tailscale_configured():
         raw["tailscale_get_config"] = await api._tailscale_get_config()  # noqa: SLF001
@@ -233,13 +232,9 @@ def _dump(path: Path, data: Any) -> None:
 
 async def capture(args: argparse.Namespace) -> None:
     """Connect, fetch, sanitise and write the profile."""
-    api = GLinet(
-        base_url=args.host + API_PATH,
-        client=AiohttpClient(),
-        sync=False,
-    )
-    await api.login(args.username, args.password)
-    raw = await fetch_raw(api)
+    async with GLinet(base_url=args.host + API_PATH) as api:
+        await api.login(args.username, args.password)
+        raw = await fetch_raw(api)
 
     sanitiser = Sanitiser()
     sanitiser.seed_router_mac(raw["router_info"])

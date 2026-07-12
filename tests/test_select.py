@@ -67,7 +67,7 @@ async def test_selecting_a_node_sets_the_exit_node(
         {"entity_id": entity_id, "option": label},
         blocking=True,
     )
-    mock_glinet.tailscale_set_exit_node.assert_awaited_with(nodes[0]["ip"])
+    mock_glinet.tailscale_set_exit_node.assert_awaited_with(exit_node_ip=nodes[0]["ip"])
 
     await hass.services.async_call(
         "select",
@@ -75,7 +75,7 @@ async def test_selecting_a_node_sets_the_exit_node(
         {"entity_id": entity_id, "option": "none"},
         blocking=True,
     )
-    mock_glinet.tailscale_set_exit_node.assert_awaited_with(None)
+    mock_glinet.tailscale_set_exit_node.assert_awaited_with(exit_node_ip=None)
 
 
 async def test_current_option_follows_config(

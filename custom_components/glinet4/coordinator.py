@@ -8,8 +8,6 @@ from datetime import datetime, timedelta
 import logging
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
-from uplink import AiohttpClient
-
 from glinet4 import GLinet
 from glinet4.enums import TailscaleConnection
 from glinet4.error_handling import AuthenticationError, NonZeroResponse, TokenError
@@ -196,12 +194,9 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         """Optimistically return a GLinet client, no test included."""
         conf = self.config_entry.data
         shared_session = async_get_clientsession(self.hass)
-        ha_client = AiohttpClient(session=shared_session)
 
         if CONF_PASSWORD in conf:
-            router = GLinet(
-                sync=False, base_url=conf[CONF_HOST] + API_PATH, client=ha_client
-            )
+            router = GLinet(base_url=conf[CONF_HOST] + API_PATH, session=shared_session)
             await router.login(conf[CONF_USERNAME], conf[CONF_PASSWORD])
             return router
         _LOGGER.error(
@@ -232,7 +227,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
     async def _async_update_data(self) -> GLinetData:
         """Fetch a fresh snapshot of router state."""
         self._cycle_failed = False
-        status = await self._update_platform(self._api.router_get_status)
+        status = await self._update_platform(self._api.router_status)
         if status is None:
             # The core health call failed (router unreachable / token not yet
             # recovered). Surface it so entities go unavailable; the token error
@@ -398,7 +393,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
 
     async def update_wifi_ifaces_state(self) -> None:
         """Make a call to the API to get the WiFi ifaces config state."""
-        ifaces = await self._update_platform(self._api.wifi_ifaces_get)
+        ifaces = await self._update_platform(self._api.wifi_ifaces)
         if not ifaces:
             return
         # Rebuild the mapping each poll so an interface that disappears from the
@@ -432,6 +427,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._tailscale_auth_url = None
             self._tailscale_exit_nodes = []
             return
+        # TODO: public API in a future glinet4 release
         ts_config = await self._update_platform(
             self._api._tailscale_get_config  # pylint: disable=protected-access  # noqa: SLF001
         )

@@ -111,7 +111,7 @@ class ClientInternetSwitch(GliSwitchBase):
     async def async_turn_on(self, **_: Any) -> None:
         """Allow the client's network access."""
         await async_run_action(
-            self.coordinator.api.client_set_blocked(self._mac, False),
+            self.coordinator.api.client_set_blocked(self._mac, blocked=False),
             device=self.coordinator.device_name,
         )
         await self.coordinator.async_request_refresh()
@@ -119,7 +119,7 @@ class ClientInternetSwitch(GliSwitchBase):
     async def async_turn_off(self, **_: Any) -> None:
         """Block the client's network access."""
         await async_run_action(
-            self.coordinator.api.client_set_blocked(self._mac, True),
+            self.coordinator.api.client_set_blocked(self._mac, blocked=True),
             device=self.coordinator.device_name,
         )
         await self.coordinator.async_request_refresh()
@@ -181,7 +181,7 @@ class FlowStatisticsSwitch(GliSwitchBase):
         surfaced via the reason attribute instead.
         """
         await async_run_action(
-            self.coordinator.api.flow_stats_set_enabled(True),
+            self.coordinator.api.flow_stats_set_enabled(enabled=True),
             device=self.coordinator.device_name,
         )
         await self.coordinator.async_request_refresh()
@@ -189,7 +189,7 @@ class FlowStatisticsSwitch(GliSwitchBase):
     async def async_turn_off(self, **_: Any) -> None:
         """Disable statistics collection."""
         await async_run_action(
-            self.coordinator.api.flow_stats_set_enabled(False),
+            self.coordinator.api.flow_stats_set_enabled(enabled=False),
             device=self.coordinator.device_name,
         )
         await self.coordinator.async_request_refresh()
@@ -216,7 +216,7 @@ class LedSwitch(GliSwitchBase):
     async def async_turn_on(self, **_: Any) -> None:
         """Enable the LEDs."""
         await async_run_action(
-            self.coordinator.api.led_set_enabled(True),
+            self.coordinator.api.led_set_enabled(enabled=True),
             device=self.coordinator.device_name,
         )
         await self.coordinator.async_request_refresh()
@@ -224,7 +224,7 @@ class LedSwitch(GliSwitchBase):
     async def async_turn_off(self, **_: Any) -> None:
         """Disable the LEDs."""
         await async_run_action(
-            self.coordinator.api.led_set_enabled(False),
+            self.coordinator.api.led_set_enabled(enabled=False),
             device=self.coordinator.device_name,
         )
         await self.coordinator.async_request_refresh()
@@ -288,7 +288,7 @@ class WifiApSwitch(GliSwitchBase):
         """Turn on the AP."""
         _LOGGER.debug("Enabling WiFi interface %s", self._iface_name)
         await async_run_action(
-            self.coordinator.api.wifi_iface_set_enabled(self._iface_name, True),
+            self.coordinator.api.wifi_iface_set_enabled(self._iface_name, enabled=True),
             device=self.coordinator.device_name,
         )
         await self.coordinator.async_request_refresh()
@@ -297,7 +297,9 @@ class WifiApSwitch(GliSwitchBase):
         """Turn off the AP."""
         _LOGGER.debug("Disabling WiFi interface %s", self._iface_name)
         await async_run_action(
-            self.coordinator.api.wifi_iface_set_enabled(self._iface_name, False),
+            self.coordinator.api.wifi_iface_set_enabled(
+                self._iface_name, enabled=False
+            ),
             device=self.coordinator.device_name,
         )
         await self.coordinator.async_request_refresh()
@@ -402,7 +404,8 @@ class WireGuardSwitch(GliSwitchBase):
                 for client in data.wireguard_connections:
                     await self.coordinator.api.wireguard_client_stop(client.peer_id)
             await self.coordinator.api.wireguard_client_start(
-                current.group_id, current.tunnel_id or current.peer_id
+                group_id=current.group_id,
+                peer_or_tunnel_id=current.tunnel_id or current.peer_id,
             )
 
         await async_run_action(_start(), device=self.coordinator.device_name)

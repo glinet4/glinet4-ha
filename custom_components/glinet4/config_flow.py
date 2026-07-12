@@ -5,7 +5,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-from uplink import AiohttpClient
 import voluptuous as vol
 
 from glinet4 import GLinet
@@ -84,8 +83,7 @@ class TestingHub:
         self.username: str = username
         self.router: GLinet = GLinet(
             base_url=self.host + API_PATH,
-            client=AiohttpClient(session=async_get_clientsession(hass)),
-            sync=False,
+            session=async_get_clientsession(hass),
         )
         self.router_mac: str = ""
         self.router_model: str = ""
