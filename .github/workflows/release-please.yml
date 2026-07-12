@@ -8,34 +8,50 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false # never cancel a release mid-cut
 jobs:
+  # Runs with a short-lived GitHub App token (glinet4-release-bot), NOT the
+  # workflow's GITHUB_TOKEN: events created by GITHUB_TOKEN never trigger other
+  # workflows, which left release PRs with no CI runs. App-token pushes trigger
+  # the normal pull_request checks, so release PRs satisfy the main ruleset.
   release-please:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
+    permissions: {} # the app token carries the write authority
     outputs:
       pr: ${{ steps.rp.outputs.pr }}
     steps:
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          app-id: ${{ vars.RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+          permission-contents: write # push release branch, create tag + release
+          permission-pull-requests: write # open/update the release PR
       - id: rp
         uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5
         with:
+          token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  # release-please bumps pyproject.toml but cannot regenerate uv.lock, and its
-  # GITHUB_TOKEN pushes never trigger PR CI — without this job the stale lock
-  # would only surface as `uv sync --locked` failing on main AFTER the release
-  # PR merges.
+  # release-please bumps pyproject.toml but cannot regenerate uv.lock — refresh
+  # the lock on the release branch so `uv sync --locked` keeps passing. The push
+  # uses the app token so the release PR's HEAD commit still gets CI (required
+  # checks evaluate the head commit).
   sync-lock:
     needs: release-please
     if: needs.release-please.outputs.pr != ''
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    permissions: {} # the app token carries the write authority
     steps:
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        id: app-token
+        with:
+          app-id: ${{ vars.RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+          permission-contents: write # push the refreshed lock to the release branch
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0 # zizmor: ignore[artipacked] -- job must push the refreshed lock back
         with:
           ref: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
+          token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
       - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
       - name: Refresh uv.lock for the release version
