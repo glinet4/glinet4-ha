@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Start a local Home Assistant with this integration loaded, for development.
+# Mirrors the ludeeus/integration_blueprint workflow, adapted to uv.
+#
+#   scripts/develop      # HA starts in debug mode on http://localhost:8123
+#
+set -e
+
+cd "$(dirname "$0")/.."
+
+# config/configuration.yaml is committed (default_config + debug logging); Home
+# Assistant writes the rest of its state — onboarding, database, .storage —
+# alongside it, all gitignored.
+#
+# pyproject.toml sets `[tool.uv] package = false` (this repo is never built or
+# pip-installed), so `uv sync` does NOT put the project on sys.path. Home
+# Assistant instead discovers the integration through the standard custom
+# components location: a symlink at config/custom_components pointing back at
+# the repo's custom_components/. Create it if missing (idempotent, gitignored).
+mkdir -p config
+if [ ! -d config/custom_components/glinet4 ]; then
+    ln -sfn ../custom_components config/custom_components
+fi
+
+# `uv run` syncs the environment from pyproject.toml / uv.lock; the dev group
+# includes the glinet4 library, so the integration's requirement is already
+# satisfied and Home Assistant doesn't need to pip-install it at startup.
+uv run hass --config "${PWD}/config" --debug

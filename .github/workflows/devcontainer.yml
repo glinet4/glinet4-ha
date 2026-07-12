@@ -1,0 +1,50 @@
+name: Devcontainer
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".devcontainer/**"
+      - "pyproject.toml"
+      - "uv.lock"
+  pull_request:
+    paths:
+      - ".devcontainer/**"
+      - "pyproject.toml"
+      - "uv.lock"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      # Builds the image, runs the lifecycle commands (postCreate: uv sync),
+      # then verifies the environment works. Catches a broken Dockerfile,
+      # devcontainer.json, or an un-syncable lockfile — including Dependabot's
+      # base-image / uv bumps before they merge.
+      #
+      # The import check proves the integration is loadable from the synced
+      # environment: `[tool.uv] package = false` means the project itself is
+      # never installed, so the import resolves via the workspace cwd while its
+      # dependencies (homeassistant, the glinet4 library) come from the venv —
+      # the same resolution `scripts/develop` relies on.
+      - name: Build devcontainer and verify
+        uses: devcontainers/ci@513af61f4de4f75d37e4438f184ba4358f0fc1ca # v0.3.1900000450
+        with:
+          push: never
+          runCmd: |
+            uv run hass --version
+            uv run python -c "import custom_components.glinet4; print('custom_components.glinet4 imports OK')"

@@ -18,3 +18,12 @@ updates:
       default-days: 7
     labels:
       - "dependencies"
+  # Dev container base image + the pinned uv tag in .devcontainer/Dockerfile.
+  - package-ecosystem: docker
+    directory: "/.devcontainer"
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    labels:
+      - "dependencies"

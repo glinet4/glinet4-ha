@@ -1,0 +1,17 @@
+# Minimal Home Assistant configuration for developing this integration.
+#
+# This file is committed; Home Assistant writes the rest of its state (database,
+# .storage, onboarding, secrets) into this folder alongside it, and everything
+# except this file is gitignored.
+
+# https://www.home-assistant.io/integrations/default_config/
+default_config:
+
+# https://www.home-assistant.io/integrations/logger/
+# Debug logging for the integration and its glinet4 API client, on by default
+# for development. Tune the levels here — this file is the source of truth.
+logger:
+  default: info
+  logs:
+    custom_components.glinet4: debug
+    glinet4: debug
