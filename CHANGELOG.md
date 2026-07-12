@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/glinet4/glinet4-ha/compare/v0.4.1...v0.4.2) (2026-07-12)
+
+
+### Bug Fixes
+
+* adopt the glinet4 0.2.0 error taxonomy in the config flow ([#25](https://github.com/glinet4/glinet4-ha/issues/25)) ([afd0d82](https://github.com/glinet4/glinet4-ha/commit/afd0d8281aac0d13638a64c2d74f0b7ea3bcecdd))
+
 ## [0.4.1](https://github.com/glinet4/glinet4-ha/compare/v0.4.0...v0.4.1) (2026-07-12)
 
 
