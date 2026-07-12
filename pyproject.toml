@@ -21,7 +21,7 @@ package = false
 # makes `uv run` (and every pre-commit hook) fail to resolve. Bump both in
 # lockstep when you target a newer HA.
 dev = [
-    "codespell>=2.4.1",
+    "codespell>=2.4.2",
     "homeassistant-stubs==2026.2.0",
     "mypy>=1.16.1",
     "PyGithub>=2.6",
