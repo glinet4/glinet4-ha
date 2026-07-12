@@ -39,7 +39,7 @@ class InternetBinarySensor(
     """Whether the router's active WAN interface reports internet access."""
 
     _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
-    _attr_name = "Internet"
+    _attr_translation_key = "internet"
     _attr_has_entity_name = True
     _attr_entity_category = EntityCategory.DIAGNOSTIC
 

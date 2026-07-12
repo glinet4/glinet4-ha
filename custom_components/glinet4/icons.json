@@ -1,0 +1,33 @@
+{
+  "entity": {
+    "sensor": {
+      "cpu_temp": { "default": "mdi:thermometer" },
+      "load_avg1": { "default": "mdi:cpu-64-bit" },
+      "load_avg5": { "default": "mdi:cpu-64-bit" },
+      "load_avg15": { "default": "mdi:cpu-64-bit" },
+      "memory_use": { "default": "mdi:memory" },
+      "flash_use": { "default": "mdi:harddisk" },
+      "uptime": { "default": "mdi:clock" },
+      "wan_ip": { "default": "mdi:ip-outline" },
+      "wan_download_speed": { "default": "mdi:download" },
+      "wan_upload_speed": { "default": "mdi:upload" },
+      "tailscale_status": { "default": "mdi:vpn" }
+    },
+    "switch": {
+      "client_internet": { "default": "mdi:web" },
+      "flow_statistics": { "default": "mdi:chart-box" },
+      "tailscale": { "default": "mdi:vpn" },
+      "wireguard_client": { "default": "mdi:vpn" },
+      "leds": {
+        "default": "mdi:led-off",
+        "state": { "on": "mdi:led-on", "off": "mdi:led-off" }
+      }
+    },
+    "select": {
+      "tailscale_exit_node": { "default": "mdi:server-network" }
+    },
+    "button": {
+      "reboot": { "default": "mdi:restart" }
+    }
+  }
+}

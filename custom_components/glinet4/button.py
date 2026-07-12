@@ -32,7 +32,7 @@ async def async_setup_entry(
 class RebootButton(CoordinatorEntity["GLinetUpdateCoordinator"], ButtonEntity):
     """Reboot button."""
 
-    _attr_icon = "mdi:restart"
+    _attr_translation_key = "reboot"
     _attr_has_entity_name = True
     _attr_entity_category = EntityCategory.CONFIG
 
@@ -41,11 +41,6 @@ class RebootButton(CoordinatorEntity["GLinetUpdateCoordinator"], ButtonEntity):
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info
         self._attr_unique_id = f"glinet4_button/{coordinator.factory_mac}/reboot"
-
-    @property
-    def name(self) -> str:
-        """Return the name of the button."""
-        return "Reboot"
 
     async def async_press(self) -> None:
         """Reboot the router."""

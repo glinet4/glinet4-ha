@@ -53,7 +53,9 @@ repos:
         # scripts/capture_fixtures.py + synthesize_profiles.py, and tests/snapshots
         # are syrupy-generated; both own their formatting, so keep prettier off
         # them (otherwise it fights the generators on every regeneration).
-        exclude: ^(custom_components/google_home/manifest\.json|tests/(fixtures|snapshots)/)
+        # manifest.json is owned by hassfest (expanded arrays); keep prettier
+        # off it so the two formatters don't fight.
+        exclude: ^(custom_components/glinet4/manifest\.json|tests/(fixtures|snapshots)/)
   - repo: https://github.com/cdce8p/python-typing-update
     rev: v0.7.0
     hooks:

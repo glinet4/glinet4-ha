@@ -36,7 +36,7 @@ class GLinetFirmwareUpdate(CoordinatorEntity["GLinetUpdateCoordinator"], UpdateE
     """
 
     _attr_device_class = UpdateDeviceClass.FIRMWARE
-    _attr_name = "Firmware"
+    _attr_translation_key = "firmware"
     _attr_has_entity_name = True
 
     def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
