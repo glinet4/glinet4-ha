@@ -11,7 +11,6 @@ from glinet4 import GLinet
 from glinet4.error_handling import (
     AuthenticationError,
     FeatureConflictError,
-    TokenError,
     UnexpectedResponse,
     UnsuccessfulRequest,
 )
@@ -122,26 +121,40 @@ class TestingHub:
     async def authenticate(self, password: str) -> bool:
         """Test if we can authenticate with the host.
 
-        Bad credentials (``AuthenticationError``/``TokenError``) are
-        swallowed: they're expected here, e.g. while probing a DHCP-discovered
-        router's default password. A transport failure
-        (``UnsuccessfulRequest``) is left to propagate to ``validate_input``,
-        which reports it as ``cannot_connect`` rather than a credentials
-        problem.
+        Bad credentials (``AuthenticationError``, including its
+        ``TokenError`` subclass) are swallowed: they're expected here, e.g.
+        while probing a DHCP-discovered router's default password. A
+        transport failure (``UnsuccessfulRequest``) is left to propagate to
+        ``validate_input``, which reports it as ``cannot_connect`` rather
+        than a credentials problem.
         """
         try:
             await self.router.login(self.username, password)
             res = await self.router.router_info()
-        except (AuthenticationError, TokenError):
+        # TokenError subclasses AuthenticationError, so this single clause
+        # also covers it; no separate except is needed.
+        except AuthenticationError:
             _LOGGER.info(
                 "Failed to authenticate with GL.iNet router during testing, this may be expected at times"
             )
         except FeatureConflictError:
+            # Defensive rather than a live path: FeatureConflictError is the
+            # router reusing JSON-RPC error code -1 for `set_netnat_config`
+            # conflicts specifically (see the glinet4 docstring), and neither
+            # login() nor router_info() touch NAT config, so this isn't
+            # realistically reachable from here today. Kept in case that
+            # -1 + "conflict"-message heuristic ever fires on these calls.
             _LOGGER.exception(
                 "GL.iNet router %s reported a feature conflict while testing authentication",
                 self.host,
             )
             raise
+        # A bare NonZeroResponse (any other non-zero JSON-RPC error code that
+        # isn't an auth failure or a feature conflict) is intentionally left
+        # uncaught here: it propagates out of authenticate() and validate_input,
+        # and each async_step_* handler's broad `except Exception` maps it to
+        # errors["base"] = "unknown", since there's no more specific
+        # classification for it.
         else:
             self.router_mac = res["mac"]
             self.router_model = res["model"]
