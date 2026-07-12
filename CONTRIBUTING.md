@@ -94,3 +94,14 @@ review code.
 `homeassistant-stubs` in `pyproject.toml` in lockstep (uv resolves the `dev` and
 `test` groups together), then regenerate the snapshots — expect a sizeable but
 legitimate `.ambr` diff as HA's internal entity/state fields change.
+
+## Releases
+
+Releases are cut by release-please: every push to `main` refreshes a release
+PR that accumulates changes; merging that PR bumps the version in
+`custom_components/glinet4/manifest.json` and `pyproject.toml`, updates
+`CHANGELOG.md`, tags `vX.Y.Z`, and publishes the GitHub release that HACS
+installs from. Version bumps are computed from conventional commits, so
+squash-merge PR titles must follow that format: `feat:` → minor, `fix:` →
+patch; `ci:`, `docs:`, `build:`, `chore:` and the like do not trigger a
+release.
