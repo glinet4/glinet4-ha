@@ -6,16 +6,25 @@ on:
       - main
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   pytest:
     name: pytest
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
         with:
           enable-cache: true
 
@@ -31,4 +40,4 @@ jobs:
           --with pytest-homeassistant-custom-component==0.13.313
           --with "glinet4 @ git+https://github.com/glinet4/glinet4@main"
           --with pytest-cov
-          pytest --cov=custom_components/glinet --cov-report=term-missing
+          pytest --cov=custom_components/glinet4 --cov-report=term-missing
