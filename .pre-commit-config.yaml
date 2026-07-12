@@ -45,18 +45,16 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.1.0
+  # Biome replaces the (upstream-archived) mirrors-prettier hook. Scope: JSON
+  # only — YAML is validation-gated (check-yaml/actionlint/zizmor) and Markdown
+  # is unformatted by design (release-please owns CHANGELOG.md). Generated
+  # files keep their generators' formatting via biome.json excludes:
+  # manifest.json (hassfest), tests/fixtures (capture scripts), tests/snapshots
+  # (syrupy).
+  - repo: https://github.com/biomejs/pre-commit
+    rev: v2.5.3
     hooks:
-      - id: prettier
-        # tests/fixtures are captured router responses authored by
-        # scripts/capture_fixtures.py + synthesize_profiles.py, and tests/snapshots
-        # are syrupy-generated; both own their formatting, so keep prettier off
-        # them (otherwise it fights the generators on every regeneration).
-        # manifest.json is owned by hassfest (expanded arrays) and CHANGELOG.md
-        # by release-please (asterisk bullets); keep prettier off generated
-        # files so the two formatters don't fight.
-        exclude: ^(custom_components/glinet4/manifest\.json|tests/(fixtures|snapshots)/|CHANGELOG\.md)
+      - id: biome-format
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.37.3
     hooks:
