@@ -13,8 +13,10 @@ environment with the pinned test dependencies, so it needs no project sync or
 lockfile. CI (`.github/workflows/pytest.yml`) runs the same command with
 coverage.
 
-The pre-commit hooks (ruff, mypy, pylint, codespell, prettier) run via
-`uv run`; install them with `uvx pre-commit install`.
+The pre-commit hooks (ruff, mypy, pylint, codespell, prettier) are defined in
+`.pre-commit-config.yaml` and run via `uv run`; install them with
+`uvx prek install` ([prek](https://github.com/j178/prek) is a drop-in
+replacement for the pre-commit tool).
 
 ## The dynamic profile model
 
