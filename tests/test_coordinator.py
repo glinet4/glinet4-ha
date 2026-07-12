@@ -63,7 +63,7 @@ async def test_update_failed_marks_unsuccessful(
     coordinator = _coordinator(init_integration)
     assert coordinator.last_update_success is True
 
-    mock_glinet.router_get_status.return_value = None
+    mock_glinet.router_status.return_value = None
     await coordinator.async_refresh()
 
     assert coordinator.last_update_success is False

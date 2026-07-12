@@ -997,14 +997,12 @@ wheels = [
 
 [[package]]
 name = "glinet4"
-version = "0.1.0"
-source = { git = "https://github.com/glinet4/glinet4?rev=main#61659cd1f5cbc87cc84c3e2280327876aeb58b9e" }
+version = "0.2.0"
+source = { git = "https://github.com/glinet4/glinet4?rev=main#8c75e295df0c2e4eae1b93f19a74193a3257da07" }
 dependencies = [
     { name = "aiohttp" },
     { name = "libpass" },
-    { name = "pydantic" },
     { name = "semver" },
-    { name = "uplink" },
 ]
 
 [[package]]
@@ -2861,29 +2859,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/ca/48/36df80548d96ffdaa3ae124854bbd5a0a0b07da22a8d22b301e5ec17de6e/ulid_transform-1.5.2-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:6f29b8004fba0da7061b5eecf6101c6283377b6cd04f3626089cc67d9342c8fd", size = 1116228, upload-time = "2025-10-04T21:04:35.325Z" },
     { url = "https://files.pythonhosted.org/packages/9f/85/9cd506a4e0fe06946c3fd75b89c7d1e9a175a5ac11dfd8e4cc56658ff389/ulid_transform-1.5.2-cp314-cp314t-win32.whl", hash = "sha256:c09f58aff7a4974f560dd5fb19dd5144e8964371fcb1971bffa817c9abcb2232", size = 67476, upload-time = "2025-10-04T21:04:36.907Z" },
     { url = "https://files.pythonhosted.org/packages/41/a9/161ab974510c78a28155de33091a0063ed84b110e6d4fb866d5110112ce9/ulid_transform-1.5.2-cp314-cp314t-win_amd64.whl", hash = "sha256:445e14170301229a486e8815c2f9cec4a10b3e3cd4c9aa509689443d05e4f020", size = 72206, upload-time = "2025-10-04T21:04:38.286Z" },
-]
-
-[[package]]
-name = "uplink"
-version = "0.10.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "requests" },
-    { name = "six" },
-    { name = "uritemplate" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/72/e1/2e7d405f1bdef3dc52af7000d7299370fbd12eb2f9e2e30efde24bb9c945/uplink-0.10.0.tar.gz", hash = "sha256:a3b76b1cac5394126a72698d72b209bb80c8a94bad091870e463919979e4ab63", size = 210185, upload-time = "2025-06-14T20:24:08.708Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/69/5b/e22e345aff4ffcaa6d68d038f512ec1167ab7d2ec4d2b6ec8a0da7800fbd/uplink-0.10.0-py3-none-any.whl", hash = "sha256:03212163f8a83a608480ec15122884988eb82cc7a2368b9072d9af8ede2246d9", size = 71425, upload-time = "2025-06-14T20:24:07.779Z" },
-]
-
-[[package]]
-name = "uritemplate"
-version = "4.2.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/98/60/f174043244c5306c9988380d2cb10009f91563fc4b31293d27e17201af56/uritemplate-4.2.0.tar.gz", hash = "sha256:480c2ed180878955863323eea31b0ede668795de182617fef9c6ca09e6ec9d0e", size = 33267, upload-time = "2025-06-02T15:12:06.318Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/a9/99/3ae339466c9183ea5b8ae87b34c0b897eda475d2aec2307cae60e5cd4f29/uritemplate-4.2.0-py3-none-any.whl", hash = "sha256:962201ba1c4edcab02e60f9a0d3821e82dfc5d2d6662a21abd533879bdb8a686", size = 11488, upload-time = "2025-06-02T15:12:03.405Z" },
 ]
 
 [[package]]

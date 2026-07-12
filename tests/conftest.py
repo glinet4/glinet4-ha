@@ -166,9 +166,9 @@ def build_mock_api(profile: Profile) -> AsyncMock:
     """
     api = AsyncMock()
     api.router_info.return_value = profile.load("router_info")
-    api.router_get_status.return_value = profile.load("router_get_status")
+    api.router_status.return_value = profile.load("router_get_status")
     api.connected_clients.return_value = profile.load("connected_clients") or {}
-    api.wifi_ifaces_get.return_value = profile.load("wifi_ifaces_get") or {}
+    api.wifi_ifaces.return_value = profile.load("wifi_ifaces_get") or {}
 
     endpoints = profile.manifest.get("endpoints", {})
     api.tailscale_configured.return_value = endpoints.get("tailscale_configured", False)

@@ -151,7 +151,7 @@ async def test_uptime_is_stable_across_polls(
     # Next poll: uptime ticks forward a few seconds (well within tolerance).
     status = profile.load("router_get_status")
     status["system"]["uptime"] += 7
-    mock_glinet.router_get_status.return_value = status
+    mock_glinet.router_status.return_value = status
     await coordinator.async_refresh()
     await hass.async_block_till_done()
 
@@ -172,7 +172,7 @@ async def test_uptime_reanchors_on_reboot(
 
     status = profile.load("router_get_status")
     status["system"]["uptime"] = 60.0  # just rebooted
-    mock_glinet.router_get_status.return_value = status
+    mock_glinet.router_status.return_value = status
     await coordinator.async_refresh()
     await hass.async_block_till_done()
 
@@ -188,7 +188,7 @@ async def test_sensor_filtered_when_value_missing(
     """A sensor whose value is unavailable on this model is not created."""
     status = profile.load("router_get_status")
     status["system"].pop("cpu", None)
-    mock_glinet.router_get_status.return_value = status
+    mock_glinet.router_status.return_value = status
 
     mock_config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(mock_config_entry.entry_id)
@@ -212,7 +212,7 @@ async def test_load_average_zero_is_reported(
     """
     status = profile.load("router_get_status")
     status["system"]["load_average"] = [0, 0, 0]
-    mock_glinet.router_get_status.return_value = status
+    mock_glinet.router_status.return_value = status
 
     mock_config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(mock_config_entry.entry_id)

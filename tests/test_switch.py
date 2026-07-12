@@ -37,22 +37,22 @@ async def test_wifi_switch_turn_on_off_calls_api(
     """Toggling a WiFi switch calls the API and refreshes the coordinator."""
     entity_id = _switch_id(hass, profile.factory_mac, "iface_wifi2g")
     assert entity_id is not None
-    calls_before = mock_glinet.wifi_ifaces_get.await_count
+    calls_before = mock_glinet.wifi_ifaces.await_count
 
     await hass.services.async_call(
         "switch", "turn_off", {"entity_id": entity_id}, blocking=True
     )
-    mock_glinet.wifi_iface_set_enabled.assert_awaited_with("wifi2g", False)
+    mock_glinet.wifi_iface_set_enabled.assert_awaited_with("wifi2g", enabled=False)
 
     await hass.services.async_call(
         "switch", "turn_on", {"entity_id": entity_id}, blocking=True
     )
-    mock_glinet.wifi_iface_set_enabled.assert_awaited_with("wifi2g", True)
+    mock_glinet.wifi_iface_set_enabled.assert_awaited_with("wifi2g", enabled=True)
 
     # async_request_refresh after each toggle re-polls the interfaces (the
     # refresh is debounced, so let it run before asserting).
     await hass.async_block_till_done()
-    assert mock_glinet.wifi_ifaces_get.await_count > calls_before
+    assert mock_glinet.wifi_ifaces.await_count > calls_before
 
 
 async def test_tailscale_switch_turn_off_calls_api(
@@ -117,11 +117,11 @@ async def test_led_switch_reflects_and_controls_led_state(
     await hass.services.async_call(
         "switch", "turn_on", {"entity_id": entity_id}, blocking=True
     )
-    mock_glinet.led_set_enabled.assert_awaited_with(True)
+    mock_glinet.led_set_enabled.assert_awaited_with(enabled=True)
     await hass.services.async_call(
         "switch", "turn_off", {"entity_id": entity_id}, blocking=True
     )
-    mock_glinet.led_set_enabled.assert_awaited_with(False)
+    mock_glinet.led_set_enabled.assert_awaited_with(enabled=False)
 
 
 async def test_client_internet_switch_blocks_and_unblocks(
@@ -156,11 +156,11 @@ async def test_client_internet_switch_blocks_and_unblocks(
     await hass.services.async_call(
         "switch", "turn_off", {"entity_id": entity_id}, blocking=True
     )
-    mock_glinet.client_set_blocked.assert_awaited_with(mac, True)
+    mock_glinet.client_set_blocked.assert_awaited_with(mac, blocked=True)
     await hass.services.async_call(
         "switch", "turn_on", {"entity_id": entity_id}, blocking=True
     )
-    mock_glinet.client_set_blocked.assert_awaited_with(mac, False)
+    mock_glinet.client_set_blocked.assert_awaited_with(mac, blocked=False)
 
 
 async def test_flow_statistics_switch_toggles_and_explains(
@@ -207,9 +207,9 @@ async def test_flow_statistics_switch_toggles_and_explains(
     await hass.services.async_call(
         "switch", "turn_off", {"entity_id": entity_id}, blocking=True
     )
-    mock_glinet.flow_stats_set_enabled.assert_awaited_with(False)
+    mock_glinet.flow_stats_set_enabled.assert_awaited_with(enabled=False)
     assert mock_glinet.network_acceleration_set.await_count == 0
-    mock_glinet.flow_stats_set_enabled.assert_awaited_with(False)
+    mock_glinet.flow_stats_set_enabled.assert_awaited_with(enabled=False)
 
 
 async def test_led_switch_raises_home_assistant_error_on_failure(

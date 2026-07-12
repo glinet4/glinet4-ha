@@ -35,7 +35,7 @@ async def test_setup_retry_when_unreachable(
     hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_glinet: AsyncMock
 ) -> None:
     """A failed first refresh (router unreachable) puts the entry in retry."""
-    mock_glinet.router_get_status.return_value = None
+    mock_glinet.router_status.return_value = None
 
     mock_config_entry.add_to_hass(hass)
     await hass.config_entries.async_setup(mock_config_entry.entry_id)

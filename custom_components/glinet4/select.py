@@ -85,7 +85,7 @@ class TailscaleExitNodeSelect(
         """Set (or clear) the exit node."""
         ip = None if option == NO_EXIT_NODE else self._labels().get(option)
         await async_run_action(
-            self.coordinator.api.tailscale_set_exit_node(ip),
+            self.coordinator.api.tailscale_set_exit_node(exit_node_ip=ip),
             device=self.coordinator.device_name,
         )
         await self.coordinator.async_request_refresh()

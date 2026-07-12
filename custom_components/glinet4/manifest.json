@@ -21,7 +21,7 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/glinet4/glinet4-ha/issues",
   "requirements": [
-    "glinet4>=0.1.2,<0.2.0"
+    "glinet4>=0.2.0,<0.3.0"
   ],
   "ssdp": [],
   "version": "0.4.0"
