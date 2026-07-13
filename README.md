@@ -1,8 +1,5 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/glinet4/branding/main/assets/dark_logo.png">
-    <img alt="glinet4" src="https://raw.githubusercontent.com/glinet4/branding/main/assets/logo.png" width="300">
-  </picture>
+  <img alt="glinet4" src="https://raw.githubusercontent.com/glinet4/branding/main/assets/logo_universal.png" width="300">
 </p>
 
 # GL.iNet (glinet4) — Home Assistant integration
