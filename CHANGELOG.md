@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.3](https://github.com/glinet4/glinet4-ha/compare/v0.4.2...v0.4.3) (2026-07-13)
+
+
+### Bug Fixes
+
+* render the logo correctly on the HACS page ([#27](https://github.com/glinet4/glinet4-ha/issues/27)) ([c34e543](https://github.com/glinet4/glinet4-ha/commit/c34e543ba4d12855a2402103470608b0c27bba27))
+
 ## [0.4.2](https://github.com/glinet4/glinet4-ha/compare/v0.4.1...v0.4.2) (2026-07-12)
 
 
