@@ -30,8 +30,9 @@ dev = [
     "ruff>=0.15.20",
     "types-requests<2.33.0.20260519",
     "voluptuous-stubs>=0.1.1",
-    # `dev` branch only: run `scripts/develop` (a live HA against the MT6000)
-    # against our glinet4 library so the integration + library iterate together.
+    # glinet4 is installed from the library's main branch (not PyPI) so the
+    # integration and the library iterate together; `scripts/develop` runs a live
+    # HA against the MT6000 using the in-development library.
     "glinet4 @ git+https://github.com/glinet4/glinet4@main",
 ]
 # Test group pulls Home Assistant's test helpers. pytest-homeassistant-custom-
@@ -41,17 +42,18 @@ dev = [
 # pyproject, so Renovate's grouped bump of the pin reaches the tests
 # automatically. Renovate keeps it in lockstep with homeassistant-stubs.
 #
-# `dev` branch only: glinet4 is installed from the library repo (@main, currently
-# 0.2.x) so the integration and the library iterate together (see issue #12).
-# manifest.json requires `glinet4>=0.2.1,<0.3.0`; widen that ceiling in lockstep
-# when the library ships a new major (its bump-minor-pre-major config lands a
-# breaking change as 0.3.0). On the upstream-bound branches (#150/#151) this
-# stays a plain PyPI pin.
+# glinet4 is installed from the library's main branch so the integration and the
+# library iterate together — a canary that catches breakage before a library
+# release. What ships to users is the PyPI range in custom_components/glinet4/
+# manifest.json (glinet4>=0.2.1,<0.3.0); pytest.yml runs the suite against BOTH
+# main (this pin) and that released range. Widen the manifest ceiling when the
+# library ships a new major (bump-minor-pre-major lands a breaking change as
+# 0.3.0). scripts/test's GLINET4_LIB env var overrides this pin.
 #
 # pytest-cov is intentionally NOT listed here: pytest-hacc already pins it
-# exactly (==7.0.0), so it resolves transitively. Declaring it directly makes
-# Dependabot try to bump it past pytest-hacc's pin and fail the uv update job.
-# scripts/test still passes `--with pytest-cov` for the ephemeral coverage run.
+# exactly (==7.0.0), so it resolves transitively. Declaring it directly would let
+# the dependency bot try to bump it past pytest-hacc's pin. scripts/test still
+# passes `--with pytest-cov` for the ephemeral coverage run.
 test = [
     "pytest-homeassistant-custom-component==0.13.313",
     "glinet4 @ git+https://github.com/glinet4/glinet4@main",

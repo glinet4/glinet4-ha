@@ -12,5 +12,5 @@ set -e
 cd "$(dirname "$0")/.."
 
 uv run --no-project --python 3.13 \
-  --with "glinet4 @ git+https://github.com/shauneccles/glinet4@dev" \
+  --with "${GLINET4_LIB:-glinet4 @ git+https://github.com/glinet4/glinet4@main}" \
   python scripts/capture_fixtures.py "$@"
