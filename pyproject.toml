@@ -24,7 +24,6 @@ dev = [
     "codespell>=2.4.2",
     "homeassistant-stubs==2026.2.0",
     "mypy>=2.1.0",
-    "PyGithub>=2.6",
     "pylint>=4.0.6",
     "pytest>=8.3.5",
     "ruff>=0.15.20",
@@ -47,8 +46,12 @@ dev = [
 # when the library ships a new major (its bump-minor-pre-major config lands a
 # breaking change as 0.3.0). On the upstream-bound branches (#150/#151) this
 # stays a plain PyPI pin.
+#
+# pytest-cov is intentionally NOT listed here: pytest-hacc already pins it
+# exactly (==7.0.0), so it resolves transitively. Declaring it directly makes
+# Dependabot try to bump it past pytest-hacc's pin and fail the uv update job.
+# scripts/test still passes `--with pytest-cov` for the ephemeral coverage run.
 test = [
-    "pytest-cov",
     "pytest-homeassistant-custom-component==0.13.313",
     "glinet4 @ git+https://github.com/glinet4/glinet4@main",
 ]
