@@ -1,0 +1,53 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
+  "labels": ["dependencies"],
+  "minimumReleaseAge": "7 days",
+  "automergeStrategy": "squash",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 4am on monday"],
+    "automerge": true
+  },
+  "packageRules": [
+    {
+      "description": "Home Assistant version cluster: homeassistant-stubs (dev) and pytest-homeassistant-custom-component (test) each pin an EXACT HA core version and must resolve to the same HA. Group them so Renovate re-resolves uv.lock ONCE per branch (atomic joint resolution) and lands one PR per HA release. Left for manual review (no automerge) because it moves the tested HA version.",
+      "matchPackageNames": [
+        "homeassistant-stubs",
+        "pytest-homeassistant-custom-component"
+      ],
+      "groupName": "home-assistant"
+    },
+    {
+      "description": "homeassistant is the deliberate minimum-supported runtime floor (kept in step with hacs.json), not the dev/test version; pytest is pinned transitively by pytest-hacc. Neither should get its own version PR.",
+      "matchPackageNames": ["homeassistant", "pytest"],
+      "enabled": false
+    },
+    {
+      "description": "glinet4 is a git dependency tracking the library's main branch (a deliberate canary); its commit is refreshed by lockFileMaintenance, so it needs no dedicated version PR.",
+      "matchPackageNames": ["glinet4"],
+      "enabled": false
+    },
+    {
+      "description": "Lint/type dev tooling: bundle into one PR and auto-merge non-major bumps. The required checks (prek + pytest) gate every merge, so a bump that breaks lint/types/tests never lands; majors get their own PR for review.",
+      "matchPackageNames": [
+        "codespell",
+        "mypy",
+        "pylint",
+        "ruff",
+        "types-requests",
+        "voluptuous-stubs"
+      ],
+      "groupName": "dev tooling",
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true
+    },
+    {
+      "description": "GitHub Actions: bundle and auto-merge non-major bumps (Actions stay digest-pinned via helpers:pinGitHubActionDigests; CI gates the merge). Majors get their own PR for review.",
+      "matchManagers": ["github-actions"],
+      "groupName": "github-actions",
+      "matchUpdateTypes": ["minor", "patch", "digest", "pin"],
+      "automerge": true
+    }
+  ]
+}
