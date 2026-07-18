@@ -33,9 +33,8 @@ repos:
         require_serial: true
       - id: pylint
         name: pylint
-        # Additional disables (wrong-import-order, unused-argument, pytest fixture
-        # friction) live in [tool.pylint.messages_control] in pyproject.toml.
-        entry: uv run pylint --disable=import-error,fixme,line-too-long,invalid-name,too-many-public-methods,abstract-method,overridden-final-method,too-many-instance-attributes,too-many-public-methods,too-few-public-methods,too-many-branches
+        # All disables live in [tool.pylint.messages_control] in pyproject.toml.
+        entry: uv run pylint
         language: system
         types: [python]
         require_serial: true

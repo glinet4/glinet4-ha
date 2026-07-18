@@ -1028,6 +1028,7 @@ dev = [
 ]
 test = [
     { name = "glinet4" },
+    { name = "pytest-cov" },
     { name = "pytest-homeassistant-custom-component" },
 ]
 
@@ -1049,6 +1050,7 @@ dev = [
 ]
 test = [
     { name = "glinet4", git = "https://github.com/glinet4/glinet4?rev=main" },
+    { name = "pytest-cov" },
     { name = "pytest-homeassistant-custom-component", specifier = "==0.13.313" },
 ]
 

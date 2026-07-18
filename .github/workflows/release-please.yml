@@ -14,6 +14,10 @@ jobs:
   # the normal pull_request checks, so release PRs satisfy the main ruleset.
   release-please:
     runs-on: ubuntu-latest
+    # Gate the release-bot private key behind the `release` environment (set its
+    # deployment-branch policy to `main` only; do NOT add required reviewers or
+    # the automated release PR will block waiting for approval).
+    environment: release
     permissions: {} # the app token carries the write authority
     outputs:
       pr: ${{ steps.rp.outputs.pr }}
@@ -40,6 +44,7 @@ jobs:
     needs: release-please
     if: needs.release-please.outputs.pr != ''
     runs-on: ubuntu-latest
+    environment: release # same release-bot secret, same environment gate
     permissions: {} # the app token carries the write authority
     steps:
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
@@ -53,7 +58,7 @@ jobs:
           ref: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
-      - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+      - uses: astral-sh/setup-uv@d31148d669074a8d0a63714ba94f3201e7020bc3 # v8.3.0
       - name: Refresh uv.lock for the release version
         run: |
           uv lock

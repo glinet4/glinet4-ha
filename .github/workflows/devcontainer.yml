@@ -33,8 +33,11 @@ jobs:
 
       # Builds the image, runs the lifecycle commands (postCreate: uv sync),
       # then verifies the environment works. Catches a broken Dockerfile,
-      # devcontainer.json, or an un-syncable lockfile — including Dependabot's
-      # base-image / uv bumps before they merge.
+      # devcontainer.json, or a lockfile that cannot be resolved at all —
+      # including Dependabot's base-image / uv bumps before they merge. (Lock
+      # *staleness* vs pyproject is gated separately by linting.yml's
+      # `uv sync --locked`; postCreate's bare `uv sync` stays lenient so the
+      # container still bootstraps mid-edit.)
       #
       # The import check proves the integration is loadable from the synced
       # environment: `[tool.uv] package = false` means the project itself is

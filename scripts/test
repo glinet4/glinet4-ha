@@ -5,8 +5,10 @@
 #   scripts/test tests/test_sensor.py  # a subset
 #   scripts/test --snapshot-update     # regenerate syrupy snapshots
 #
-# Uses an ephemeral uv environment with the pinned test dependencies, matching
-# .github/workflows/pytest.yml, so it needs no project sync or lockfile.
+# Uses an ephemeral uv environment with the pinned test dependencies. This is
+# the single source of truth for the test env: .github/workflows/pytest.yml
+# calls this script (passing --cov flags) rather than re-listing the pins, so
+# there is one place to bump the pytest-homeassistant-custom-component pin.
 set -e
 
 cd "$(dirname "$0")/.."
@@ -14,4 +16,5 @@ cd "$(dirname "$0")/.."
 uv run --no-project --python 3.13 \
   --with pytest-homeassistant-custom-component==0.13.313 \
   --with "${GLINET4_LIB:-glinet4 @ git+https://github.com/glinet4/glinet4@main}" \
+  --with pytest-cov \
   pytest "$@"
