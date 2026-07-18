@@ -15,11 +15,12 @@ dependencies = [
 package = false
 
 [dependency-groups]
-# Pin homeassistant-stubs to the SAME Home Assistant core version that the test
-# group resolves to (pytest-homeassistant-custom-component==0.13.313 -> HA
-# 2026.2.0). uv resolves all dependency groups together, so a mismatch here
-# makes `uv run` (and every pre-commit hook) fail to resolve. Bump both in
-# lockstep when you target a newer HA.
+# homeassistant-stubs (dev) and pytest-homeassistant-custom-component (test) each
+# pin an EXACT Home Assistant core version and must resolve to the same HA core
+# (uv resolves all dependency groups together, so a mismatch makes every `uv run`
+# fail). Renovate groups them (.github/renovate.json, group "home-assistant") and
+# bumps both together in one atomic PR per HA release, so you no longer hand-bump
+# them in lockstep.
 dev = [
     "codespell>=2.4.2",
     "homeassistant-stubs==2026.2.0",
@@ -34,11 +35,11 @@ dev = [
     "glinet4 @ git+https://github.com/glinet4/glinet4@main",
 ]
 # Test group pulls Home Assistant's test helpers. pytest-homeassistant-custom-
-# component pins an exact HA core version (0.13.313 -> HA 2026.2.0); bump it in
-# lockstep with the HA version you target. NOTE: CI (pytest.yml) and scripts/test
-# run the suite in an ephemeral `uv run --no-project` env, so scripts/test is the
-# runtime authority for the pytest-hacc / glinet4 pins; this group keeps them
-# declared and lock-resolved for `uv run --group test` and IDE tooling.
+# component pins an exact HA core version (0.13.313 -> HA 2026.2.0) and is the
+# SINGLE SOURCE for it: CI (pytest.yml) and scripts/test run the suite in an
+# ephemeral `uv run --no-project` env and READ this exact version out of
+# pyproject, so Renovate's grouped bump of the pin reaches the tests
+# automatically. Renovate keeps it in lockstep with homeassistant-stubs.
 #
 # `dev` branch only: glinet4 is installed from the library repo (@main, currently
 # 0.2.x) so the integration and the library iterate together (see issue #12).

@@ -5,16 +5,24 @@
 #   scripts/test tests/test_sensor.py  # a subset
 #   scripts/test --snapshot-update     # regenerate syrupy snapshots
 #
-# Uses an ephemeral uv environment with the pinned test dependencies. This is
-# the single source of truth for the test env: .github/workflows/pytest.yml
-# calls this script (passing --cov flags) rather than re-listing the pins, so
-# there is one place to bump the pytest-homeassistant-custom-component pin.
+# Uses an ephemeral uv environment. The pytest-homeassistant-custom-component
+# pin is READ FROM pyproject.toml (the single source of truth) so that Renovate's
+# grouped Home-Assistant bump reaches the tests automatically — there is no second
+# pin here to keep in sync. .github/workflows/pytest.yml calls this script.
 set -e
 
 cd "$(dirname "$0")/.."
 
+# Read the exact pytest-hacc pin from pyproject.toml's [dependency-groups] test
+# (the quote anchors to the dependency string, not a mention in a comment).
+phacc="$(grep -oP '"pytest-homeassistant-custom-component==\K[0-9][0-9.]*' pyproject.toml | head -1)"
+if [ -z "${phacc}" ]; then
+  echo "error: could not read the pytest-homeassistant-custom-component pin from pyproject.toml" >&2
+  exit 1
+fi
+
 uv run --no-project --python 3.13 \
-  --with pytest-homeassistant-custom-component==0.13.313 \
+  --with "pytest-homeassistant-custom-component==${phacc}" \
   --with "${GLINET4_LIB:-glinet4 @ git+https://github.com/glinet4/glinet4@main}" \
   --with pytest-cov \
   pytest "$@"
