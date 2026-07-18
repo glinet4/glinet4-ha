@@ -29,15 +29,13 @@ jobs:
           enable-cache: true
 
       - name: Run pytest
-        # Ephemeral uv env: no project build required (tests import the
-        # integration via pythonpath), and the lockfile is left untouched.
-        # Versions mirror the `test` dependency group in pyproject.toml. The
-        # suite is parametrized over every router profile in-process, so a
-        # single job already covers the whole matrix; --snapshot-update is
+        # Delegates to scripts/test (the single source of the ephemeral uv env
+        # and its pinned deps) so the pytest-hacc / glinet4 pins live in one
+        # place. The suite is parametrized over every router profile in-process,
+        # so a single job already covers the whole matrix; --snapshot-update is
         # deliberately omitted so any drift in the committed snapshots fails CI.
+        # --cov-fail-under matches the library's gate (current coverage ~89%).
         run: >
-          uv run --no-project --python 3.13
-          --with pytest-homeassistant-custom-component==0.13.313
-          --with "glinet4 @ git+https://github.com/glinet4/glinet4@main"
-          --with pytest-cov
-          pytest --cov=custom_components/glinet4 --cov-report=term-missing
+          ./scripts/test
+          --cov=custom_components/glinet4 --cov-report=term-missing
+          --cov-fail-under=85

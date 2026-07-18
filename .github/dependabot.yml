@@ -3,21 +3,37 @@ updates:
   - package-ecosystem: uv
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
     cooldown:
       default-days: 7
-    labels:
-      - "dependencies"
+    # homeassistant-stubs (dev) and pytest-homeassistant-custom-component (test)
+    # each pin an EXACT Home Assistant core version and MUST move together.
+    # Grouping bumps both in a SINGLE PR to a mutually-compatible set — this is
+    # exactly what Dependabot groups are for ("dependencies that must be updated
+    # in tandem or the update will fail"). A lone bump of either leaves the other
+    # on the old core and makes `uv` resolution unsatisfiable, which is what
+    # failed every Dependabot run before. The 7-day cooldown gives both projects
+    # time to publish a version for a new HA core before the group is proposed,
+    # so the combined update resolves.
+    groups:
+      home-assistant:
+        patterns:
+          - "homeassistant-stubs"
+          - "pytest-homeassistant-custom-component"
     ignore:
+      # The runtime floor is the deliberate "minimum supported HA"; don't let
+      # Dependabot raise it just because we test against a newer core.
       - dependency-name: "homeassistant"
+      # pytest's version is pinned transitively by pytest-hacc (the group bumps
+      # it in the lock); a standalone pytest PR can't resolve against pytest-hacc's
+      # exact, per-Python pins.
+      - dependency-name: "pytest"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: weekly
     cooldown:
       default-days: 7
-    labels:
-      - "dependencies"
   # Dev container base image + the pinned uv tag in .devcontainer/Dockerfile.
   - package-ecosystem: docker
     directory: "/.devcontainer"
@@ -25,5 +41,3 @@ updates:
       interval: weekly
     cooldown:
       default-days: 7
-    labels:
-      - "dependencies"
