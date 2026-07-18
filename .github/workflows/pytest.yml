@@ -28,14 +28,21 @@ jobs:
         with:
           enable-cache: true
 
-      - name: Run pytest
-        # Delegates to scripts/test (the single source of the ephemeral uv env
-        # and its pinned deps) so the pytest-hacc / glinet4 pins live in one
-        # place. The suite is parametrized over every router profile in-process,
-        # so a single job already covers the whole matrix; --snapshot-update is
-        # deliberately omitted so any drift in the committed snapshots fails CI.
+      # Both legs delegate to scripts/test (the single source of the ephemeral uv
+      # env and its pinned deps). The suite is parametrized over every router
+      # profile in-process, so one run covers the whole matrix; --snapshot-update
+      # is omitted so any drift in the committed snapshots fails CI.
+      - name: Run pytest against the library's main branch (canary)
+        # Catches integration<->library breakage before a library release.
         # --cov-fail-under matches the library's gate (current coverage ~89%).
         run: >
           ./scripts/test
           --cov=custom_components/glinet4 --cov-report=term-missing
           --cov-fail-under=85
+      - name: Run pytest against the released library users install
+        # The glinet4 range that actually ships (manifest.json requirements), so
+        # CI also validates the combination end users get, not just main.
+        run: |
+          glinet4_req="$(jq -r '.requirements[] | select(startswith("glinet4"))' custom_components/glinet4/manifest.json)"
+          echo "Testing against released library: ${glinet4_req}"
+          GLINET4_LIB="${glinet4_req}" ./scripts/test
