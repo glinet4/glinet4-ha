@@ -6,27 +6,21 @@ updates:
       interval: weekly
     cooldown:
       default-days: 7
-    # homeassistant-stubs (dev) and pytest-homeassistant-custom-component (test)
-    # each pin an EXACT Home Assistant core version and MUST move together.
-    # Grouping bumps both in a SINGLE PR to a mutually-compatible set — this is
-    # exactly what Dependabot groups are for ("dependencies that must be updated
-    # in tandem or the update will fail"). A lone bump of either leaves the other
-    # on the old core and makes `uv` resolution unsatisfiable, which is what
-    # failed every Dependabot run before. The 7-day cooldown gives both projects
-    # time to publish a version for a new HA core before the group is proposed,
-    # so the combined update resolves.
-    groups:
-      home-assistant:
-        patterns:
-          - "homeassistant-stubs"
-          - "pytest-homeassistant-custom-component"
+    # The Home-Assistant-version cluster can only move ATOMICALLY: homeassistant-
+    # stubs (dev) and pytest-homeassistant-custom-component (test) each pin an
+    # EXACT HA core version, so both must change in the same resolution or `uv`
+    # is unsatisfiable. Dependabot cannot do this: even a `groups:` bundle
+    # computes each member's change INDIVIDUALLY against the current manifest, so
+    # bumping stubs while pytest-hacc is unchanged still fails and the group is
+    # skipped (verified: the grouped run errored `dependency_file_not_resolvable`
+    # exactly as an ungrouped one does). There is therefore no Dependabot config
+    # that can advance this cluster — ignore it and bump the HA core by hand (see
+    # the [dependency-groups] comments in pyproject.toml). homeassistant is the
+    # deliberate runtime floor; pytest is pinned transitively by pytest-hacc.
     ignore:
-      # The runtime floor is the deliberate "minimum supported HA"; don't let
-      # Dependabot raise it just because we test against a newer core.
       - dependency-name: "homeassistant"
-      # pytest's version is pinned transitively by pytest-hacc (the group bumps
-      # it in the lock); a standalone pytest PR can't resolve against pytest-hacc's
-      # exact, per-Python pins.
+      - dependency-name: "homeassistant-stubs"
+      - dependency-name: "pytest-homeassistant-custom-component"
       - dependency-name: "pytest"
   - package-ecosystem: github-actions
     directory: "/"
