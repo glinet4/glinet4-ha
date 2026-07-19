@@ -28,7 +28,7 @@ dev = [
     "pylint>=4.0.6",
     "pytest>=8.3.5",
     "ruff>=0.15.20",
-    "types-requests<2.33.0.20260519",
+    "types-requests<2.33.0.20260713",
     "voluptuous-stubs>=0.1.1",
     # glinet4 is installed from the library's main branch (not PyPI) so the
     # integration and the library iterate together; `scripts/develop` runs a live
