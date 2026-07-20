@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 import logging
+from math import floor, log10
 from typing import TYPE_CHECKING, Any
 
 from glinet4.enums import TailscaleConnection
@@ -28,7 +29,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import GlinetConfigEntry, GLinetData, GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetCoordinator, GLinetData
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -110,6 +111,19 @@ SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
         state_class=SensorStateClass.MEASUREMENT,
         suggested_display_precision=2,
         native_unit_of_measurement=PERCENTAGE,
+        # Rounded natively, not just for display: the raw quotient is a full
+        # float (38.1658171423608) and the recorder keys its dedup on the state
+        # *string*, so unrounded it wrote a row on every single poll.
+        #
+        # 2dp (0.01pp, ~101 KiB of this router's 989 MiB) is finer than the
+        # measurement noise - profiled over 24h the poll-to-poll deltas have a
+        # lag-1 autocorrelation of -0.51, i.e. essentially pure noise, sd
+        # 0.27pp - so most transitions it keeps are jitter rather than memory
+        # actually moving. It is kept anyway because the absolute cost is
+        # trivial (~1.4k rows/day, ~14k against the default 10-day purge) and
+        # it matches the precision the sensor has always displayed. Dropping
+        # the round() below to 1dp would roughly halve the rows if that ever
+        # matters (keep suggested_display_precision in step with it).
         value_fn=lambda system_status: (
             (
                 (memory_total := system_status.get("memory_total", 0)) > 0
@@ -121,7 +135,7 @@ SYSTEM_SENSORS: list[SystemStatusEntityDescription] = [
                 and (mu := 100 * (1 - memory_free / memory_total))
                 and isinstance(mu, float)
                 and 0 <= mu <= 100
-                and mu
+                and round(mu, 2)
             )
             or None
         ),
@@ -187,15 +201,47 @@ WAN_SENSORS: list[GLinetDataEntityDescription] = [
             "protocol": data.wan_status.get("protocol"),
         },
     ),
+]
+
+
+def _round_sig(value: int | None, digits: int = 3) -> int | None:
+    """Round a byte rate to ``digits`` significant figures.
+
+    Home Assistant's recorder only writes a row when the *state string* changes,
+    so an unrounded rate writes a row on every single poll - measured at 636
+    changes per 635 polls on a live router. Rounding the native value lets that
+    dedup work during steady traffic while staying well inside the router's own
+    accuracy (it reports an average over a ~3s window). Display is unaffected:
+    25158 -> 25200 B/s still renders as 0.20 Mbit/s.
+    """
+    if not value:
+        return value
+    magnitude = floor(log10(abs(value)))
+    quantum = 10 ** max(0, magnitude - digits + 1)
+    return int(round(value / quantum) * quantum)
+
+
+# Split out of WAN_SENSORS: these are the only entities whose value changes on
+# every poll, so they are driven by the fast coordinator and shipped disabled.
+#
+# Disabled by default because they are the integration's one genuinely noisy
+# entity pair, and at a 10s poll they would write ~8,600 recorder rows per day
+# each. HA's Gold `entity-disabled-by-default` rule targets exactly this case,
+# and core precedent is unambiguous - unifi keeps its bandwidth sensors behind
+# an opt-in that defaults to off. Users who want WAN throughput enable them
+# once; users who don't pay nothing for them.
+WAN_THROUGHPUT_SENSORS: list[GLinetDataEntityDescription] = [
     GLinetDataEntityDescription(
         key="wan_download_speed",
         translation_key="wan_download_speed",
         has_entity_name=True,
         device_class=SensorDeviceClass.DATA_RATE,
         native_unit_of_measurement=UnitOfDataRate.BYTES_PER_SECOND,
+        suggested_unit_of_measurement=UnitOfDataRate.MEGABITS_PER_SECOND,
         state_class=SensorStateClass.MEASUREMENT,
-        suggested_display_precision=0,
-        value_fn=lambda data: data.wan_speed.get("speed_rx"),
+        suggested_display_precision=2,
+        entity_registry_enabled_default=False,
+        value_fn=lambda data: _round_sig(data.wan_speed.get("speed_rx")),
     ),
     GLinetDataEntityDescription(
         key="wan_upload_speed",
@@ -203,9 +249,11 @@ WAN_SENSORS: list[GLinetDataEntityDescription] = [
         has_entity_name=True,
         device_class=SensorDeviceClass.DATA_RATE,
         native_unit_of_measurement=UnitOfDataRate.BYTES_PER_SECOND,
+        suggested_unit_of_measurement=UnitOfDataRate.MEGABITS_PER_SECOND,
         state_class=SensorStateClass.MEASUREMENT,
-        suggested_display_precision=0,
-        value_fn=lambda data: data.wan_speed.get("speed_tx"),
+        suggested_display_precision=2,
+        entity_registry_enabled_default=False,
+        value_fn=lambda data: _round_sig(data.wan_speed.get("speed_tx")),
     ),
 ]
 
@@ -231,14 +279,29 @@ async def async_setup_entry(
     """Set up sensors."""
     _LOGGER.debug("Setting up GL.iNet Sensors")
 
-    coordinator = entry.runtime_data
+    # Sensors span three buckets. WAN throughput is the only data that changes
+    # on every poll, so it gets the fast coordinator; Tailscale status changes
+    # about once a day and rides the slow one.
+    coordinator = entry.runtime_data.main
     sensors: list[SystemStatusSensor | SystemUptimeSensor | GLinetDataSensor] = [
         SystemStatusSensor(coordinator=coordinator, entity_description=description)
         for description in SYSTEM_SENSORS
     ]
     sensors.extend(
+        GLinetDataSensor(
+            coordinator=entry.runtime_data.fast, entity_description=description
+        )
+        for description in WAN_THROUGHPUT_SENSORS
+    )
+    sensors.extend(
         GLinetDataSensor(coordinator=coordinator, entity_description=description)
-        for description in (*WAN_SENSORS, *TAILSCALE_SENSORS)
+        for description in WAN_SENSORS
+    )
+    sensors.extend(
+        GLinetDataSensor(
+            coordinator=entry.runtime_data.slow, entity_description=description
+        )
+        for description in TAILSCALE_SENSORS
     )
     # Special case for uptime as it requires additional data processing
     sensors.append(
@@ -281,14 +344,14 @@ def _boot_time_changed(old: datetime | None, new: datetime) -> bool:
     return old is None or abs(new - old) > UPTIME_DEVIATION
 
 
-class GliSensorBase(CoordinatorEntity["GLinetUpdateCoordinator"], SensorEntity):
+class GliSensorBase(CoordinatorEntity["GLinetCoordinator"], SensorEntity):
     """GL.iNet sensor base class."""
 
     entity_description: SystemStatusEntityDescription
 
     def __init__(
         self,
-        coordinator: GLinetUpdateCoordinator,
+        coordinator: GLinetCoordinator,
         entity_description: SystemStatusEntityDescription,
     ) -> None:
         """Initialize the sensor class."""
@@ -318,14 +381,14 @@ class SystemStatusSensor(GliSensorBase):
         return self.entity_description.value_fn(self.coordinator.data.system_status)
 
 
-class GLinetDataSensor(CoordinatorEntity["GLinetUpdateCoordinator"], SensorEntity):
+class GLinetDataSensor(CoordinatorEntity["GLinetCoordinator"], SensorEntity):
     """GL.iNet sensor whose value derives from the full coordinator snapshot."""
 
     entity_description: GLinetDataEntityDescription
 
     def __init__(
         self,
-        coordinator: GLinetUpdateCoordinator,
+        coordinator: GLinetCoordinator,
         entity_description: GLinetDataEntityDescription,
     ) -> None:
         """Initialize the sensor from its description."""

@@ -7,7 +7,8 @@ from unittest.mock import AsyncMock
 from freezegun.api import FrozenDateTimeFactory
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.glinet4.const import DOMAIN
+from custom_components.glinet4.const import DOMAIN, SLOW_SCAN_INTERVAL
+from custom_components.glinet4.coordinator import FIRMWARE_CHECK_INTERVAL
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
@@ -64,8 +65,9 @@ async def test_update_entity_reports_new_firmware(
         **check,
         "new_version": "4.9.1",
     }
-    freezer.tick(6 * 3600 + 60)  # past the firmware-check throttle
-    coordinator = mock_config_entry.runtime_data
+    freezer.tick(FIRMWARE_CHECK_INTERVAL)  # past the firmware-check throttle
+    # The firmware check is part of the slow (configuration) poll.
+    coordinator = mock_config_entry.runtime_data.slow
     await coordinator.async_refresh()
     await hass.async_block_till_done()
 
@@ -79,14 +81,28 @@ async def test_firmware_check_is_throttled(
     mock_config_entry: MockConfigEntry,
     mock_glinet: AsyncMock,
     profile: Profile,
+    freezer: FrozenDateTimeFactory,
 ) -> None:
     """The online check hits GL.iNet's servers; it must not run every poll."""
     if profile.load("firmware_check_online") is None:
         return
     await _setup(hass, mock_config_entry)
     calls_after_setup = mock_glinet.firmware_check_online.call_count
+    assert calls_after_setup == 1
 
-    coordinator = mock_config_entry.runtime_data
-    await coordinator.async_refresh()
-    await coordinator.async_refresh()
+    # The check rides the slow coordinator but is throttled far harder than
+    # that coordinator's own interval, so several slow polls inside one
+    # FIRMWARE_CHECK_INTERVAL must not produce a second online check.
+    coordinator = mock_config_entry.runtime_data.slow
+    assert coordinator.update_interval == SLOW_SCAN_INTERVAL
+    polls = 3
+    assert polls * SLOW_SCAN_INTERVAL < FIRMWARE_CHECK_INTERVAL
+    for _ in range(polls):
+        freezer.tick(SLOW_SCAN_INTERVAL)
+        await coordinator.async_refresh()
     assert mock_glinet.firmware_check_online.call_count == calls_after_setup
+
+    # Past the throttle window, the next slow poll checks again.
+    freezer.tick(FIRMWARE_CHECK_INTERVAL)
+    await coordinator.async_refresh()
+    assert mock_glinet.firmware_check_online.call_count == calls_after_setup + 1

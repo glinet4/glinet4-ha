@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import GlinetConfigEntry, GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetCoordinator
     from .models import WifiInterface, WireGuardClient
 
 _LOGGER = logging.getLogger(__name__)
@@ -29,8 +29,18 @@ async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up the GL.iNet switches."""
-    coordinator = entry.runtime_data
-    data = coordinator.data
+    # Switches span three buckets: WiFi/WireGuard follow the main poll, the
+    # near-static config toggles follow the slow one, and per-client internet
+    # access follows the tracker poll that discovers the clients.
+    main = entry.runtime_data.main
+    slow = entry.runtime_data.slow
+    trackers = entry.runtime_data.trackers
+    # Gate on a freshly built snapshot, not on any one coordinator's cached
+    # `.data`. A GLinetData holds references to the hub's working dicts, which
+    # are *reassigned* on each poll - so main.data still points at the empty
+    # dicts from before the siblings first refreshed, and gating on it would
+    # silently never create the slow-bucket switches.
+    data = main.snapshot()
     switches: list[
         WifiApSwitch
         | WireGuardSwitch
@@ -43,38 +53,37 @@ async def async_setup_entry(
         # TODO detect all configured wireguard, openvpn, shadowsocks and
         # TOR clients & servers with router/vpn/status? and gen a switch for each
         switches = [
-            WireGuardSwitch(coordinator, client)
-            for client in data.wireguard_clients.values()
+            WireGuardSwitch(main, client) for client in data.wireguard_clients.values()
         ]
     if data.tailscale_config:
-        switches.append(TailscaleSwitch(coordinator))
+        switches.append(TailscaleSwitch(slow))
     if data.led_config:
-        switches.append(LedSwitch(coordinator))
+        switches.append(LedSwitch(slow))
     if data.flow_stats_rule:
-        switches.append(FlowStatisticsSwitch(coordinator))
+        switches.append(FlowStatisticsSwitch(slow))
     switches.extend(
-        ClientInternetSwitch(coordinator, mac)
+        ClientInternetSwitch(trackers, mac)
         for mac, device in data.devices.items()
         if device.name
     )
     for iface_name, iface in data.wifi_ifaces.items():
-        switches.append(WifiApSwitch(coordinator, iface_name, iface))
+        switches.append(WifiApSwitch(main, iface_name, iface))
     if switches:
         async_add_entities(switches)
 
 
-class GliSwitchBase(CoordinatorEntity["GLinetUpdateCoordinator"], SwitchEntity):
+class GliSwitchBase(CoordinatorEntity["GLinetCoordinator"], SwitchEntity):
     """GL.iNet switch base class."""
 
     # Bind the concrete coordinator type so `self.coordinator.data` is typed as
     # GLinetData rather than Any (the generic parameter isn't propagated to the
     # attribute by the homeassistant stubs).
-    coordinator: GLinetUpdateCoordinator
+    coordinator: GLinetCoordinator
 
     _attr_has_entity_name = True
     _attr_entity_category = EntityCategory.CONFIG
 
-    def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
+    def __init__(self, coordinator: GLinetCoordinator) -> None:
         """Initialize a GLinet switch."""
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info
@@ -90,7 +99,7 @@ class ClientInternetSwitch(GliSwitchBase):
     _attr_translation_key = "client_internet"
     _attr_entity_registry_enabled_default = False
 
-    def __init__(self, coordinator: GLinetUpdateCoordinator, mac: str) -> None:
+    def __init__(self, coordinator: GLinetCoordinator, mac: str) -> None:
         """Initialize the client internet switch."""
         super().__init__(coordinator)
         self._mac = mac
@@ -136,7 +145,7 @@ class FlowStatisticsSwitch(GliSwitchBase):
 
     _attr_translation_key = "flow_statistics"
 
-    def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
+    def __init__(self, coordinator: GLinetCoordinator) -> None:
         """Initialize the flow-statistics switch."""
         super().__init__(coordinator)
         self._attr_unique_id = (
@@ -200,7 +209,7 @@ class LedSwitch(GliSwitchBase):
 
     _attr_translation_key = "leds"
 
-    def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
+    def __init__(self, coordinator: GLinetCoordinator) -> None:
         """Initialize the LED switch."""
         super().__init__(coordinator)
         self._attr_unique_id = f"glinet4_switch/{coordinator.factory_mac}/led"
@@ -235,7 +244,7 @@ class WifiApSwitch(GliSwitchBase):
 
     def __init__(
         self,
-        coordinator: GLinetUpdateCoordinator,
+        coordinator: GLinetCoordinator,
         iface_name: str,
         iface: WifiInterface,
     ) -> None:
@@ -310,7 +319,7 @@ class TailscaleSwitch(GliSwitchBase):
 
     _attr_translation_key = "tailscale"
 
-    def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
+    def __init__(self, coordinator: GLinetCoordinator) -> None:
         """Initialize the Tailscale switch."""
         super().__init__(coordinator)
         self._attr_unique_id = f"glinet4_switch/{coordinator.factory_mac}/tailscale"
@@ -363,9 +372,7 @@ class WireGuardSwitch(GliSwitchBase):
     _attr_translation_key = "wireguard_client"
 
     # TODO make class, client/server/VPN type agnostic and appreciate >1 can be configured of each
-    def __init__(
-        self, coordinator: GLinetUpdateCoordinator, client: WireGuardClient
-    ) -> None:
+    def __init__(self, coordinator: GLinetCoordinator, client: WireGuardClient) -> None:
         """Initialize a GLinet device."""
         super().__init__(coordinator)
         self._client = client

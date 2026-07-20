@@ -7,8 +7,19 @@ from unittest.mock import AsyncMock, patch
 from glinet4.error_handling import AuthenticationError
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from custom_components.glinet4.const import DOMAIN
-from custom_components.glinet4.coordinator import GLinetUpdateCoordinator
+from custom_components.glinet4.const import (
+    DOMAIN,
+    FAST_SCAN_INTERVAL,
+    SCAN_INTERVAL,
+    SLOW_SCAN_INTERVAL,
+    TRACKER_SCAN_INTERVAL,
+)
+from custom_components.glinet4.coordinator import (
+    GLinetData,
+    GLinetRuntimeData,
+    GLinetSubCoordinator,
+    GLinetUpdateCoordinator,
+)
 from custom_components.glinet4.models import DeviceInterfaceType
 from homeassistant.components.device_tracker import CONF_CONSIDER_HOME
 from homeassistant.config_entries import SOURCE_REAUTH, ConfigEntryState
@@ -21,10 +32,36 @@ from .conftest import build_mock_api, load_profile
 async def test_setup_and_unload(
     hass: HomeAssistant, init_integration: MockConfigEntry
 ) -> None:
-    """The entry loads, exposes the coordinator, then unloads cleanly."""
+    """The entry loads, exposes all four coordinators, then unloads cleanly."""
     entry = init_integration
     assert entry.state is ConfigEntryState.LOADED
-    assert isinstance(entry.runtime_data, GLinetUpdateCoordinator)
+
+    runtime_data = entry.runtime_data
+    assert isinstance(runtime_data, GLinetRuntimeData)
+    # The hub owns the API client; the siblings are bound to it.
+    assert isinstance(runtime_data.main, GLinetUpdateCoordinator)
+    assert isinstance(runtime_data.fast, GLinetSubCoordinator)
+    assert isinstance(runtime_data.trackers, GLinetSubCoordinator)
+    assert isinstance(runtime_data.slow, GLinetSubCoordinator)
+    assert runtime_data.all() == (
+        runtime_data.main,
+        runtime_data.fast,
+        runtime_data.trackers,
+        runtime_data.slow,
+    )
+
+    # Each bucket polls on its own cadence...
+    assert runtime_data.main.update_interval == SCAN_INTERVAL
+    assert runtime_data.fast.update_interval == FAST_SCAN_INTERVAL
+    assert runtime_data.trackers.update_interval == TRACKER_SCAN_INTERVAL
+    assert runtime_data.slow.update_interval == SLOW_SCAN_INTERVAL
+
+    # ...but every one is primed with the same shared snapshot shape, so an
+    # entity can read `.data.<field>` off whichever coordinator drives it.
+    for coordinator in runtime_data.all():
+        assert coordinator.last_update_success is True
+        assert isinstance(coordinator.data, GLinetData)
+        assert coordinator.config_entry is entry
 
     assert await hass.config_entries.async_unload(entry.entry_id)
     await hass.async_block_till_done()
@@ -89,5 +126,5 @@ async def test_wifi7_mlo_client_setup_succeeds(hass: HomeAssistant) -> None:
     ):
         assert await hass.config_entries.async_setup(entry.entry_id)
     assert entry.state is ConfigEntryState.LOADED
-    mlo_device = entry.runtime_data.data.devices["00:11:22:00:00:99"]
+    mlo_device = entry.runtime_data.trackers.data.devices["00:11:22:00:00:99"]
     assert mlo_device.interface_type is DeviceInterfaceType.MLO

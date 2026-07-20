@@ -14,7 +14,7 @@ from unittest.mock import AsyncMock
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet4.const import DOMAIN
-from custom_components.glinet4.coordinator import GLinetUpdateCoordinator
+from custom_components.glinet4.coordinator import GLinetSubCoordinator
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
@@ -54,7 +54,7 @@ async def test_unnamed_client_excluded(
     }
     mock_glinet.connected_clients.return_value = clients
 
-    coordinator: GLinetUpdateCoordinator = init_integration.runtime_data
+    coordinator: GLinetSubCoordinator = init_integration.runtime_data.trackers
     await coordinator.async_refresh()
     await hass.async_block_till_done()
 
@@ -82,7 +82,7 @@ async def test_new_client_discovered_on_refresh(
     }
     mock_glinet.connected_clients.return_value = clients
 
-    coordinator: GLinetUpdateCoordinator = init_integration.runtime_data
+    coordinator: GLinetSubCoordinator = init_integration.runtime_data.trackers
     await coordinator.async_refresh()
     await hass.async_block_till_done()
 

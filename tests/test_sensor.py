@@ -11,10 +11,12 @@ from unittest.mock import AsyncMock
 
 from freezegun.api import FrozenDateTimeFactory
 from glinet4.enums import TailscaleConnection
+import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet4.const import DOMAIN
-from custom_components.glinet4.coordinator import GLinetUpdateCoordinator
+from custom_components.glinet4.coordinator import GLinetRuntimeData
+from homeassistant.const import UnitOfDataRate
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 
@@ -31,8 +33,8 @@ async def _setup_at(
     hass: HomeAssistant,
     entry: MockConfigEntry,
     freezer: FrozenDateTimeFactory,
-) -> GLinetUpdateCoordinator:
-    """Set up the integration with the clock frozen and return the coordinator.
+) -> GLinetRuntimeData:
+    """Set up the integration with the clock frozen and return its coordinators.
 
     Freezing before setup makes the uptime sensor's derived boot time
     deterministic across machines.
@@ -74,7 +76,7 @@ async def test_wan_speed_sensors_report_rates(
     profile: Profile,
     freezer: FrozenDateTimeFactory,
 ) -> None:
-    """WAN download/upload sensors report bytes per second; absent otherwise."""
+    """WAN download/upload sensors report the router's B/s rate, displayed as Mbit/s."""
     await _setup_at(hass, mock_config_entry, freezer)
     registry = er.async_get(hass)
     download_id = registry.async_get_entity_id(
@@ -90,8 +92,44 @@ async def test_wan_speed_sensors_report_rates(
         return
     assert download_id is not None
     assert upload_id is not None
-    assert hass.states.get(download_id).state == str(wan_speed["speed_rx"])
-    assert hass.states.get(upload_id).state == str(wan_speed["speed_tx"])
+
+    # These two ride the 10s fast coordinator and would write ~8,600 recorder
+    # rows a day each, so they ship disabled: registered, but never added to
+    # hass until the user opts in. Enable them and reload to get live states.
+    for entity_id in (download_id, upload_id):
+        assert (
+            registry.async_get(entity_id).disabled_by
+            is er.RegistryEntryDisabler.INTEGRATION
+        )
+        assert hass.states.get(entity_id) is None
+        registry.async_update_entity(entity_id, disabled_by=None)
+    await hass.config_entries.async_reload(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    for entity_id, key in ((download_id, "speed_rx"), (upload_id, "speed_tx")):
+        state = hass.states.get(entity_id)
+        assert state is not None
+        # The API reports bytes/sec; the entities suggest Mbit/s, so HA converts
+        # the state itself (1 B/s == 8e-6 Mbit/s). suggested_display_precision
+        # only rounds what the frontend renders.
+        assert (
+            state.attributes["unit_of_measurement"]
+            == UnitOfDataRate.MEGABITS_PER_SECOND
+        )
+        # The native value is first rounded to 3 significant figures to keep the
+        # recorder from storing meaningless jitter (computed here with format
+        # spec 'g' rather than the integration's own helper).
+        rounded = float(f"{wan_speed[key]:.3g}")
+        assert float(state.state) == pytest.approx(rounded * 8 / 1_000_000)
+        if rounded != wan_speed[key]:
+            # ...and the rounding is really applied, not a no-op.
+            assert float(state.state) != pytest.approx(wan_speed[key] * 8 / 1_000_000)
+        assert (
+            registry.async_get(entity_id).options["sensor"][
+                "suggested_display_precision"
+            ]
+            == 2
+        )
 
 
 async def test_tailscale_status_sensor_reflects_connection_state(
@@ -102,7 +140,8 @@ async def test_tailscale_status_sensor_reflects_connection_state(
     freezer: FrozenDateTimeFactory,
 ) -> None:
     """The tailscale status sensor mirrors the connection state enum."""
-    coordinator = await _setup_at(hass, mock_config_entry, freezer)
+    # Tailscale rides the slow (configuration) coordinator.
+    coordinator = (await _setup_at(hass, mock_config_entry, freezer)).slow
     entity_id = er.async_get(hass).async_get_entity_id(
         "sensor", DOMAIN, f"glinet4_sensor/{profile.factory_mac}/tailscale_status"
     )
@@ -142,7 +181,8 @@ async def test_uptime_is_stable_across_polls(
     Regression test: the old sensor recomputed ``now - uptime`` on every read,
     so the boot timestamp drifted across minute boundaries between polls.
     """
-    coordinator = await _setup_at(hass, mock_config_entry, freezer)
+    # router_status (and therefore uptime) rides the hub coordinator.
+    coordinator = (await _setup_at(hass, mock_config_entry, freezer)).main
     uptime_id = _entity_id(hass, profile.factory_mac, "uptime")
     assert uptime_id is not None
     first = hass.states.get(uptime_id).state
@@ -166,7 +206,7 @@ async def test_uptime_reanchors_on_reboot(
     freezer: FrozenDateTimeFactory,
 ) -> None:
     """A reboot (uptime resets low) moves the boot timestamp."""
-    coordinator = await _setup_at(hass, mock_config_entry, freezer)
+    coordinator = (await _setup_at(hass, mock_config_entry, freezer)).main
     uptime_id = _entity_id(hass, profile.factory_mac, "uptime")
     first = hass.states.get(uptime_id).state
 
@@ -236,7 +276,8 @@ async def test_wan_ip_sensor_survives_null_ipv4(
     wan_status = profile.load("wan_status")
     if wan_status is None:
         return
-    coordinator = await _setup_at(hass, mock_config_entry, freezer)
+    # wan_status rides the hub coordinator.
+    coordinator = (await _setup_at(hass, mock_config_entry, freezer)).main
     entity_id = er.async_get(hass).async_get_entity_id(
         "sensor", DOMAIN, f"glinet4_sensor/{profile.factory_mac}/wan_ip"
     )

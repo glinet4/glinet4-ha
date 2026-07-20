@@ -61,7 +61,8 @@ async def test_internet_sensor_off_when_active_interface_offline(
         {**entry, "online": False} if entry["up"] else entry for entry in interfaces
     ]
     mock_glinet.network_interfaces_status.return_value = degraded
-    coordinator = mock_config_entry.runtime_data
+    # network_interfaces_status is part of the hub's WAN poll.
+    coordinator = mock_config_entry.runtime_data.main
     await coordinator.async_refresh()
     await hass.async_block_till_done()
 

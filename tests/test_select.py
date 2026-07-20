@@ -94,7 +94,8 @@ async def test_current_option_follows_config(
     config = dict(mock_glinet._tailscale_get_config.return_value)
     config["exit_node_ip"] = nodes[0]["ip"]
     mock_glinet._tailscale_get_config.return_value = config
-    coordinator = mock_config_entry.runtime_data
+    # The exit-node select is driven by the slow (configuration) coordinator.
+    coordinator = mock_config_entry.runtime_data.slow
     await coordinator.async_refresh()
     await hass.async_block_till_done()
 
