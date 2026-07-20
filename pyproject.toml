@@ -23,7 +23,7 @@ package = false
 # them in lockstep.
 dev = [
     "codespell>=2.4.2",
-    "homeassistant-stubs==2026.2.0",
+    "homeassistant-stubs==2026.7.2",
     "mypy>=2.1.0",
     "pylint>=4.0.6",
     "pytest>=8.3.5",
@@ -55,7 +55,7 @@ dev = [
 # the dependency bot try to bump it past pytest-hacc's pin. scripts/test still
 # passes `--with pytest-cov` for the ephemeral coverage run.
 test = [
-    "pytest-homeassistant-custom-component==0.13.313",
+    "pytest-homeassistant-custom-component==0.13.346",
     "glinet4 @ git+https://github.com/glinet4/glinet4@main",
 ]
 
