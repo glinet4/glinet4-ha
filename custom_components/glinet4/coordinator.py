@@ -144,6 +144,17 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         # Set by _update_platform when any call hits a transport error this
         # cycle, so _async_update_data can fail the whole refresh
         self._cycle_failed: bool = False
+        # Set by _call_optional when an *optional* endpoint fails for transport
+        # or auth reasons rather than being unsupported. The hub ignores it (a
+        # flaky optional endpoint must not take down the whole refresh, since
+        # its mandatory calls still prove reachability), but a sibling whose
+        # bucket is entirely optional has no such proof and uses it to fail.
+        self._optional_transport_failed: bool = False
+        # Serialises refreshes across all four coordinators. They share this
+        # object's working state, so without it an overlapping refresh can
+        # clear a failure flag another one just set, or interleave writes and
+        # yield a snapshot mixing two polls.
+        self._refresh_lock = asyncio.Lock()
 
     async def async_setup(self) -> None:
         """Authenticate, load identity and restore known trackers.
@@ -236,26 +247,38 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         rationale. This coordinator keeps ``router_status`` because a failure
         there is the signal that the router is unreachable.
         """
-        self._cycle_failed = False
-        status = await self._update_platform(self._api.router_status)
-        if status is None:
-            # The core health call failed (router unreachable / token not yet
-            # recovered). Surface it so entities go unavailable; the token error
-            # flag triggers a renewal attempt on the next cycle.
-            raise UpdateFailed(f"Unable to reach GL.iNet router {self._host}")
-        self._system_status = status.get("system", {})
+        async with self._refresh_lock:
+            self.reset_cycle()
+            status = await self._update_platform(self._api.router_status)
+            if status is None:
+                # The core health call failed (router unreachable / token not
+                # yet recovered). Surface it so entities go unavailable; the
+                # token error flag triggers a renewal attempt next cycle.
+                raise UpdateFailed(f"Unable to reach GL.iNet router {self._host}")
+            self._system_status = status.get("system", {})
 
-        await self.update_wifi_ifaces_state()
-        await self.update_wireguard_client_state()
-        await self.update_wan_state()
+            await self.update_wifi_ifaces_state()
+            await self.update_wireguard_client_state()
+            await self.update_wan_state()
 
-        self.raise_if_cycle_failed()
-        self.async_manage_repair_issues()
-        return self.snapshot()
+            self.raise_if_cycle_failed()
+            self.async_manage_repair_issues()
+            return self.snapshot()
+
+    @property
+    def refresh_lock(self) -> asyncio.Lock:
+        """Return the lock serialising refreshes across all coordinators."""
+        return self._refresh_lock
 
     def reset_cycle(self) -> None:
-        """Clear the per-cycle failure flag before a refresh."""
+        """Clear the per-cycle failure flags before a refresh."""
         self._cycle_failed = False
+        self._optional_transport_failed = False
+
+    @property
+    def optional_transport_failed(self) -> bool:
+        """Whether an optional endpoint failed for transport/auth reasons."""
+        return self._optional_transport_failed
 
     def raise_if_cycle_failed(self) -> None:
         """Fail the refresh if any call hit a transport error this cycle."""
@@ -526,6 +549,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             # AuthenticationError first: it subclasses NonZeroResponse, and an
             # auth hiccup must not mark the endpoint permanently unsupported.
             _LOGGER.debug("Optional endpoint %s failed transiently: %s", name, err)
+            self._optional_transport_failed = True
             return None
         except NonZeroResponse as err:
             if name in self._confirmed_endpoints:
@@ -780,11 +804,27 @@ class GLinetSubCoordinator(DataUpdateCoordinator[GLinetData]):
 
     async def _async_update_data(self) -> GLinetData:
         """Poll this bucket's endpoints and return the shared snapshot."""
-        # _cycle_failed is per-coordinator-cycle state on the hub; reset it so a
-        # failure recorded by a sibling doesn't fail this refresh too.
-        self._hub.reset_cycle()
-        await self._update(self._hub)
-        self._hub.raise_if_cycle_failed()
+        # Serialised against the hub and the other siblings: they all mutate the
+        # hub's working state and per-cycle flags, so overlapping refreshes could
+        # otherwise clear each other's failure flag or interleave writes.
+        async with self._hub.refresh_lock:
+            if not self._hub.last_update_success:
+                # Only the hub polls a mandatory endpoint, so it is the sole
+                # authority on reachability. Without this a bucket built purely
+                # from optional endpoints stays "successful" against an offline
+                # router, leaving its entities available with stale values.
+                raise UpdateFailed(f"GL.iNet router {self._hub.host} is unreachable")
+            self._hub.reset_cycle()
+            await self._update(self._hub)
+            self._hub.raise_if_cycle_failed()
+            if self._hub.optional_transport_failed:
+                # This bucket is all optional endpoints, which swallow transport
+                # and auth errors to preserve last-good values. With no mandatory
+                # call to prove reachability, treat that as a failed refresh
+                # rather than reporting success on stale data.
+                raise UpdateFailed(
+                    f"GL.iNet router {self._hub.host} did not answer {self.name}"
+                )
         # Three of the four repair issues are driven by slow-bucket data
         # (flow stats, acceleration, tailscale). Reconciling after every bucket
         # keeps them from lagging a full hub poll behind the state that caused

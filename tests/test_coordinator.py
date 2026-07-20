@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from unittest.mock import AsyncMock
 
 from glinet4.error_handling import AuthenticationError, NonZeroResponse, TokenError
@@ -228,3 +229,87 @@ async def test_tailscale_connection_cleared_when_unconfigured(
     await coordinator.async_refresh()
     assert coordinator.data.tailscale_connection is None
     assert coordinator.data.tailscale_state is None
+
+
+async def test_siblings_go_unavailable_when_hub_is(
+    hass: HomeAssistant, init_integration: MockConfigEntry, mock_glinet: AsyncMock
+) -> None:
+    """A sibling must not report success against an unreachable router.
+
+    Only the hub polls a mandatory endpoint, so it is the sole authority on
+    reachability. The fast and slow buckets are built purely from optional
+    endpoints, which swallow transport errors to preserve last-good values -
+    without propagation their entities would stay available on stale data.
+    """
+    runtime_data = _runtime(init_integration)
+    assert runtime_data.fast.last_update_success is True
+
+    mock_glinet.router_status.return_value = None
+    await runtime_data.main.async_refresh()
+    assert runtime_data.main.last_update_success is False
+
+    for sibling in (runtime_data.fast, runtime_data.trackers, runtime_data.slow):
+        await sibling.async_refresh()
+        assert sibling.last_update_success is False, sibling.name
+
+
+async def test_optional_transport_error_fails_the_owning_sibling(
+    hass: HomeAssistant, init_integration: MockConfigEntry, profile: Profile
+) -> None:
+    """A timeout on a bucket's only endpoint fails that bucket's refresh.
+
+    ``_call_optional`` returns None on transport errors so callers keep their
+    last good value. In the hub that is safe - its mandatory call proves
+    reachability - but a bucket of purely optional calls has no such proof.
+    """
+    if profile.load("wan_speed") is None:
+        return
+    runtime_data = _runtime(init_integration)
+    assert runtime_data.fast.last_update_success is True
+
+    runtime_data.main.api.wan_speed.side_effect = TimeoutError
+    await runtime_data.fast.async_refresh()
+    assert runtime_data.fast.last_update_success is False
+
+    # The hub still polls a mandatory endpoint, so it stays available.
+    await runtime_data.main.async_refresh()
+    assert runtime_data.main.last_update_success is True
+
+    # And the bucket recovers once the endpoint answers again.
+    runtime_data.main.api.wan_speed.side_effect = None
+    await runtime_data.fast.async_refresh()
+    assert runtime_data.fast.last_update_success is True
+
+
+async def test_refreshes_are_serialised_across_coordinators(
+    hass: HomeAssistant, init_integration: MockConfigEntry, mock_glinet: AsyncMock
+) -> None:
+    """A sibling refresh must not clear a failure the hub is mid-way through.
+
+    The coordinators share the hub's per-cycle failure flag. Without the
+    refresh lock, a sibling's reset_cycle() landing at one of the hub's await
+    points would wipe a failure already recorded and the hub would report
+    success on a broken poll.
+    """
+    runtime_data = _runtime(init_integration)
+    sibling_ran = asyncio.Event()
+
+    async def fail_then_yield_to_sibling(*_: object, **__: object) -> None:
+        # Stand in for a mandatory call failing partway through the hub's
+        # cycle, then yielding the loop while the rest of the cycle continues.
+        runtime_data.main.reset_cycle()
+        raise TimeoutError
+
+    mock_glinet.wifi_ifaces.side_effect = fail_then_yield_to_sibling
+
+    async def run_sibling() -> None:
+        await asyncio.sleep(0)
+        await runtime_data.fast.async_refresh()
+        sibling_ran.set()
+
+    await asyncio.gather(runtime_data.main.async_refresh(), run_sibling())
+
+    assert sibling_ran.is_set()
+    # The lock means the sibling could not interleave, so the hub's failure
+    # survived to the end of its own cycle.
+    assert runtime_data.main.last_update_success is False
