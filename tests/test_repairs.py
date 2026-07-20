@@ -35,9 +35,27 @@ def _force(mock_glinet: AsyncMock, *, stats_on: bool, accel_on: bool) -> None:
     }
 
 
+async def _repoll(entry: MockConfigEntry) -> None:
+    """Re-poll the issue inputs, then re-evaluate the issues.
+
+    ``_async_manage_repair_issues`` runs from the hub (main) coordinator's
+    update, but three of its four inputs - the flow-statistics rule, NAT
+    acceleration and the tailscale state - are polled by the slow
+    (configuration) coordinator. The slow poll therefore has to land *before*
+    the hub re-evaluates, which rules out ``async_refresh_all`` here (it drives
+    the hub first).
+    """
+    await entry.runtime_data.slow.async_refresh()
+    await entry.runtime_data.main.async_refresh()
+
+
 async def _setup(hass: HomeAssistant, entry: MockConfigEntry) -> None:
     entry.add_to_hass(hass)
     await hass.config_entries.async_setup(entry.entry_id)
+    await hass.async_block_till_done()
+    # The slow coordinator primes after the hub's first refresh, so the hub has
+    # not yet seen the slow-bucket inputs; drive one more round.
+    await _repoll(entry)
     await hass.async_block_till_done()
 
 
@@ -87,7 +105,7 @@ async def test_issue_cleared_when_condition_resolves(
     assert ir.async_get(hass).async_get_issue(DOMAIN, _issue_id(mock_config_entry))
 
     _force(mock_glinet, stats_on=True, accel_on=True)
-    await mock_config_entry.runtime_data.async_refresh()
+    await _repoll(mock_config_entry)
     await hass.async_block_till_done()
     assert (
         ir.async_get(hass).async_get_issue(DOMAIN, _issue_id(mock_config_entry)) is None
@@ -191,7 +209,7 @@ async def test_tailscale_reauth_issue_cleared_on_reconnect(
         DOMAIN, _tailscale_issue_id(mock_config_entry)
     )
     _force_tailscale(mock_glinet, "connected", None)
-    await mock_config_entry.runtime_data.async_refresh()
+    await _repoll(mock_config_entry)
     await hass.async_block_till_done()
     assert (
         ir.async_get(hass).async_get_issue(

@@ -1170,7 +1170,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '40.877846169639',
+    'state': '40.88',
   })
 # ---
 # name: test_entities[mt3000_beryl_ax-sensor][sensor.gl_inet_mt3000_uptime-entry]
@@ -3301,7 +3301,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '40.877846169639',
+    'state': '40.88',
   })
 # ---
 # name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_tailscale_status-entry]
@@ -3445,7 +3445,10 @@
     'object_id_base': 'WAN download speed',
     'options': dict({
       'sensor': dict({
-        'suggested_display_precision': 0,
+        'suggested_display_precision': 2,
+      }),
+      'sensor.private': dict({
+        'suggested_unit_of_measurement': <UnitOfDataRate.MEGABITS_PER_SECOND: 'Mbit/s'>,
       }),
     }),
     'original_device_class': <SensorDeviceClass.DATA_RATE: 'data_rate'>,
@@ -3457,7 +3460,7 @@
     'supported_features': 0,
     'translation_key': 'wan_download_speed',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/wan_download_speed',
-    'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
+    'unit_of_measurement': <UnitOfDataRate.MEGABITS_PER_SECOND: 'Mbit/s'>,
   })
 # ---
 # name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_wan_download_speed-state]
@@ -3466,14 +3469,14 @@
       'device_class': 'data_rate',
       'friendly_name': 'GL.iNet MT6000 WAN download speed',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
+      'unit_of_measurement': <UnitOfDataRate.MEGABITS_PER_SECOND: 'Mbit/s'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.gl_inet_mt6000_wan_download_speed',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '4582',
+    'state': '0.03664',
   })
 # ---
 # name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_wan_ip-entry]
@@ -3557,7 +3560,10 @@
     'object_id_base': 'WAN upload speed',
     'options': dict({
       'sensor': dict({
-        'suggested_display_precision': 0,
+        'suggested_display_precision': 2,
+      }),
+      'sensor.private': dict({
+        'suggested_unit_of_measurement': <UnitOfDataRate.MEGABITS_PER_SECOND: 'Mbit/s'>,
       }),
     }),
     'original_device_class': <SensorDeviceClass.DATA_RATE: 'data_rate'>,
@@ -3569,7 +3575,7 @@
     'supported_features': 0,
     'translation_key': 'wan_upload_speed',
     'unique_id': 'glinet4_sensor/00:11:22:00:00:01/wan_upload_speed',
-    'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
+    'unit_of_measurement': <UnitOfDataRate.MEGABITS_PER_SECOND: 'Mbit/s'>,
   })
 # ---
 # name: test_entities[mt6000-sensor][sensor.gl_inet_mt6000_wan_upload_speed-state]
@@ -3578,14 +3584,14 @@
       'device_class': 'data_rate',
       'friendly_name': 'GL.iNet MT6000 WAN upload speed',
       'state_class': <SensorStateClass.MEASUREMENT: 'measurement'>,
-      'unit_of_measurement': <UnitOfDataRate.BYTES_PER_SECOND: 'B/s'>,
+      'unit_of_measurement': <UnitOfDataRate.MEGABITS_PER_SECOND: 'Mbit/s'>,
     }),
     'context': <ANY>,
     'entity_id': 'sensor.gl_inet_mt6000_wan_upload_speed',
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '2926',
+    'state': '0.02344',
   })
 # ---
 # name: test_entities[mt6000-switch][switch.gl_inet_mt6000_alias_38_internet-entry]
@@ -6036,7 +6042,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '40.877846169639',
+    'state': '40.88',
   })
 # ---
 # name: test_entities[mt6000_no_tailscale-sensor][sensor.gl_inet_mt6000_uptime-entry]
@@ -8381,7 +8387,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '40.877846169639',
+    'state': '40.88',
   })
 # ---
 # name: test_entities[mt6000_no_wireguard-sensor][sensor.gl_inet_mt6000_tailscale_status-entry]
@@ -10847,7 +10853,7 @@
     'last_changed': <ANY>,
     'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '40.877846169639',
+    'state': '40.88',
   })
 # ---
 # name: test_entities[wifi7_mlo_client-sensor][sensor.gl_inet_mt6000_tailscale_status-entry]

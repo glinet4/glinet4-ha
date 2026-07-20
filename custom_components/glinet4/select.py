@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import GlinetConfigEntry, GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,21 +29,20 @@ async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up selects."""
-    coordinator = entry.runtime_data
+    # Tailscale exit nodes change on the order of days.
+    coordinator = entry.runtime_data.slow
     if coordinator.data.tailscale_state is not None:
         async_add_entities([TailscaleExitNodeSelect(coordinator)])
 
 
-class TailscaleExitNodeSelect(
-    CoordinatorEntity["GLinetUpdateCoordinator"], SelectEntity
-):
+class TailscaleExitNodeSelect(CoordinatorEntity["GLinetCoordinator"], SelectEntity):
     """Route the router's traffic through a tailnet exit node."""
 
     _attr_translation_key = "tailscale_exit_node"
     _attr_has_entity_name = True
     _attr_entity_category = EntityCategory.CONFIG
 
-    def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
+    def __init__(self, coordinator: GLinetCoordinator) -> None:
         """Initialize the exit-node select."""
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info

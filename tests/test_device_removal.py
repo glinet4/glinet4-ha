@@ -48,7 +48,9 @@ async def test_connected_client_cannot_be_removed(
 ) -> None:
     """A currently-connected client cannot be removed (it would reappear)."""
     await _setup(hass, mock_config_entry)
-    coordinator = mock_config_entry.runtime_data
+    # Client connectivity comes from the tracker coordinator, which is also
+    # what async_remove_config_entry_device consults.
+    coordinator = mock_config_entry.runtime_data.trackers
     connected = [m for m, d in coordinator.data.devices.items() if d.is_connected]
     if not connected:
         return

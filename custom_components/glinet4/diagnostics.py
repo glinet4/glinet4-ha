@@ -43,8 +43,13 @@ async def async_get_config_entry_diagnostics(
     hass: HomeAssistant, entry: GlinetConfigEntry
 ) -> dict[str, Any]:
     """Return redacted diagnostics for a config entry."""
-    coordinator = entry.runtime_data
-    data = coordinator.data
+    coordinator = entry.runtime_data.main
+    # Build a fresh snapshot rather than reading the hub's cached `.data`, which
+    # is stale for every field another coordinator owns (connected_devices,
+    # tailscale, led, flow stats). A diagnostics dump reporting 0 clients
+    # because the tracker poll landed after the hub's would be actively
+    # misleading.
+    data = coordinator.snapshot()
 
     snapshot: dict[str, Any] = {
         "system_status": data.system_status,

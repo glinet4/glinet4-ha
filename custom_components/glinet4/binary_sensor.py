@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import GlinetConfigEntry, GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -28,14 +28,13 @@ async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up binary sensors."""
-    coordinator = entry.runtime_data
+    # Internet reachability comes from network_interfaces (WAN status bucket).
+    coordinator = entry.runtime_data.main
     if coordinator.data.network_interfaces:
         async_add_entities([InternetBinarySensor(coordinator)])
 
 
-class InternetBinarySensor(
-    CoordinatorEntity["GLinetUpdateCoordinator"], BinarySensorEntity
-):
+class InternetBinarySensor(CoordinatorEntity["GLinetCoordinator"], BinarySensorEntity):
     """Whether the router's active WAN interface reports internet access."""
 
     _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
@@ -43,7 +42,7 @@ class InternetBinarySensor(
     _attr_has_entity_name = True
     _attr_entity_category = EntityCategory.DIAGNOSTIC
 
-    def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
+    def __init__(self, coordinator: GLinetCoordinator) -> None:
         """Initialize the internet sensor."""
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info

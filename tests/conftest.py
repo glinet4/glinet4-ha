@@ -240,3 +240,14 @@ async def init_integration(
     await hass.config_entries.async_setup(mock_config_entry.entry_id)
     await hass.async_block_till_done()
     return mock_config_entry
+
+
+async def async_refresh_all(entry: MockConfigEntry) -> None:
+    """Refresh every coordinator on ``entry``.
+
+    Polling is split across four coordinators by change rate, so a test that
+    wants the whole snapshot re-fetched has to drive all of them. Tests that
+    care about one bucket's cadence should refresh that coordinator directly.
+    """
+    for coordinator in entry.runtime_data.all():
+        await coordinator.async_refresh()

@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import GlinetConfigEntry, GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -24,12 +24,13 @@ async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up update entities."""
-    coordinator = entry.runtime_data
+    # Firmware is checked online at most every 6h; the slow bucket drives it.
+    coordinator = entry.runtime_data.slow
     if coordinator.data.firmware_check:
         async_add_entities([GLinetFirmwareUpdate(coordinator)])
 
 
-class GLinetFirmwareUpdate(CoordinatorEntity["GLinetUpdateCoordinator"], UpdateEntity):
+class GLinetFirmwareUpdate(CoordinatorEntity["GLinetCoordinator"], UpdateEntity):
     """Indicates when the router has a firmware update available.
 
     Read-only: installing firmware from HA is deliberately unsupported.
@@ -39,7 +40,7 @@ class GLinetFirmwareUpdate(CoordinatorEntity["GLinetUpdateCoordinator"], UpdateE
     _attr_translation_key = "firmware"
     _attr_has_entity_name = True
 
-    def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
+    def __init__(self, coordinator: GLinetCoordinator) -> None:
         """Initialize the update entity."""
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info

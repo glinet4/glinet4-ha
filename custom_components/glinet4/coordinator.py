@@ -29,10 +29,13 @@ from homeassistant.util import dt as dt_util
 from .const import (
     API_PATH,
     DOMAIN,
+    FAST_SCAN_INTERVAL,
     ISSUE_ROUTER_MODE,
     ISSUE_STATISTICS_NOT_COLLECTING,
     ISSUE_TAILSCALE_REAUTH,
     SCAN_INTERVAL,
+    SLOW_SCAN_INTERVAL,
+    TRACKER_SCAN_INTERVAL,
 )
 from .models import ClientDevInfo, WifiInterface, WireGuardClient
 from .utils import adjust_mac
@@ -141,6 +144,17 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         # Set by _update_platform when any call hits a transport error this
         # cycle, so _async_update_data can fail the whole refresh
         self._cycle_failed: bool = False
+        # Set by _call_optional when an *optional* endpoint fails for transport
+        # or auth reasons rather than being unsupported. The hub ignores it (a
+        # flaky optional endpoint must not take down the whole refresh, since
+        # its mandatory calls still prove reachability), but a sibling whose
+        # bucket is entirely optional has no such proof and uses it to fail.
+        self._optional_transport_failed: bool = False
+        # Serialises refreshes across all four coordinators. They share this
+        # object's working state, so without it an overlapping refresh can
+        # clear a failure flag another one just set, or interleave writes and
+        # yield a snapshot mixing two polls.
+        self._refresh_lock = asyncio.Lock()
 
     async def async_setup(self) -> None:
         """Authenticate, load identity and restore known trackers.
@@ -225,33 +239,61 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             raise  # Let generic network/timeout exceptions bubble up normally
 
     async def _async_update_data(self) -> GLinetData:
-        """Fetch a fresh snapshot of router state."""
+        """Fetch the medium-rate slice of router state.
+
+        Device trackers, WAN throughput and the near-static configuration
+        endpoints are polled by the sibling coordinators built in
+        ``async_setup_entry``; see ``const.SCAN_INTERVAL`` for the bucketing
+        rationale. This coordinator keeps ``router_status`` because a failure
+        there is the signal that the router is unreachable.
+        """
+        async with self._refresh_lock:
+            self.reset_cycle()
+            status = await self._update_platform(self._api.router_status)
+            if status is None:
+                # The core health call failed (router unreachable / token not
+                # yet recovered). Surface it so entities go unavailable; the
+                # token error flag triggers a renewal attempt next cycle.
+                raise UpdateFailed(f"Unable to reach GL.iNet router {self._host}")
+            self._system_status = status.get("system", {})
+
+            await self.update_wifi_ifaces_state()
+            await self.update_wireguard_client_state()
+            await self.update_wan_state()
+
+            self.raise_if_cycle_failed()
+            self.async_manage_repair_issues()
+            return self.snapshot()
+
+    @property
+    def refresh_lock(self) -> asyncio.Lock:
+        """Return the lock serialising refreshes across all coordinators."""
+        return self._refresh_lock
+
+    def reset_cycle(self) -> None:
+        """Clear the per-cycle failure flags before a refresh."""
         self._cycle_failed = False
-        status = await self._update_platform(self._api.router_status)
-        if status is None:
-            # The core health call failed (router unreachable / token not yet
-            # recovered). Surface it so entities go unavailable; the token error
-            # flag triggers a renewal attempt on the next cycle.
-            raise UpdateFailed(f"Unable to reach GL.iNet router {self._host}")
-        self._system_status = status.get("system", {})
+        self._optional_transport_failed = False
 
-        await self.update_device_trackers()
-        await self.update_wifi_ifaces_state()
-        await self.update_wireguard_client_state()
-        await self.update_tailscale_state()
-        await self.update_wan_state()
-        await self.update_led_state()
-        await self.update_flow_statistics_state()
-        await self.update_firmware_check()
+    @property
+    def optional_transport_failed(self) -> bool:
+        """Whether an optional endpoint failed for transport/auth reasons."""
+        return self._optional_transport_failed
 
-        # If any call hit a transport error this cycle, fail the whole refresh
+    def raise_if_cycle_failed(self) -> None:
+        """Fail the refresh if any call hit a transport error this cycle."""
         if self._cycle_failed:
             raise UpdateFailed(
                 f"One or more calls to GL.iNet router {self._host} failed"
             )
 
-        self._async_manage_repair_issues()
+    def snapshot(self) -> GLinetData:
+        """Build a snapshot from the shared working state.
 
+        Every coordinator returns this same shape, so entities read
+        ``coordinator.data.<field>`` regardless of which one drives them; only
+        the callback cadence differs.
+        """
         return GLinetData(
             system_status=self._system_status,
             devices=self._devices,
@@ -273,6 +315,41 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             network_acceleration=self._network_acceleration,
             network_mode=self._network_mode,
         )
+
+    def async_build_siblings(self) -> GLinetRuntimeData:
+        """Create the sibling coordinators that share this one's API client.
+
+        They reuse the hub's client, auth recovery and working state; only the
+        set of endpoints polled and the interval differ.
+        """
+        return GLinetRuntimeData(
+            main=self,
+            fast=GLinetSubCoordinator(
+                self,
+                name=f"{DOMAIN} wan speed",
+                update_interval=FAST_SCAN_INTERVAL,
+                update=lambda hub: hub.update_wan_speed(),
+            ),
+            trackers=GLinetSubCoordinator(
+                self,
+                name=f"{DOMAIN} device trackers",
+                update_interval=TRACKER_SCAN_INTERVAL,
+                update=lambda hub: hub.update_device_trackers(),
+            ),
+            slow=GLinetSubCoordinator(
+                self,
+                name=f"{DOMAIN} configuration",
+                update_interval=SLOW_SCAN_INTERVAL,
+                update=GLinetUpdateCoordinator._update_slow_state,
+            ),
+        )
+
+    async def _update_slow_state(self) -> None:
+        """Poll the endpoints that change on the order of days, not seconds."""
+        await self.update_tailscale_state()
+        await self.update_led_state()
+        await self.update_flow_statistics_state()
+        await self.update_firmware_check()
 
     async def _update_platform(
         self, api_callable: Callable[[], Coroutine[Any, Any, T]]
@@ -472,6 +549,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             # AuthenticationError first: it subclasses NonZeroResponse, and an
             # auth hiccup must not mark the endpoint permanently unsupported.
             _LOGGER.debug("Optional endpoint %s failed transiently: %s", name, err)
+            self._optional_transport_failed = True
             return None
         except NonZeroResponse as err:
             if name in self._confirmed_endpoints:
@@ -483,15 +561,25 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._confirmed_endpoints.add(name)
         return result
 
+    async def update_wan_speed(self) -> None:
+        """Poll WAN throughput only - the one endpoint worth polling fast.
+
+        Split out of ``update_wan_state`` so the fast coordinator costs exactly
+        one RPC per cycle. On transient errors the previous value is kept.
+        """
+        speed = await self._call_optional("wan_speed", self._api.wan_speed)
+        if speed is not None:
+            self._wan_speed = dict(speed)
+
     async def update_wan_state(self) -> None:
-        """Poll WAN status and throughput; degrade gracefully when unsupported.
+        """Poll WAN status; degrade gracefully when unsupported.
 
         The endpoints only exist on newer firmware and are probed
         independently; on transient errors the previous values are kept.
+        Throughput is polled separately by ``update_wan_speed``.
         """
-        status, speed, interfaces, mode = await asyncio.gather(
+        status, interfaces, mode = await asyncio.gather(
             self._call_optional("wan_status", self._api.wan_status),
-            self._call_optional("wan_speed", self._api.wan_speed),
             self._call_optional(
                 "network_interfaces_status", self._api.network_interfaces_status
             ),
@@ -499,8 +587,6 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         )
         if status is not None:
             self._wan_status = dict(status)
-        if speed is not None:
-            self._wan_speed = dict(speed)
         if interfaces is not None:
             self._network_interfaces = [dict(i) for i in interfaces]
         if mode is not None:
@@ -608,7 +694,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         else:
             ir.async_delete_issue(self.hass, DOMAIN, self._issue_id(key))
 
-    def _async_manage_repair_issues(self) -> None:
+    def async_manage_repair_issues(self) -> None:
         """Raise or clear every repair issue from the current snapshot."""
         # Flow statistics enabled but not collecting (NAT acceleration off,
         # which is mutually exclusive with QoS/SQM).
@@ -687,4 +773,112 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         return f"GL.iNet {self._model.upper()}"
 
 
-type GlinetConfigEntry = ConfigEntry[GLinetUpdateCoordinator]
+class GLinetSubCoordinator(DataUpdateCoordinator[GLinetData]):
+    """A coordinator that polls one bucket of endpoints on its own interval.
+
+    Shares the hub's API client, auth recovery and working state, so a snapshot
+    it returns is the same ``GLinetData`` every other coordinator produces.
+    Entities attach to whichever coordinator drives the data they read.
+    """
+
+    config_entry: ConfigEntry
+
+    def __init__(
+        self,
+        hub: GLinetUpdateCoordinator,
+        *,
+        name: str,
+        update_interval: timedelta,
+        update: Callable[[GLinetUpdateCoordinator], Coroutine[Any, Any, None]],
+    ) -> None:
+        """Initialize a sibling coordinator bound to ``hub``."""
+        super().__init__(
+            hub.hass,
+            _LOGGER,
+            name=name,
+            update_interval=update_interval,
+            config_entry=hub.config_entry,
+        )
+        self._hub = hub
+        self._update = update
+
+    async def _async_update_data(self) -> GLinetData:
+        """Poll this bucket's endpoints and return the shared snapshot."""
+        # Serialised against the hub and the other siblings: they all mutate the
+        # hub's working state and per-cycle flags, so overlapping refreshes could
+        # otherwise clear each other's failure flag or interleave writes.
+        async with self._hub.refresh_lock:
+            if not self._hub.last_update_success:
+                # Only the hub polls a mandatory endpoint, so it is the sole
+                # authority on reachability. Without this a bucket built purely
+                # from optional endpoints stays "successful" against an offline
+                # router, leaving its entities available with stale values.
+                raise UpdateFailed(f"GL.iNet router {self._hub.host} is unreachable")
+            self._hub.reset_cycle()
+            await self._update(self._hub)
+            self._hub.raise_if_cycle_failed()
+            if self._hub.optional_transport_failed:
+                # This bucket is all optional endpoints, which swallow transport
+                # and auth errors to preserve last-good values. With no mandatory
+                # call to prove reachability, treat that as a failed refresh
+                # rather than reporting success on stale data.
+                raise UpdateFailed(
+                    f"GL.iNet router {self._hub.host} did not answer {self.name}"
+                )
+        # Three of the four repair issues are driven by slow-bucket data
+        # (flow stats, acceleration, tailscale). Reconciling after every bucket
+        # keeps them from lagging a full hub poll behind the state that caused
+        # them; the check is pure bookkeeping over current shared state, so
+        # running it more often is free and never wrong.
+        self._hub.async_manage_repair_issues()
+        return self._hub.snapshot()
+
+    # Identity and the API client live on the hub. Proxying them keeps every
+    # entity able to take any coordinator without caring which bucket it is in.
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return the router device entry."""
+        return self._hub.device_info
+
+    @property
+    def api(self) -> GLinet:
+        """Return router API."""
+        return self._hub.api
+
+    @property
+    def factory_mac(self) -> str:
+        """Return router factory_mac."""
+        return self._hub.factory_mac
+
+    @property
+    def model(self) -> str:
+        """Return router model."""
+        return self._hub.model
+
+    @property
+    def device_name(self) -> str:
+        """Return the router's display name (used for the device registry)."""
+        return self._hub.device_name
+
+
+@dataclass
+class GLinetRuntimeData:
+    """The four coordinators backing a config entry, bucketed by change rate."""
+
+    main: GLinetUpdateCoordinator
+    fast: GLinetSubCoordinator
+    trackers: GLinetSubCoordinator
+    slow: GLinetSubCoordinator
+
+    def all(self) -> tuple[DataUpdateCoordinator[GLinetData], ...]:
+        """Return every coordinator, hub first."""
+        return (self.main, self.fast, self.trackers, self.slow)
+
+
+# Entities take whichever coordinator drives their data. The two classes are
+# siblings rather than parent/child - GLinetSubCoordinator proxies the hub's
+# identity and API client - so this alias is what entity code should name.
+type GLinetCoordinator = GLinetUpdateCoordinator | GLinetSubCoordinator
+
+type GlinetConfigEntry = ConfigEntry[GLinetRuntimeData]

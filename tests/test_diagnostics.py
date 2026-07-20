@@ -14,6 +14,11 @@ async def test_diagnostics_redacts_secrets(
     hass: HomeAssistant, init_integration: MockConfigEntry, profile: Profile
 ) -> None:
     """Diagnostics expose device state but redact credentials and identifiers."""
+    # Diagnostics dump the hub coordinator's snapshot. ``connected_devices`` is
+    # a scalar produced by the tracker coordinator, which primes *after* the
+    # hub's first refresh, so it only reaches the hub's snapshot on the hub's
+    # next poll. Drive that poll before dumping.
+    await init_integration.runtime_data.main.async_refresh()
     diagnostics = await async_get_config_entry_diagnostics(hass, init_integration)
 
     # Credentials and identifiers from the entry/data must not leak verbatim.

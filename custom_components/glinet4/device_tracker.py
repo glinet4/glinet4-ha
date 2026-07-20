@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-    from .coordinator import GlinetConfigEntry, GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetCoordinator
     from .models import ClientDevInfo
 
 _LOGGER = logging.getLogger(__name__)
@@ -33,7 +33,8 @@ async def async_setup_entry(
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up device tracker for GLinet component."""
-    coordinator = entry.runtime_data
+    # Client presence is latency-sensitive and costs one RPC of its own.
+    coordinator = entry.runtime_data.trackers
     tracked: set[str] = set()
 
     @callback
@@ -54,14 +55,12 @@ async def async_setup_entry(
     add_new_entities()
 
 
-class GLinetDevice(CoordinatorEntity["GLinetUpdateCoordinator"], ScannerEntity):
+class GLinetDevice(CoordinatorEntity["GLinetCoordinator"], ScannerEntity):
     """Representation of a GLinet tracked device."""
 
     _attr_source_type: SourceType = SourceType.ROUTER
 
-    def __init__(
-        self, coordinator: GLinetUpdateCoordinator, device: ClientDevInfo
-    ) -> None:
+    def __init__(self, coordinator: GLinetCoordinator, device: ClientDevInfo) -> None:
         """Initialize a GLinet device."""
         super().__init__(coordinator)
         self._device: ClientDevInfo = device

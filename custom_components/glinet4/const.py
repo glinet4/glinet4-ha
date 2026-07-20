@@ -3,7 +3,26 @@
 from datetime import timedelta
 
 DOMAIN = "glinet4"
-SCAN_INTERVAL = timedelta(seconds=30)
+
+# Polling is split across four coordinators, bucketed by how fast the
+# underlying data actually changes (measured against a live MT6000 over a 6h
+# window, ~635 polls):
+#
+#   wan_speed          636/635 changes (100%)  -> FAST
+#   connected clients  presence, latency-sensitive -> TRACKER
+#   system status      cpu/mem/load, 19-99%    -> SCAN (main)
+#   tailscale/led/     1 change in 6 hours     -> SLOW
+#   flow stats/mode
+#
+# FAST is 10s because the router recomputes its WAN rate every ~3s (verified by
+# 1s sampling: 58 of 61 runs were exactly 3 identical samples). Polling slower
+# than that aliases - at the old 30s interval only ~9% of traffic was sampled.
+# Below 3s buys nothing; 10s keeps us above HA's documented 5s floor while
+# giving long-term statistics ~30 samples per 5-minute bucket instead of ~9.
+FAST_SCAN_INTERVAL = timedelta(seconds=10)
+TRACKER_SCAN_INTERVAL = timedelta(seconds=30)
+SCAN_INTERVAL = timedelta(seconds=60)
+SLOW_SCAN_INTERVAL = timedelta(minutes=5)
 DATA_GLINET = "glinet"
 API_PATH = "/rpc"
 GLINET_FRIENDLY_NAME = "GL.iNet"

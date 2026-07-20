@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-    from .coordinator import GlinetConfigEntry, GLinetUpdateCoordinator
+    from .coordinator import GlinetConfigEntry, GLinetCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,17 +26,17 @@ async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     """Set up the button entities."""
-    async_add_entities([RebootButton(entry.runtime_data)])
+    async_add_entities([RebootButton(entry.runtime_data.main)])
 
 
-class RebootButton(CoordinatorEntity["GLinetUpdateCoordinator"], ButtonEntity):
+class RebootButton(CoordinatorEntity["GLinetCoordinator"], ButtonEntity):
     """Reboot button."""
 
     _attr_translation_key = "reboot"
     _attr_has_entity_name = True
     _attr_entity_category = EntityCategory.CONFIG
 
-    def __init__(self, coordinator: GLinetUpdateCoordinator) -> None:
+    def __init__(self, coordinator: GLinetCoordinator) -> None:
         """Initialize a GLinet device."""
         super().__init__(coordinator)
         self._attr_device_info = coordinator.device_info

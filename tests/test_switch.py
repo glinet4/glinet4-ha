@@ -182,7 +182,9 @@ async def test_flow_statistics_switch_toggles_and_explains(
         assert entity_id is None
         return
     assert entity_id is not None
-    coordinator = mock_config_entry.runtime_data
+    # The flow-statistics rule and NAT acceleration are near-static config, so
+    # they ride the slow coordinator.
+    coordinator = mock_config_entry.runtime_data.slow
     accel = profile.load("network_acceleration") or {}
 
     # Baseline: stats off => not collecting; reason says so.

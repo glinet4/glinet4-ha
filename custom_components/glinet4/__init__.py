@@ -36,7 +36,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: GlinetConfigEntry) -> bo
     await coordinator.async_setup()
     await coordinator.async_config_entry_first_refresh()
 
-    entry.runtime_data = coordinator
+    runtime_data = coordinator.async_build_siblings()
+    # The hub has already fetched; prime the siblings so their entities have
+    # data before the platforms are forwarded. They share the hub's working
+    # state, so a sibling failing here means its endpoints are unreachable.
+    for sibling in (runtime_data.fast, runtime_data.trackers, runtime_data.slow):
+        await sibling.async_config_entry_first_refresh()
+
+    entry.runtime_data = runtime_data
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
@@ -48,7 +55,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: GlinetConfigEntry) -> b
     The coordinator's polling timer is owned by Home Assistant and torn down
     automatically with the config entry, so only the platforms need unloading.
     """
-    entry.runtime_data.async_clear_issues()
+    entry.runtime_data.main.async_clear_issues()
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
 
@@ -70,7 +77,7 @@ async def async_remove_config_entry_device(
         for domain, mac in device_entry.connections
         if domain == CONNECTION_NETWORK_MAC
     }
-    coordinator = config_entry.runtime_data
+    coordinator = config_entry.runtime_data.trackers
     connected_macs = {
         format_mac(mac)
         for mac, device in coordinator.data.devices.items()
