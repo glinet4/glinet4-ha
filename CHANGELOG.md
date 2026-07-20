@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.4](https://github.com/glinet4/glinet4-ha/compare/v0.4.3...v0.4.4) (2026-07-20)
+
+
+### Features
+
+* split polling into four coordinators and make WAN rates readable ([#48](https://github.com/glinet4/glinet4-ha/issues/48)) ([70ebaae](https://github.com/glinet4/glinet4-ha/commit/70ebaae716f4fcfc9f94a98ab71435e89623d189))
+
 ## [0.4.3](https://github.com/glinet4/glinet4-ha/compare/v0.4.2...v0.4.3) (2026-07-13)
 
 
