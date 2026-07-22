@@ -81,6 +81,12 @@ class GLinetData:
     flow_stats_rule: dict = field(default_factory=dict)
     network_acceleration: dict = field(default_factory=dict)
     network_mode: str = ""
+    firewall_wan_access: dict = field(default_factory=dict)
+    firewall_dmz: dict = field(default_factory=dict)
+    # None until the router answers the read, so an empty list (0 rules) is
+    # distinguishable from an unsupported endpoint.
+    firewall_port_forwards: list[dict] | None = None
+    firewall_rules: list[dict] | None = None
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -133,6 +139,10 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._flow_stats_rule: dict = {}
         self._network_acceleration: dict = {}
         self._network_mode: str = ""
+        self._firewall_wan_access: dict = {}
+        self._firewall_dmz: dict = {}
+        self._firewall_port_forwards: list[dict] | None = None
+        self._firewall_rules: list[dict] | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -314,6 +324,10 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             flow_stats_rule=self._flow_stats_rule,
             network_acceleration=self._network_acceleration,
             network_mode=self._network_mode,
+            firewall_wan_access=self._firewall_wan_access,
+            firewall_dmz=self._firewall_dmz,
+            firewall_port_forwards=self._firewall_port_forwards,
+            firewall_rules=self._firewall_rules,
         )
 
     def async_build_siblings(self) -> GLinetRuntimeData:
@@ -349,6 +363,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         await self.update_tailscale_state()
         await self.update_led_state()
         await self.update_flow_statistics_state()
+        await self.update_firewall_state()
         await self.update_firmware_check()
 
     async def _update_platform(
@@ -613,6 +628,29 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._flow_stats_rule = dict(rule)
         if accel is not None:
             self._network_acceleration = dict(accel)
+
+    async def update_firewall_state(self) -> None:
+        """Poll the firewall reads (WAN exposure, DMZ, port forwards, rules).
+
+        All optional per firmware; each preserves its last-good value on a
+        transient failure and stays unset when the router doesn't expose it.
+        """
+        wan_access, dmz, port_forwards, rules = await asyncio.gather(
+            self._call_optional("firewall_wan_access", self._api.firewall_wan_access),
+            self._call_optional("firewall_dmz", self._api.firewall_dmz),
+            self._call_optional(
+                "firewall_port_forward_list", self._api.firewall_port_forward_list
+            ),
+            self._call_optional("firewall_rule_list", self._api.firewall_rule_list),
+        )
+        if wan_access is not None:
+            self._firewall_wan_access = dict(wan_access)
+        if dmz is not None:
+            self._firewall_dmz = dict(dmz)
+        if port_forwards is not None:
+            self._firewall_port_forwards = [dict(rule) for rule in port_forwards]
+        if rules is not None:
+            self._firewall_rules = [dict(rule) for rule in rules]
 
     async def update_firmware_check(self) -> None:
         """Check online for a firmware update, at most every 6 hours."""

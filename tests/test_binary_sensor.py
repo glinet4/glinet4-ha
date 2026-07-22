@@ -67,3 +67,63 @@ async def test_internet_sensor_off_when_active_interface_offline(
     await hass.async_block_till_done()
 
     assert hass.states.get(entity_id).state == "off"
+
+
+def _fw_entity_id(hass: HomeAssistant, mac: str, key: str) -> str | None:
+    return er.async_get(hass).async_get_entity_id(
+        "binary_sensor", DOMAIN, f"glinet4_binary_sensor/{mac}/{key}"
+    )
+
+
+async def test_firewall_wan_access_sensors_reflect_exposure(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """WAN ssh/https/ping exposure sensors mirror the firewall config."""
+    # Clear the "endpoint absent" side effect the profile wired in by default.
+    mock_glinet.firewall_wan_access.side_effect = None
+    mock_glinet.firewall_wan_access.return_value = {
+        "enable_https": True,
+        "enable_ping": False,
+        "enable_ssh": True,
+    }
+    await _setup(hass, mock_config_entry)
+
+    mac = profile.factory_mac
+    assert hass.states.get(_fw_entity_id(hass, mac, "wan_ssh")).state == "on"
+    assert hass.states.get(_fw_entity_id(hass, mac, "wan_https")).state == "on"
+    assert hass.states.get(_fw_entity_id(hass, mac, "wan_ping")).state == "off"
+
+
+async def test_firewall_dmz_sensor_reports_state_and_target(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """The DMZ sensor reflects enablement and exposes the target IP."""
+    mock_glinet.firewall_dmz.side_effect = None
+    mock_glinet.firewall_dmz.return_value = {
+        "enabled": True,
+        "dmz_ip": "192.168.8.150",
+    }
+    await _setup(hass, mock_config_entry)
+
+    state = hass.states.get(_fw_entity_id(hass, profile.factory_mac, "dmz"))
+    assert state.state == "on"
+    assert state.attributes["destination_ip"] == "192.168.8.150"
+
+
+async def test_firewall_sensors_absent_when_unsupported(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,  # noqa: ARG001  (leaves firewall endpoints raising)
+    profile: Profile,
+) -> None:
+    """A router that doesn't answer the firewall reads gets no firewall sensors."""
+    await _setup(hass, mock_config_entry)
+    mac = profile.factory_mac
+    for key in ("wan_ssh", "wan_https", "wan_ping", "dmz"):
+        assert _fw_entity_id(hass, mac, key) is None

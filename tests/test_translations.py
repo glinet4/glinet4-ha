@@ -47,6 +47,8 @@ EXPECTED_NAMES: dict[str, dict[str, str]] = {
         "wan_download_speed": "WAN download speed",
         "wan_upload_speed": "WAN upload speed",
         "tailscale_status": "Tailscale status",
+        "firewall_port_forwards": "Port forwards",
+        "firewall_rules": "Firewall rules",
     },
     "switch": {
         "flow_statistics": "Flow statistics",
@@ -57,7 +59,13 @@ EXPECTED_NAMES: dict[str, dict[str, str]] = {
     },
     "select": {"tailscale_exit_node": "Tailscale exit node"},
     "update": {"firmware": "Firmware"},
-    "binary_sensor": {"internet": "Internet"},
+    "binary_sensor": {
+        "internet": "Internet",
+        "wan_ssh": "WAN SSH",
+        "wan_https": "WAN HTTPS",
+        "wan_ping": "WAN ping",
+        "dmz": "DMZ",
+    },
     "button": {"reboot": "Reboot"},
 }
 
@@ -76,6 +84,8 @@ EXPECTED_ICONS: dict[str, dict[str, dict]] = {
         "wan_download_speed": {"default": "mdi:download"},
         "wan_upload_speed": {"default": "mdi:upload"},
         "tailscale_status": {"default": "mdi:vpn"},
+        "firewall_port_forwards": {"default": "mdi:arrow-decision"},
+        "firewall_rules": {"default": "mdi:wall-fire"},
     },
     "switch": {
         "client_internet": {"default": "mdi:web"},
@@ -89,6 +99,12 @@ EXPECTED_ICONS: dict[str, dict[str, dict]] = {
     },
     "select": {"tailscale_exit_node": {"default": "mdi:server-network"}},
     "button": {"reboot": {"default": "mdi:restart"}},
+    "binary_sensor": {
+        "wan_ssh": {"default": "mdi:console-network"},
+        "wan_https": {"default": "mdi:web"},
+        "wan_ping": {"default": "mdi:access-point-network"},
+        "dmz": {"default": "mdi:wall"},
+    },
 }
 
 

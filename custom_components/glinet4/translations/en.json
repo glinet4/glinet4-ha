@@ -84,6 +84,8 @@
       "flash_use": { "name": "Flash usage" },
       "uptime": { "name": "Uptime" },
       "wan_ip": { "name": "WAN IP" },
+      "firewall_port_forwards": { "name": "Port forwards" },
+      "firewall_rules": { "name": "Firewall rules" },
       "wan_download_speed": { "name": "WAN download speed" },
       "wan_upload_speed": { "name": "WAN upload speed" },
       "tailscale_status": { "name": "Tailscale status" }
@@ -102,7 +104,11 @@
       "firmware": { "name": "Firmware" }
     },
     "binary_sensor": {
-      "internet": { "name": "Internet" }
+      "internet": { "name": "Internet" },
+      "wan_ssh": { "name": "WAN SSH" },
+      "wan_https": { "name": "WAN HTTPS" },
+      "wan_ping": { "name": "WAN ping" },
+      "dmz": { "name": "DMZ" }
     },
     "button": {
       "reboot": { "name": "Reboot" }

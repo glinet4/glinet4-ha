@@ -9,6 +9,8 @@
       "flash_use": { "default": "mdi:harddisk" },
       "uptime": { "default": "mdi:clock" },
       "wan_ip": { "default": "mdi:ip-outline" },
+      "firewall_port_forwards": { "default": "mdi:arrow-decision" },
+      "firewall_rules": { "default": "mdi:wall-fire" },
       "wan_download_speed": { "default": "mdi:download" },
       "wan_upload_speed": { "default": "mdi:upload" },
       "tailscale_status": { "default": "mdi:vpn" }
@@ -28,6 +30,12 @@
     },
     "button": {
       "reboot": { "default": "mdi:restart" }
+    },
+    "binary_sensor": {
+      "wan_ssh": { "default": "mdi:console-network" },
+      "wan_https": { "default": "mdi:web" },
+      "wan_ping": { "default": "mdi:access-point-network" },
+      "dmz": { "default": "mdi:wall" }
     }
   }
 }
