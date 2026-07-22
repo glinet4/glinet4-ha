@@ -75,8 +75,9 @@ class GLinetDevice(CoordinatorEntity["GLinetCoordinator"], ScannerEntity):
         """Create and attach a device for this client when the tracker is enabled.
 
         HA's ``ScannerEntity.device_info`` is ``@final`` and returns ``None`` --
-        trackers never create a device on their own, they only attach to one
-        another integration already made. This hook runs only for *enabled*
+        trackers never create a device on their own, they only attach to a
+        device another integration already created. This hook runs only for
+        *enabled*
         entities, so creating the device here gives each tracked client its own
         device the moment its tracker is turned on (#51), without creating
         devices for clients the user never enables. The MAC connection means it
