@@ -398,6 +398,25 @@ DIAGNOSTICS_SENSORS: list[GLinetDataEntityDescription] = [
             None if data.usb_devices is None else {"devices": data.usb_devices}
         ),
     ),
+    # The DPI per-app breakdown the flow-statistics switch collects: state is the
+    # number of tracked apps, with the top ones (by traffic) in the attributes.
+    GLinetDataEntityDescription(
+        key="flow_top_apps",
+        translation_key="flow_top_apps",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: (
+            None if data.flow_stats_top_apps is None else len(data.flow_stats_top_apps)
+        ),
+        # State counts every tracked app; the attribute is capped to the busiest
+        # 10 (already sorted by the coordinator) to keep the payload bounded.
+        extra_attributes_fn=lambda data: (
+            None
+            if data.flow_stats_top_apps is None
+            else {"apps": data.flow_stats_top_apps[:10]}
+        ),
+    ),
 ]
 
 

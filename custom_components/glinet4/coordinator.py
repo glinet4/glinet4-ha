@@ -97,6 +97,7 @@ class GLinetData:
     clients_status: dict | None = None
     ethernet_ports: list[dict] | None = None
     usb_devices: list[dict] | None = None
+    flow_stats_top_apps: list[dict] | None = None
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -158,6 +159,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._clients_status: dict | None = None
         self._ethernet_ports: list[dict] | None = None
         self._usb_devices: list[dict] | None = None
+        self._flow_stats_top_apps: list[dict] | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -348,6 +350,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             clients_status=self._clients_status,
             ethernet_ports=self._ethernet_ports,
             usb_devices=self._usb_devices,
+            flow_stats_top_apps=self._flow_stats_top_apps,
         )
 
     def async_build_siblings(self) -> GLinetRuntimeData:
@@ -636,20 +639,44 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._led_config = dict(led)
 
     async def update_flow_statistics_state(self) -> None:
-        """Poll the flow-statistics rule and NAT-acceleration state.
+        """Poll the flow-statistics rule, NAT-acceleration state and top apps.
 
-        Both are optional endpoints. Acceleration state is kept so consumers
-        can explain why statistics may not be collecting app data (the DPI
-        accounting rides on acceleration, which conflicts with QoS/SQM).
+        All optional endpoints. Acceleration state is kept so consumers can
+        explain why statistics may not be collecting app data (the DPI
+        accounting rides on acceleration, which conflicts with QoS/SQM); the
+        top-apps list is the per-app breakdown that collection produces.
         """
-        rule, accel = await asyncio.gather(
+        rule, accel, top_apps = await asyncio.gather(
             self._call_optional("flow_stats_rule", self._api.flow_stats_rule),
             self._call_optional("network_acceleration", self._api.network_acceleration),
+            self._call_optional("flow_stats_top_apps", self._api.flow_stats_top_apps),
         )
         if rule is not None:
             self._flow_stats_rule = dict(rule)
         if accel is not None:
             self._network_acceleration = dict(accel)
+        if top_apps is not None:
+            self._flow_stats_top_apps = self._summarise_top_apps(top_apps)
+
+    @staticmethod
+    def _summarise_top_apps(apps: list) -> list[dict]:
+        """Clean and sort every DPI app entry by total traffic, descending.
+
+        The full list is kept so the sensor's state can report the true tracked-
+        app count; the top-N cap for the attribute payload is applied by the
+        sensor, not here.
+        """
+        cleaned = [
+            {
+                "name": app.get("application_name"),
+                "download": app.get("total_download", 0),
+                "upload": app.get("total_upload", 0),
+                "packets": app.get("total_packets", 0),
+            }
+            for app in apps
+        ]
+        cleaned.sort(key=lambda a: a["download"] + a["upload"], reverse=True)
+        return cleaned
 
     async def update_firewall_state(self) -> None:
         """Poll the firewall reads (WAN exposure, DMZ, port forwards, rules).

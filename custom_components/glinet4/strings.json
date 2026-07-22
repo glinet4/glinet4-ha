@@ -94,7 +94,8 @@
       "wired_clients": { "name": "Wired clients" },
       "wireless_clients": { "name": "Wireless clients" },
       "ethernet_ports": { "name": "Ethernet ports" },
-      "usb_devices": { "name": "USB devices" }
+      "usb_devices": { "name": "USB devices" },
+      "flow_top_apps": { "name": "Top apps" }
     },
     "switch": {
       "flow_statistics": { "name": "Flow statistics" },
