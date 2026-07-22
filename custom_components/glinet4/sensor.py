@@ -349,10 +349,12 @@ DIAGNOSTICS_SENSORS: list[GLinetDataEntityDescription] = [
         has_entity_name=True,
         entity_category=EntityCategory.DIAGNOSTIC,
         state_class=SensorStateClass.MEASUREMENT,
+        # `... is None` gates on the endpoint being answered at all; a missing
+        # count key on an answered payload is a real 0, not an absent sensor.
         value_fn=lambda data: (
             None
             if data.clients_status is None
-            else data.clients_status.get("cable_total")
+            else data.clients_status.get("cable_total", 0)
         ),
     ),
     GLinetDataEntityDescription(
@@ -364,7 +366,7 @@ DIAGNOSTICS_SENSORS: list[GLinetDataEntityDescription] = [
         value_fn=lambda data: (
             None
             if data.clients_status is None
-            else data.clients_status.get("wireless_total")
+            else data.clients_status.get("wireless_total", 0)
         ),
     ),
     GLinetDataEntityDescription(

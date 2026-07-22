@@ -88,19 +88,15 @@ class GLinetData:
     network_mode: str = ""
     firewall_wan_access: dict = field(default_factory=dict)
     firewall_dmz: dict = field(default_factory=dict)
-    # None until the router answers the read, so an empty list (0 rules) is
-    # distinguishable from an unsupported endpoint.
+    # The fields below stay None until the router first answers the read, which
+    # distinguishes an empty/unconfigured result from an unsupported endpoint.
     firewall_port_forwards: list[dict] | None = None
     firewall_rules: list[dict] | None = None
-    # None until the router answers the read, distinguishing an unconfigured/
-    # empty server from an endpoint the firmware doesn't expose.
     wireguard_server: dict | None = None
     openvpn_server_users: list[dict] | None = None
-    # None until the router answers, so an empty result is distinguishable from
-    # an endpoint the firmware doesn't expose.
     clients_status: dict | None = None
-    ethernet_ports: list | None = None
-    usb_devices: list | None = None
+    ethernet_ports: list[dict] | None = None
+    usb_devices: list[dict] | None = None
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -160,8 +156,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._wireguard_server: dict | None = None
         self._openvpn_server_users: list[dict] | None = None
         self._clients_status: dict | None = None
-        self._ethernet_ports: list | None = None
-        self._usb_devices: list | None = None
+        self._ethernet_ports: list[dict] | None = None
+        self._usb_devices: list[dict] | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
