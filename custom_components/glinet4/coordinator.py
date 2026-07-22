@@ -660,7 +660,12 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
 
     @staticmethod
     def _summarise_top_apps(apps: list) -> list[dict]:
-        """Clean and sort DPI app entries by total traffic, keeping the top 10."""
+        """Clean and sort every DPI app entry by total traffic, descending.
+
+        The full list is kept so the sensor's state can report the true tracked-
+        app count; the top-N cap for the attribute payload is applied by the
+        sensor, not here.
+        """
         cleaned = [
             {
                 "name": app.get("application_name"),
@@ -671,7 +676,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             for app in apps
         ]
         cleaned.sort(key=lambda a: a["download"] + a["upload"], reverse=True)
-        return cleaned[:10]
+        return cleaned
 
     async def update_firewall_state(self) -> None:
         """Poll the firewall reads (WAN exposure, DMZ, port forwards, rules).

@@ -543,6 +543,29 @@ async def test_flow_top_apps_sensor_surfaces_per_app_traffic(
     assert apps[1]["name"] == "YouTube"
 
 
+async def test_flow_top_apps_state_counts_all_but_attribute_caps_at_ten(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """State is the full tracked-app count; the attribute keeps only the top 10."""
+    mock_glinet.flow_stats_top_apps.side_effect = None
+    mock_glinet.flow_stats_top_apps.return_value = [
+        {"application_name": f"app{i}", "total_download": i, "total_upload": 0}
+        for i in range(12)
+    ]
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    state = hass.states.get(_data_entity_id(hass, profile.factory_mac, "flow_top_apps"))
+    assert state.state == "12"
+    apps = state.attributes["apps"]
+    assert len(apps) == 10
+    # Highest-traffic app first (app11 downloaded 11).
+    assert apps[0]["name"] == "app11"
+
+
 async def test_flow_top_apps_sensor_empty_is_zero(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,

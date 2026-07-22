@@ -409,10 +409,12 @@ DIAGNOSTICS_SENSORS: list[GLinetDataEntityDescription] = [
         value_fn=lambda data: (
             None if data.flow_stats_top_apps is None else len(data.flow_stats_top_apps)
         ),
+        # State counts every tracked app; the attribute is capped to the busiest
+        # 10 (already sorted by the coordinator) to keep the payload bounded.
         extra_attributes_fn=lambda data: (
             None
             if data.flow_stats_top_apps is None
-            else {"apps": data.flow_stats_top_apps}
+            else {"apps": data.flow_stats_top_apps[:10]}
         ),
     ),
 ]
