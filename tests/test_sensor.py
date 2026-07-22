@@ -593,3 +593,64 @@ async def test_flow_top_apps_sensor_absent_when_unsupported(
     """A router without flow statistics gets no top-apps sensor."""
     await _setup_at(hass, mock_config_entry, freezer)
     assert _data_entity_id(hass, profile.factory_mac, "flow_top_apps") is None
+
+
+async def test_multiwan_sensor_counts_interfaces(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """The multi-WAN sensor counts interfaces and exposes their health."""
+    mock_glinet.multiwan_status.side_effect = None
+    mock_glinet.multiwan_status.return_value = {
+        "interfaces": [
+            {"interface": "wan", "status_v4": 1, "status_v6": 0},
+            {"interface": "tethering", "status_v4": 0, "status_v6": 0},
+        ]
+    }
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    state = hass.states.get(_data_entity_id(hass, profile.factory_mac, "multiwan"))
+    assert state.state == "2"
+    assert {i["interface"] for i in state.attributes["interfaces"]} == {
+        "wan",
+        "tethering",
+    }
+
+
+async def test_repeater_sensor_reports_state(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """The repeater sensor reports the human-readable state; no portal secrets."""
+    mock_glinet.repeater_status.side_effect = None
+    mock_glinet.repeater_status.return_value = {
+        "state": 4,
+        "state_s": "connected",
+        "portal_info": {"username": "u", "password": "SECRET"},
+    }
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    state = hass.states.get(_data_entity_id(hass, profile.factory_mac, "repeater"))
+    assert state.state == "connected"
+    # portal_info (with credentials) must not be surfaced anywhere on the entity.
+    assert "SECRET" not in str(state.attributes)
+
+
+async def test_multiwan_repeater_absent_when_unsupported(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,  # noqa: ARG001  (leaves the reads raising)
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """A router that doesn't answer these reads gets no such sensors."""
+    await _setup_at(hass, mock_config_entry, freezer)
+    mac = profile.factory_mac
+    assert _data_entity_id(hass, mac, "multiwan") is None
+    assert _data_entity_id(hass, mac, "repeater") is None

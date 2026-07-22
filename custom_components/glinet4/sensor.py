@@ -417,6 +417,35 @@ DIAGNOSTICS_SENSORS: list[GLinetDataEntityDescription] = [
             else {"apps": data.flow_stats_top_apps[:10]}
         ),
     ),
+    GLinetDataEntityDescription(
+        key="multiwan",
+        translation_key="multiwan",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: (
+            None
+            if data.multiwan_status is None
+            else len(data.multiwan_status.get("interfaces", []))
+        ),
+        extra_attributes_fn=lambda data: (
+            None
+            if data.multiwan_status is None
+            else {"interfaces": data.multiwan_status.get("interfaces", [])}
+        ),
+    ),
+    GLinetDataEntityDescription(
+        key="repeater",
+        translation_key="repeater",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        # The WiFi-as-WAN connection state (e.g. connected / not_used / failed).
+        value_fn=lambda data: (
+            None
+            if data.repeater_status is None
+            else data.repeater_status.get("state_s")
+        ),
+    ),
 ]
 
 

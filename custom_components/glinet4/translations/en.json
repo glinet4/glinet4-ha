@@ -95,7 +95,9 @@
       "wireless_clients": { "name": "Wireless clients" },
       "ethernet_ports": { "name": "Ethernet ports" },
       "usb_devices": { "name": "USB devices" },
-      "flow_top_apps": { "name": "Top apps" }
+      "flow_top_apps": { "name": "Top apps" },
+      "multiwan": { "name": "Multi-WAN interfaces" },
+      "repeater": { "name": "Repeater" }
     },
     "switch": {
       "flow_statistics": { "name": "Flow statistics" },
