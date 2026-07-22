@@ -96,6 +96,11 @@ class GLinetData:
     # empty server from an endpoint the firmware doesn't expose.
     wireguard_server: dict | None = None
     openvpn_server_users: list[dict] | None = None
+    # None until the router answers, so an empty result is distinguishable from
+    # an endpoint the firmware doesn't expose.
+    clients_status: dict | None = None
+    ethernet_ports: list | None = None
+    usb_devices: list | None = None
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -154,6 +159,9 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._firewall_rules: list[dict] | None = None
         self._wireguard_server: dict | None = None
         self._openvpn_server_users: list[dict] | None = None
+        self._clients_status: dict | None = None
+        self._ethernet_ports: list | None = None
+        self._usb_devices: list | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -341,6 +349,9 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             firewall_rules=self._firewall_rules,
             wireguard_server=self._wireguard_server,
             openvpn_server_users=self._openvpn_server_users,
+            clients_status=self._clients_status,
+            ethernet_ports=self._ethernet_ports,
+            usb_devices=self._usb_devices,
         )
 
     def async_build_siblings(self) -> GLinetRuntimeData:
@@ -378,6 +389,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         await self.update_flow_statistics_state()
         await self.update_firewall_state()
         await self.update_vpn_server_state()
+        await self.update_diagnostics_state()
         await self.update_firmware_check()
 
     async def _update_platform(
@@ -706,6 +718,22 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
                 }
             )
         return {"connected": connected, "total": len(peers), "peers": summaries}
+
+    async def update_diagnostics_state(self) -> None:
+        """Poll the client-count / ethernet-port / USB reads; all optional."""
+        clients, ports, usb = await asyncio.gather(
+            self._call_optional("clients_status", self._api.clients_status),
+            self._call_optional(
+                "ethernet_ports_status", self._api.ethernet_ports_status
+            ),
+            self._call_optional("router_usb_info", self._api.router_usb_info),
+        )
+        if clients is not None:
+            self._clients_status = dict(clients)
+        if ports is not None:
+            self._ethernet_ports = [dict(port) for port in ports]
+        if usb is not None:
+            self._usb_devices = [dict(device) for device in usb]
 
     async def update_firmware_check(self) -> None:
         """Check online for a firmware update, at most every 6 hours."""

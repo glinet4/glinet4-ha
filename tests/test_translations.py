@@ -51,6 +51,10 @@ EXPECTED_NAMES: dict[str, dict[str, str]] = {
         "firewall_rules": "Firewall rules",
         "wireguard_server_peers": "WireGuard peers",
         "openvpn_server_users": "OpenVPN users",
+        "wired_clients": "Wired clients",
+        "wireless_clients": "Wireless clients",
+        "ethernet_ports": "Ethernet ports",
+        "usb_devices": "USB devices",
     },
     "switch": {
         "flow_statistics": "Flow statistics",
@@ -90,6 +94,10 @@ EXPECTED_ICONS: dict[str, dict[str, dict]] = {
         "firewall_rules": {"default": "mdi:wall-fire"},
         "wireguard_server_peers": {"default": "mdi:account-network"},
         "openvpn_server_users": {"default": "mdi:account-key"},
+        "wired_clients": {"default": "mdi:lan"},
+        "wireless_clients": {"default": "mdi:wifi"},
+        "ethernet_ports": {"default": "mdi:ethernet"},
+        "usb_devices": {"default": "mdi:usb-port"},
     },
     "switch": {
         "client_internet": {"default": "mdi:web"},

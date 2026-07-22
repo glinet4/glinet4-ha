@@ -90,7 +90,11 @@
       "wan_upload_speed": { "name": "WAN upload speed" },
       "tailscale_status": { "name": "Tailscale status" },
       "wireguard_server_peers": { "name": "WireGuard peers" },
-      "openvpn_server_users": { "name": "OpenVPN users" }
+      "openvpn_server_users": { "name": "OpenVPN users" },
+      "wired_clients": { "name": "Wired clients" },
+      "wireless_clients": { "name": "Wireless clients" },
+      "ethernet_ports": { "name": "Ethernet ports" },
+      "usb_devices": { "name": "USB devices" }
     },
     "switch": {
       "flow_statistics": { "name": "Flow statistics" },

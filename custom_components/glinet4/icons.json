@@ -15,7 +15,11 @@
       "wan_upload_speed": { "default": "mdi:upload" },
       "tailscale_status": { "default": "mdi:vpn" },
       "wireguard_server_peers": { "default": "mdi:account-network" },
-      "openvpn_server_users": { "default": "mdi:account-key" }
+      "openvpn_server_users": { "default": "mdi:account-key" },
+      "wired_clients": { "default": "mdi:lan" },
+      "wireless_clients": { "default": "mdi:wifi" },
+      "ethernet_ports": { "default": "mdi:ethernet" },
+      "usb_devices": { "default": "mdi:usb-port" }
     },
     "switch": {
       "client_internet": { "default": "mdi:web" },

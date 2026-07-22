@@ -211,6 +211,11 @@ def build_mock_api(profile: Profile) -> AsyncMock:
     _wire_optional_endpoint(
         api.openvpn_server_users, profile.load("openvpn_server_users")
     )
+    _wire_optional_endpoint(api.clients_status, profile.load("clients_status"))
+    _wire_optional_endpoint(
+        api.ethernet_ports_status, profile.load("ethernet_ports_status")
+    )
+    _wire_optional_endpoint(api.router_usb_info, profile.load("router_usb_info"))
 
     # Action endpoints (no useful return value).
     api.router_reboot.return_value = None
