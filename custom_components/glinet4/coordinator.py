@@ -769,7 +769,10 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._usb_devices = [dict(device) for device in usb]
 
     async def update_link_diagnostics(self) -> None:
-        """Poll multi-WAN health and repeater (WiFi-as-WAN) state; both optional."""
+        """Poll multi-WAN health, repeater (WiFi-as-WAN) state and radio status.
+
+        All three are optional per firmware.
+        """
         multiwan, repeater, radios = await asyncio.gather(
             self._call_optional("multiwan_status", self._api.multiwan_status),
             self._call_optional("repeater_status", self._api.repeater_status),

@@ -673,7 +673,12 @@ async def test_wifi_radios_sensor_counts_and_exposes_radios(
 
     state = hass.states.get(_data_entity_id(hass, profile.factory_mac, "wifi_radios"))
     assert state.state == "2"
-    assert {r["band"] for r in state.attributes["radios"]} == {"2g", "5g"}
+    radios = state.attributes["radios"]
+    assert {r["band"] for r in radios} == {"2g", "5g"}
+    # Each radio's channel/state must survive into the attributes, not just band.
+    by_band = {r["band"]: r for r in radios}
+    assert by_band["5g"]["channel"] == 36
+    assert by_band["5g"]["state"] == "up"
 
 
 async def test_wifi_radios_sensor_absent_when_unsupported(
