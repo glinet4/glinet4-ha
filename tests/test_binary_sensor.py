@@ -127,3 +127,37 @@ async def test_firewall_sensors_absent_when_unsupported(
     mac = profile.factory_mac
     for key in ("wan_ssh", "wan_https", "wan_ping", "dmz"):
         assert _fw_entity_id(hass, mac, key) is None
+
+
+async def test_capability_appearing_after_setup_creates_entity(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+) -> None:
+    """A capability absent at setup gets its entity on the next poll, no reload.
+
+    The router answers firewall_wan_access with an empty payload at setup (the
+    read exists but carries no toggles yet), so no entity is created; once the
+    config is populated the entity appears on the next poll without a reload.
+    """
+    # Endpoint present but empty at setup (not a NonZeroResponse, which would be
+    # cached as permanently unsupported and never re-probed).
+    mock_glinet.firewall_wan_access.side_effect = None
+    mock_glinet.firewall_wan_access.return_value = {}
+    await _setup(hass, mock_config_entry)
+    mac = profile.factory_mac
+    assert _fw_entity_id(hass, mac, "wan_ssh") is None
+
+    # The config is populated on the router.
+    mock_glinet.firewall_wan_access.return_value = {
+        "enable_https": False,
+        "enable_ping": False,
+        "enable_ssh": True,
+    }
+    # Firewall reads ride the slow (configuration) bucket.
+    await mock_config_entry.runtime_data.slow.async_refresh()
+    await hass.async_block_till_done()
+
+    assert _fw_entity_id(hass, mac, "wan_ssh") is not None
+    assert hass.states.get(_fw_entity_id(hass, mac, "wan_ssh")).state == "on"

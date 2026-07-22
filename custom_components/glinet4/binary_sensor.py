@@ -13,6 +13,8 @@ from homeassistant.components.binary_sensor import (
 from homeassistant.const import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from .dynamic import add_entities_when_available
+
 if TYPE_CHECKING:
     from collections.abc import Callable
 
@@ -77,28 +79,34 @@ FIREWALL_BINARY_SENSORS: list[GLinetBinarySensorEntityDescription] = [
 ]
 
 
+def _has_state(entity: GLinetDataBinarySensor) -> Callable[[], bool]:
+    """Return an availability predicate: the sensor's backing read is present."""
+    return lambda: entity.is_on is not None
+
+
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Set up binary sensors."""
+    """Set up binary sensors, adding each as soon as its data is available."""
     coordinator = entry.runtime_data.main
-    entities: list[BinarySensorEntity] = []
+    slow = entry.runtime_data.slow
+
+    candidates: list[tuple[BinarySensorEntity, Callable[[], bool]]] = []
 
     # Internet reachability comes from network_interfaces (WAN status bucket).
-    if coordinator.data.network_interfaces:
-        entities.append(InternetBinarySensor(coordinator))
+    def _internet_available() -> bool:
+        return bool(coordinator.data.network_interfaces)
 
-    # Firewall sensors ride the slow (configuration) bucket. Only create the ones
-    # whose backing read is available on this router/firmware (value is not None);
-    # a model without WAN-access/DMZ reads simply doesn't get them.
-    slow = entry.runtime_data.slow
-    entities.extend(
-        GLinetDataBinarySensor(slow, description)
-        for description in FIREWALL_BINARY_SENSORS
-        if description.value_fn(slow.data) is not None
+    candidates.append((InternetBinarySensor(coordinator), _internet_available))
+    # Firewall sensors ride the slow (configuration) bucket; a model without the
+    # backing read simply never becomes available.
+    for description in FIREWALL_BINARY_SENSORS:
+        entity = GLinetDataBinarySensor(slow, description)
+        candidates.append((entity, _has_state(entity)))
+
+    add_entities_when_available(
+        entry, async_add_entities, candidates, {coordinator, slow}
     )
-
-    async_add_entities(entities)
 
 
 class InternetBinarySensor(CoordinatorEntity["GLinetCoordinator"], BinarySensorEntity):
