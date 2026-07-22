@@ -9,6 +9,8 @@ from propcache.api import cached_property
 
 from homeassistant.components.device_tracker import ScannerEntity, SourceType
 from homeassistant.core import callback
+from homeassistant.helpers import device_registry as dr, entity_registry as er
+from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, format_mac
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 if TYPE_CHECKING:
@@ -68,6 +70,34 @@ class GLinetDevice(CoordinatorEntity["GLinetCoordinator"], ScannerEntity):
         self._attr_hostname: str = device.name or DEFAULT_DEVICE_NAME
         self._attr_ip_address: str | None = device.ip_address
         self._attr_mac_address: str = device.mac
+
+    async def async_added_to_hass(self) -> None:
+        """Create and attach a device for this client when the tracker is enabled.
+
+        HA's ``ScannerEntity.device_info`` is ``@final`` and returns ``None`` --
+        trackers never create a device on their own, they only attach to one
+        another integration already made. This hook runs only for *enabled*
+        entities, so creating the device here gives each tracked client its own
+        device the moment its tracker is turned on (#51), without creating
+        devices for clients the user never enables. The MAC connection means it
+        merges onto any existing device for the same client rather than
+        duplicating it; ``default_name`` avoids clobbering that device's name.
+        """
+        await super().async_added_to_hass()
+        config_entry = self.coordinator.config_entry
+        if config_entry is None:  # pragma: no cover - always set in practice
+            return
+        device = dr.async_get(self.hass).async_get_or_create(
+            config_entry_id=config_entry.entry_id,
+            connections={(CONNECTION_NETWORK_MAC, format_mac(self._attr_mac_address))},
+            default_name=self._attr_hostname,
+        )
+        # HA's own attach logic ran before this hook and found no device (we had
+        # not created it yet), so link this entity to the device explicitly.
+        if self.registry_entry and self.registry_entry.device_id != device.id:
+            er.async_get(self.hass).async_update_entity(
+                self.entity_id, device_id=device.id
+            )
 
     @property
     def unique_id(self) -> str:
