@@ -8,6 +8,8 @@ from typing import TYPE_CHECKING
 from homeassistant.components.update import UpdateDeviceClass, UpdateEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from .dynamic import add_entities_when_available
+
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -23,11 +25,19 @@ PARALLEL_UPDATES = 0
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Set up update entities."""
+    """Set up update entities, adding each as soon as its data is available."""
     # Firmware is checked online at most every 6h; the slow bucket drives it.
     coordinator = entry.runtime_data.slow
-    if coordinator.data.firmware_check:
-        async_add_entities([GLinetFirmwareUpdate(coordinator)])
+
+    def _firmware_available() -> bool:
+        return bool(coordinator.data.firmware_check)
+
+    add_entities_when_available(
+        entry,
+        async_add_entities,
+        [(GLinetFirmwareUpdate(coordinator), _firmware_available)],
+        {coordinator},
+    )
 
 
 class GLinetFirmwareUpdate(CoordinatorEntity["GLinetCoordinator"], UpdateEntity):

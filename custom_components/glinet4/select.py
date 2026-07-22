@@ -9,6 +9,7 @@ from homeassistant.components.select import SelectEntity
 from homeassistant.const import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+from .dynamic import add_entities_when_available
 from .utils import async_run_action
 
 if TYPE_CHECKING:
@@ -28,11 +29,19 @@ NO_EXIT_NODE = "none"
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Set up selects."""
+    """Set up selects, adding each as soon as its data is available."""
     # Tailscale exit nodes change on the order of days.
     coordinator = entry.runtime_data.slow
-    if coordinator.data.tailscale_state is not None:
-        async_add_entities([TailscaleExitNodeSelect(coordinator)])
+
+    def _tailscale_available() -> bool:
+        return coordinator.data.tailscale_state is not None
+
+    add_entities_when_available(
+        entry,
+        async_add_entities,
+        [(TailscaleExitNodeSelect(coordinator), _tailscale_available)],
+        {coordinator},
+    )
 
 
 class TailscaleExitNodeSelect(CoordinatorEntity["GLinetCoordinator"], SelectEntity):

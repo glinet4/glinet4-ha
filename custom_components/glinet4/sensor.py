@@ -23,6 +23,8 @@ from homeassistant.const import (
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import dt as dt_util
 
+from .dynamic import add_entities_when_available
+
 if TYPE_CHECKING:
     from collections.abc import Callable
 
@@ -463,6 +465,11 @@ DIAGNOSTICS_SENSORS: list[GLinetDataEntityDescription] = [
 ]
 
 
+def _has_value(entity: SensorEntity) -> Callable[[], bool]:
+    """Return an availability predicate: the sensor currently has a value."""
+    return lambda: entity.native_value is not None
+
+
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
@@ -526,12 +533,16 @@ async def async_setup_entry(
         )
     )
 
-    # Only add sensors whose value is available on this device/model. Build a
-    # new list rather than mutating `sensors` while iterating it, which would
-    # skip elements and leave unavailable sensors in place.
-    available = [sensor for sensor in sensors if sensor.native_value is not None]
-
-    async_add_entities(available)
+    # Add each sensor as soon as its value is available on this device, and
+    # re-check on every poll so a capability appearing after setup (a USB disk,
+    # a firewall config, a cellular profile) gets its sensor with no reload.
+    candidates = [(sensor, _has_value(sensor)) for sensor in sensors]
+    add_entities_when_available(
+        entry,
+        async_add_entities,
+        candidates,
+        {entry.runtime_data.main, entry.runtime_data.fast, entry.runtime_data.slow},
+    )
 
 
 def _derive_boot_time(seconds_uptime: float) -> datetime:
