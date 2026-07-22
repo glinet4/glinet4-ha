@@ -295,6 +295,7 @@ async def test_wan_ip_sensor_survives_null_ipv4(
     await hass.async_block_till_done()
     assert hass.states.get(entity_id).state == "unknown"
 
+
 async def test_firewall_count_sensors_report_counts(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,

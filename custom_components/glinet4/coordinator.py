@@ -95,7 +95,7 @@ class GLinetData:
     # None until the router answers the read, distinguishing an unconfigured/
     # empty server from an endpoint the firmware doesn't expose.
     wireguard_server: dict | None = None
-    openvpn_server_users: list | None = None
+    openvpn_server_users: list[dict] | None = None
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -153,7 +153,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._firewall_port_forwards: list[dict] | None = None
         self._firewall_rules: list[dict] | None = None
         self._wireguard_server: dict | None = None
-        self._openvpn_server_users: list | None = None
+        self._openvpn_server_users: list[dict] | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
