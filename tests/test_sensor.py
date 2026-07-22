@@ -517,3 +517,56 @@ async def test_diagnostics_sensors_absent_when_unsupported(
     mac = profile.factory_mac
     for key in ("wired_clients", "wireless_clients", "ethernet_ports", "usb_devices"):
         assert _data_entity_id(hass, mac, key) is None
+
+
+async def test_flow_top_apps_sensor_surfaces_per_app_traffic(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """The DPI top-apps sensor counts apps and exposes them sorted by traffic."""
+    mock_glinet.flow_stats_top_apps.side_effect = None
+    mock_glinet.flow_stats_top_apps.return_value = [
+        {"application_name": "YouTube", "total_download": 100, "total_upload": 10},
+        {"application_name": "Steam", "total_download": 500, "total_upload": 20},
+    ]
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    state = hass.states.get(_data_entity_id(hass, profile.factory_mac, "flow_top_apps"))
+    assert state.state == "2"
+    apps = state.attributes["apps"]
+    # Sorted by total (download + upload) descending: Steam (520) before YouTube (110).
+    assert apps[0]["name"] == "Steam"
+    assert apps[0]["download"] == 500
+    assert apps[1]["name"] == "YouTube"
+
+
+async def test_flow_top_apps_sensor_empty_is_zero(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """Collection enabled but no traffic yet reads as a real 0, not absent."""
+    mock_glinet.flow_stats_top_apps.side_effect = None
+    mock_glinet.flow_stats_top_apps.return_value = []
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    state = hass.states.get(_data_entity_id(hass, profile.factory_mac, "flow_top_apps"))
+    assert state.state == "0"
+    assert state.attributes["apps"] == []
+
+
+async def test_flow_top_apps_sensor_absent_when_unsupported(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,  # noqa: ARG001  (leaves the read raising)
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """A router without flow statistics gets no top-apps sensor."""
+    await _setup_at(hass, mock_config_entry, freezer)
+    assert _data_entity_id(hass, profile.factory_mac, "flow_top_apps") is None

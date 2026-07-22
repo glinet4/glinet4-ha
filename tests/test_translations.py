@@ -55,6 +55,7 @@ EXPECTED_NAMES: dict[str, dict[str, str]] = {
         "wireless_clients": "Wireless clients",
         "ethernet_ports": "Ethernet ports",
         "usb_devices": "USB devices",
+        "flow_top_apps": "Top apps",
     },
     "switch": {
         "flow_statistics": "Flow statistics",
@@ -98,6 +99,7 @@ EXPECTED_ICONS: dict[str, dict[str, dict]] = {
         "wireless_clients": {"default": "mdi:wifi"},
         "ethernet_ports": {"default": "mdi:ethernet"},
         "usb_devices": {"default": "mdi:usb-port"},
+        "flow_top_apps": {"default": "mdi:chart-donut"},
     },
     "switch": {
         "client_internet": {"default": "mdi:web"},
