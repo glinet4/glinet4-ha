@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.4.5](https://github.com/glinet4/glinet4-ha/compare/v0.4.4...v0.4.5) (2026-07-22)
+
+
+### Features
+
+* add client-count, ethernet-port and USB diagnostic sensors (part of [#30](https://github.com/glinet4/glinet4-ha/issues/30)) ([#54](https://github.com/glinet4/glinet4-ha/issues/54)) ([f93c496](https://github.com/glinet4/glinet4-ha/commit/f93c4961408ff743377f6279196c1453425dfe98))
+* add firewall diagnostic entities — WAN exposure, DMZ, port-forward/rule counts (part of [#30](https://github.com/glinet4/glinet4-ha/issues/30)) ([#52](https://github.com/glinet4/glinet4-ha/issues/52)) ([4363654](https://github.com/glinet4/glinet4-ha/commit/43636541298d1c6eb29e85805f196952afaddc2e))
+* add multi-WAN and repeater (WiFi-as-WAN) diagnostic sensors ([#57](https://github.com/glinet4/glinet4-ha/issues/57)) ([7e26474](https://github.com/glinet4/glinet4-ha/commit/7e26474daa6d5d36f8b675955e2a853a84116342))
+* add per-radio WiFi status diagnostic sensor (part of [#30](https://github.com/glinet4/glinet4-ha/issues/30)) ([#58](https://github.com/glinet4/glinet4-ha/issues/58)) ([a0c8e61](https://github.com/glinet4/glinet4-ha/commit/a0c8e616031bf87461d6be7938562b40f2f46107))
+* add WireGuard and OpenVPN server diagnostic sensors (part of [#30](https://github.com/glinet4/glinet4-ha/issues/30)) ([#53](https://github.com/glinet4/glinet4-ha/issues/53)) ([3247d96](https://github.com/glinet4/glinet4-ha/commit/3247d9686fdc79f668d1f91b721f162fdc0069dc))
+* create entities dynamically as capabilities appear (Wave E part 1) ([#60](https://github.com/glinet4/glinet4-ha/issues/60)) ([b826e38](https://github.com/glinet4/glinet4-ha/commit/b826e385ff01b27acb8b90265fcb1198e287023c))
+* surface DPI top-app traffic as a sensor (part of [#30](https://github.com/glinet4/glinet4-ha/issues/30)) ([#56](https://github.com/glinet4/glinet4-ha/issues/56)) ([b73b4f1](https://github.com/glinet4/glinet4-ha/commit/b73b4f12b69f64d50d449ede25df2bb359f21ccd))
+
+
+### Bug Fixes
+
+* give an enabled tracked client its own device ([#51](https://github.com/glinet4/glinet4-ha/issues/51)) ([#59](https://github.com/glinet4/glinet4-ha/issues/59)) ([ec3b9a0](https://github.com/glinet4/glinet4-ha/commit/ec3b9a02fff6e7a29e2c3a096bb31873e007e328))
+
 ## [0.4.4](https://github.com/glinet4/glinet4-ha/compare/v0.4.3...v0.4.4) (2026-07-20)
 
 
