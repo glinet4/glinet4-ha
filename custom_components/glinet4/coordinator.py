@@ -85,8 +85,8 @@ class GLinetData:
     firewall_dmz: dict = field(default_factory=dict)
     # None until the router answers the read, so an empty list (0 rules) is
     # distinguishable from an unsupported endpoint.
-    firewall_port_forwards: list | None = None
-    firewall_rules: list | None = None
+    firewall_port_forwards: list[dict] | None = None
+    firewall_rules: list[dict] | None = None
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -141,8 +141,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._network_mode: str = ""
         self._firewall_wan_access: dict = {}
         self._firewall_dmz: dict = {}
-        self._firewall_port_forwards: list | None = None
-        self._firewall_rules: list | None = None
+        self._firewall_port_forwards: list[dict] | None = None
+        self._firewall_rules: list[dict] | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()

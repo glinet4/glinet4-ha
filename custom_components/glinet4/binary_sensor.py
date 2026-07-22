@@ -66,9 +66,13 @@ FIREWALL_BINARY_SENSORS: list[GLinetBinarySensorEntityDescription] = [
         has_entity_name=True,
         entity_category=EntityCategory.DIAGNOSTIC,
         value_fn=lambda data: data.firewall_dmz.get("enabled"),
-        extra_attributes_fn=lambda data: {
-            "destination_ip": data.firewall_dmz.get("dmz_ip")
-        },
+        # Only expose the target when there is one (mirrors tailscale_status);
+        # avoids a bare destination_ip: None on a disabled/empty DMZ.
+        extra_attributes_fn=lambda data: (
+            {"destination_ip": dmz_ip}
+            if (dmz_ip := data.firewall_dmz.get("dmz_ip"))
+            else None
+        ),
     ),
 ]
 
