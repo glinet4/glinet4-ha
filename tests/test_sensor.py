@@ -7,6 +7,7 @@ regression and the filter that drops sensors a model doesn't report.
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from unittest.mock import AsyncMock
 
 from freezegun.api import FrozenDateTimeFactory
@@ -26,6 +27,12 @@ from .conftest import Profile
 def _entity_id(hass: HomeAssistant, mac: str, key: str) -> str | None:
     return er.async_get(hass).async_get_entity_id(
         "sensor", DOMAIN, f"glinet4_sensor/{mac}/system_{key}"
+    )
+
+
+def _data_entity_id(hass: HomeAssistant, mac: str, key: str) -> str | None:
+    return er.async_get(hass).async_get_entity_id(
+        "sensor", DOMAIN, f"glinet4_sensor/{mac}/{key}"
     )
 
 
@@ -288,13 +295,6 @@ async def test_wan_ip_sensor_survives_null_ipv4(
     await hass.async_block_till_done()
     assert hass.states.get(entity_id).state == "unknown"
 
-
-def _data_entity_id(hass: HomeAssistant, mac: str, key: str) -> str | None:
-    return er.async_get(hass).async_get_entity_id(
-        "sensor", DOMAIN, f"glinet4_sensor/{mac}/{key}"
-    )
-
-
 async def test_firewall_count_sensors_report_counts(
     hass: HomeAssistant,
     mock_config_entry: MockConfigEntry,
@@ -353,3 +353,77 @@ async def test_firewall_count_sensors_absent_when_unsupported(
     mac = profile.factory_mac
     assert _data_entity_id(hass, mac, "firewall_port_forwards") is None
     assert _data_entity_id(hass, mac, "firewall_rules") is None
+
+
+# A fixed clock; peer handshakes below are expressed relative to it so the
+# "connected within the handshake window" derivation is deterministic. Matches
+# the instant _setup_at freezes to.
+_FROZEN_TS = datetime(2026, 1, 1, tzinfo=UTC).timestamp()
+
+
+async def test_wireguard_server_sensor_counts_connected_peers(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """State is the count of peers whose handshake is within the live window."""
+    mock_glinet.wireguard_server_status.side_effect = None
+    mock_glinet.wireguard_server_status.return_value = {
+        "server": {"status": 1},
+        "peers": [
+            {
+                "name": "phone",
+                "rx_bytes": 10,
+                "tx_bytes": 20,
+                "latest_handshake": int(_FROZEN_TS - 60),
+            },  # recent -> connected
+            {
+                "name": "laptop",
+                "rx_bytes": 0,
+                "tx_bytes": 0,
+                "latest_handshake": int(_FROZEN_TS - 600),
+            },  # stale -> not connected
+        ],
+    }
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    state = hass.states.get(
+        _data_entity_id(hass, profile.factory_mac, "wireguard_server_peers")
+    )
+    assert state.state == "1"
+    assert state.attributes["total_peers"] == 2
+    assert {p["name"] for p in state.attributes["peers"]} == {"phone", "laptop"}
+
+
+async def test_openvpn_server_users_sensor_counts_users(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """State is the number of configured OpenVPN server users."""
+    mock_glinet.openvpn_server_users.side_effect = None
+    mock_glinet.openvpn_server_users.return_value = [{"name": "alice"}, {"name": "bob"}]
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    state = hass.states.get(
+        _data_entity_id(hass, profile.factory_mac, "openvpn_server_users")
+    )
+    assert state.state == "2"
+
+
+async def test_vpn_server_sensors_absent_when_unsupported(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,  # noqa: ARG001  (leaves the reads raising)
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """A router that doesn't answer the VPN-server reads gets no such sensors."""
+    await _setup_at(hass, mock_config_entry, freezer)
+    mac = profile.factory_mac
+    assert _data_entity_id(hass, mac, "wireguard_server_peers") is None
+    assert _data_entity_id(hass, mac, "openvpn_server_users") is None

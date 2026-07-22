@@ -302,6 +302,45 @@ FIREWALL_SENSORS: list[GLinetDataEntityDescription] = [
 ]
 
 
+# VPN-server diagnostics. Both ride the slow bucket. WireGuard's connected
+# count is derived in the coordinator (it needs the clock); OpenVPN is a plain
+# count of configured server users.
+VPN_SERVER_SENSORS: list[GLinetDataEntityDescription] = [
+    GLinetDataEntityDescription(
+        key="wireguard_server_peers",
+        translation_key="wireguard_server_peers",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: (
+            None
+            if data.wireguard_server is None
+            else data.wireguard_server["connected"]
+        ),
+        extra_attributes_fn=lambda data: (
+            None
+            if data.wireguard_server is None
+            else {
+                "total_peers": data.wireguard_server["total"],
+                "peers": data.wireguard_server["peers"],
+            }
+        ),
+    ),
+    GLinetDataEntityDescription(
+        key="openvpn_server_users",
+        translation_key="openvpn_server_users",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: (
+            None
+            if data.openvpn_server_users is None
+            else len(data.openvpn_server_users)
+        ),
+    ),
+]
+
+
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
@@ -337,6 +376,12 @@ async def async_setup_entry(
             coordinator=entry.runtime_data.slow, entity_description=description
         )
         for description in FIREWALL_SENSORS
+    )
+    sensors.extend(
+        GLinetDataSensor(
+            coordinator=entry.runtime_data.slow, entity_description=description
+        )
+        for description in VPN_SERVER_SENSORS
     )
     # Special case for uptime as it requires additional data processing
     sensors.append(

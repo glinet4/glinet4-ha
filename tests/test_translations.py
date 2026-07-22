@@ -49,6 +49,8 @@ EXPECTED_NAMES: dict[str, dict[str, str]] = {
         "tailscale_status": "Tailscale status",
         "firewall_port_forwards": "Port forwards",
         "firewall_rules": "Firewall rules",
+        "wireguard_server_peers": "WireGuard peers",
+        "openvpn_server_users": "OpenVPN users",
     },
     "switch": {
         "flow_statistics": "Flow statistics",
@@ -86,6 +88,8 @@ EXPECTED_ICONS: dict[str, dict[str, dict]] = {
         "tailscale_status": {"default": "mdi:vpn"},
         "firewall_port_forwards": {"default": "mdi:arrow-decision"},
         "firewall_rules": {"default": "mdi:wall-fire"},
+        "wireguard_server_peers": {"default": "mdi:account-network"},
+        "openvpn_server_users": {"default": "mdi:account-key"},
     },
     "switch": {
         "client_internet": {"default": "mdi:web"},

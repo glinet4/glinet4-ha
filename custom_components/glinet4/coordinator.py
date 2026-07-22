@@ -53,6 +53,11 @@ T = TypeVar("T")
 # less often than the router poll.
 FIRMWARE_CHECK_INTERVAL = timedelta(hours=6)
 
+# A WireGuard peer is treated as connected when its last handshake is within
+# this window; WireGuard renegotiates roughly every 2 minutes, so 3 covers a
+# live peer without flagging one that has just dropped.
+WG_HANDSHAKE_TIMEOUT_S = 180
+
 
 @dataclass
 class GLinetData:
@@ -87,6 +92,10 @@ class GLinetData:
     # distinguishable from an unsupported endpoint.
     firewall_port_forwards: list[dict] | None = None
     firewall_rules: list[dict] | None = None
+    # None until the router answers the read, distinguishing an unconfigured/
+    # empty server from an endpoint the firmware doesn't expose.
+    wireguard_server: dict | None = None
+    openvpn_server_users: list | None = None
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -143,6 +152,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._firewall_dmz: dict = {}
         self._firewall_port_forwards: list[dict] | None = None
         self._firewall_rules: list[dict] | None = None
+        self._wireguard_server: dict | None = None
+        self._openvpn_server_users: list | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -328,6 +339,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             firewall_dmz=self._firewall_dmz,
             firewall_port_forwards=self._firewall_port_forwards,
             firewall_rules=self._firewall_rules,
+            wireguard_server=self._wireguard_server,
+            openvpn_server_users=self._openvpn_server_users,
         )
 
     def async_build_siblings(self) -> GLinetRuntimeData:
@@ -364,6 +377,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         await self.update_led_state()
         await self.update_flow_statistics_state()
         await self.update_firewall_state()
+        await self.update_vpn_server_state()
         await self.update_firmware_check()
 
     async def _update_platform(
@@ -651,6 +665,47 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._firewall_port_forwards = [dict(rule) for rule in port_forwards]
         if rules is not None:
             self._firewall_rules = [dict(rule) for rule in rules]
+
+    async def update_vpn_server_state(self) -> None:
+        """Poll the WireGuard/OpenVPN server reads; both optional per firmware."""
+        wg_status, ovpn_users = await asyncio.gather(
+            self._call_optional(
+                "wireguard_server_status", self._api.wireguard_server_status
+            ),
+            self._call_optional("openvpn_server_users", self._api.openvpn_server_users),
+        )
+        if wg_status is not None:
+            self._wireguard_server = self._summarise_wireguard_server(wg_status)
+        if ovpn_users is not None:
+            self._openvpn_server_users = [dict(user) for user in ovpn_users]
+
+    @staticmethod
+    def _summarise_wireguard_server(status: dict) -> dict:
+        """Reduce ``wg-server get_status`` to a connected count + safe peer stats.
+
+        Keeps only traffic/handshake fields (never the peer key material, which
+        lives in the separate ``get_peer_list`` read). A peer counts as
+        connected when its last handshake is within ``WG_HANDSHAKE_TIMEOUT_S``.
+        """
+        now_ts = dt_util.utcnow().timestamp()
+        peers = status.get("peers") or []
+        summaries: list[dict] = []
+        connected = 0
+        for peer in peers:
+            handshake = peer.get("latest_handshake") or 0
+            is_connected = handshake > 0 and now_ts - handshake < WG_HANDSHAKE_TIMEOUT_S
+            if is_connected:
+                connected += 1
+            summaries.append(
+                {
+                    "name": peer.get("name"),
+                    "rx_bytes": peer.get("rx_bytes"),
+                    "tx_bytes": peer.get("tx_bytes"),
+                    "latest_handshake": handshake,
+                    "connected": is_connected,
+                }
+            )
+        return {"connected": connected, "total": len(peers), "peers": summaries}
 
     async def update_firmware_check(self) -> None:
         """Check online for a firmware update, at most every 6 hours."""
