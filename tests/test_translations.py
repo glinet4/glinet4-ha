@@ -47,6 +47,8 @@ EXPECTED_NAMES: dict[str, dict[str, str]] = {
         "wan_download_speed": "WAN download speed",
         "wan_upload_speed": "WAN upload speed",
         "tailscale_status": "Tailscale status",
+        "firewall_port_forwards": "Port forwards",
+        "firewall_rules": "Firewall rules",
     },
     "switch": {
         "flow_statistics": "Flow statistics",
@@ -82,6 +84,8 @@ EXPECTED_ICONS: dict[str, dict[str, dict]] = {
         "wan_download_speed": {"default": "mdi:download"},
         "wan_upload_speed": {"default": "mdi:upload"},
         "tailscale_status": {"default": "mdi:vpn"},
+        "firewall_port_forwards": {"default": "mdi:arrow-decision"},
+        "firewall_rules": {"default": "mdi:wall-fire"},
     },
     "switch": {
         "client_internet": {"default": "mdi:web"},

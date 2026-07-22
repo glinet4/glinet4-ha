@@ -201,6 +201,10 @@ def build_mock_api(profile: Profile) -> AsyncMock:
         api.firewall_wan_access, profile.load("firewall_wan_access")
     )
     _wire_optional_endpoint(api.firewall_dmz, profile.load("firewall_dmz"))
+    _wire_optional_endpoint(
+        api.firewall_port_forward_list, profile.load("firewall_port_forward_list")
+    )
+    _wire_optional_endpoint(api.firewall_rule_list, profile.load("firewall_rule_list"))
 
     # Action endpoints (no useful return value).
     api.router_reboot.return_value = None

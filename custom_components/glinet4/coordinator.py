@@ -83,6 +83,10 @@ class GLinetData:
     network_mode: str = ""
     firewall_wan_access: dict = field(default_factory=dict)
     firewall_dmz: dict = field(default_factory=dict)
+    # None until the router answers the read, so an empty list (0 rules) is
+    # distinguishable from an unsupported endpoint.
+    firewall_port_forwards: list | None = None
+    firewall_rules: list | None = None
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -137,6 +141,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._network_mode: str = ""
         self._firewall_wan_access: dict = {}
         self._firewall_dmz: dict = {}
+        self._firewall_port_forwards: list | None = None
+        self._firewall_rules: list | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -320,6 +326,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             network_mode=self._network_mode,
             firewall_wan_access=self._firewall_wan_access,
             firewall_dmz=self._firewall_dmz,
+            firewall_port_forwards=self._firewall_port_forwards,
+            firewall_rules=self._firewall_rules,
         )
 
     def async_build_siblings(self) -> GLinetRuntimeData:
@@ -622,15 +630,27 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._network_acceleration = dict(accel)
 
     async def update_firewall_state(self) -> None:
-        """Poll the WAN-exposure and DMZ config; both optional per firmware."""
-        wan_access, dmz = await asyncio.gather(
+        """Poll the firewall reads (WAN exposure, DMZ, port forwards, rules).
+
+        All optional per firmware; each preserves its last-good value on a
+        transient failure and stays unset when the router doesn't expose it.
+        """
+        wan_access, dmz, port_forwards, rules = await asyncio.gather(
             self._call_optional("firewall_wan_access", self._api.firewall_wan_access),
             self._call_optional("firewall_dmz", self._api.firewall_dmz),
+            self._call_optional(
+                "firewall_port_forward_list", self._api.firewall_port_forward_list
+            ),
+            self._call_optional("firewall_rule_list", self._api.firewall_rule_list),
         )
         if wan_access is not None:
             self._firewall_wan_access = dict(wan_access)
         if dmz is not None:
             self._firewall_dmz = dict(dmz)
+        if port_forwards is not None:
+            self._firewall_port_forwards = [dict(rule) for rule in port_forwards]
+        if rules is not None:
+            self._firewall_rules = [dict(rule) for rule in rules]
 
     async def update_firmware_check(self) -> None:
         """Check online for a firmware update, at most every 6 hours."""

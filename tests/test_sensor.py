@@ -287,3 +287,69 @@ async def test_wan_ip_sensor_survives_null_ipv4(
     await coordinator.async_refresh()
     await hass.async_block_till_done()
     assert hass.states.get(entity_id).state == "unknown"
+
+
+def _data_entity_id(hass: HomeAssistant, mac: str, key: str) -> str | None:
+    return er.async_get(hass).async_get_entity_id(
+        "sensor", DOMAIN, f"glinet4_sensor/{mac}/{key}"
+    )
+
+
+async def test_firewall_count_sensors_report_counts(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """Port-forward and custom-rule count sensors reflect the firewall lists."""
+    mock_glinet.firewall_port_forward_list.side_effect = None
+    mock_glinet.firewall_port_forward_list.return_value = [
+        {"name": "web", "proto": "tcp", "src_dport": "443"},
+        {"name": "ssh", "proto": "tcp", "src_dport": "22"},
+    ]
+    mock_glinet.firewall_rule_list.side_effect = None
+    mock_glinet.firewall_rule_list.return_value = [{"name": "block-1"}]
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    mac = profile.factory_mac
+    pf = hass.states.get(_data_entity_id(hass, mac, "firewall_port_forwards"))
+    assert pf.state == "2"
+    assert len(pf.attributes["rules"]) == 2
+    assert hass.states.get(_data_entity_id(hass, mac, "firewall_rules")).state == "1"
+
+
+async def test_firewall_count_sensors_report_zero_when_empty(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """An answered-but-empty firewall list is a real 0, not an absent sensor."""
+    mock_glinet.firewall_port_forward_list.side_effect = None
+    mock_glinet.firewall_port_forward_list.return_value = []
+    mock_glinet.firewall_rule_list.side_effect = None
+    mock_glinet.firewall_rule_list.return_value = []
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    mac = profile.factory_mac
+    assert (
+        hass.states.get(_data_entity_id(hass, mac, "firewall_port_forwards")).state
+        == "0"
+    )
+    assert hass.states.get(_data_entity_id(hass, mac, "firewall_rules")).state == "0"
+
+
+async def test_firewall_count_sensors_absent_when_unsupported(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,  # noqa: ARG001  (leaves firewall reads raising)
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """A router that doesn't answer the firewall lists gets no count sensors."""
+    await _setup_at(hass, mock_config_entry, freezer)
+    mac = profile.factory_mac
+    assert _data_entity_id(hass, mac, "firewall_port_forwards") is None
+    assert _data_entity_id(hass, mac, "firewall_rules") is None

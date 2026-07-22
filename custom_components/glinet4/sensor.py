@@ -272,6 +272,35 @@ TAILSCALE_SENSORS: list[GLinetDataEntityDescription] = [
     ),
 ]
 
+# Count sensors over the firewall read surface. The backing lists are None until
+# the router answers (see coordinator), so an empty list reads as a real 0 while
+# an unsupported endpoint leaves the sensor uncreated.
+FIREWALL_SENSORS: list[GLinetDataEntityDescription] = [
+    GLinetDataEntityDescription(
+        key="firewall_port_forwards",
+        translation_key="firewall_port_forwards",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: (
+            None
+            if data.firewall_port_forwards is None
+            else len(data.firewall_port_forwards)
+        ),
+        extra_attributes_fn=lambda data: {"rules": data.firewall_port_forwards},
+    ),
+    GLinetDataEntityDescription(
+        key="firewall_rules",
+        translation_key="firewall_rules",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: (
+            None if data.firewall_rules is None else len(data.firewall_rules)
+        ),
+    ),
+]
+
 
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
@@ -302,6 +331,12 @@ async def async_setup_entry(
             coordinator=entry.runtime_data.slow, entity_description=description
         )
         for description in TAILSCALE_SENSORS
+    )
+    sensors.extend(
+        GLinetDataSensor(
+            coordinator=entry.runtime_data.slow, entity_description=description
+        )
+        for description in FIREWALL_SENSORS
     )
     # Special case for uptime as it requires additional data processing
     sensors.append(
