@@ -245,6 +245,9 @@ disable = [
 expected-line-ending-format = "LF"
 max-line-length = 100
 min-similarity-lines = 7
+# The coordinator is the integration's polling hub and grows with each entity
+# wave; 1100 gives headroom over pylint's 1000 default without inviting sprawl.
+max-module-lines = 1100
 
 # Single source of truth for mypy. There is deliberately NO mypy.ini: mypy's
 # config discovery prefers mypy.ini over pyproject.toml, so a stray mypy.ini

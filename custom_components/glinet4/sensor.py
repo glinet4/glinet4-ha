@@ -341,6 +341,66 @@ VPN_SERVER_SENSORS: list[GLinetDataEntityDescription] = [
 ]
 
 
+# Hardware/client diagnostics, all on the slow bucket.
+DIAGNOSTICS_SENSORS: list[GLinetDataEntityDescription] = [
+    GLinetDataEntityDescription(
+        key="wired_clients",
+        translation_key="wired_clients",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        # `... is None` gates on the endpoint being answered at all; a missing
+        # count key on an answered payload is a real 0, not an absent sensor.
+        value_fn=lambda data: (
+            None
+            if data.clients_status is None
+            else data.clients_status.get("cable_total", 0)
+        ),
+    ),
+    GLinetDataEntityDescription(
+        key="wireless_clients",
+        translation_key="wireless_clients",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: (
+            None
+            if data.clients_status is None
+            else data.clients_status.get("wireless_total", 0)
+        ),
+    ),
+    GLinetDataEntityDescription(
+        key="ethernet_ports",
+        translation_key="ethernet_ports",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        # Count ports carrying a link (non-zero negotiated speed).
+        value_fn=lambda data: (
+            None
+            if data.ethernet_ports is None
+            else sum(1 for port in data.ethernet_ports if port.get("speed"))
+        ),
+        extra_attributes_fn=lambda data: (
+            None if data.ethernet_ports is None else {"ports": data.ethernet_ports}
+        ),
+    ),
+    GLinetDataEntityDescription(
+        key="usb_devices",
+        translation_key="usb_devices",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda data: (
+            None if data.usb_devices is None else len(data.usb_devices)
+        ),
+        extra_attributes_fn=lambda data: (
+            None if data.usb_devices is None else {"devices": data.usb_devices}
+        ),
+    ),
+]
+
+
 async def async_setup_entry(
     _: HomeAssistant, entry: GlinetConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
@@ -382,6 +442,12 @@ async def async_setup_entry(
             coordinator=entry.runtime_data.slow, entity_description=description
         )
         for description in VPN_SERVER_SENSORS
+    )
+    sensors.extend(
+        GLinetDataSensor(
+            coordinator=entry.runtime_data.slow, entity_description=description
+        )
+        for description in DIAGNOSTICS_SENSORS
     )
     # Special case for uptime as it requires additional data processing
     sensors.append(

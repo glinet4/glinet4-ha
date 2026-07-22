@@ -428,3 +428,92 @@ async def test_vpn_server_sensors_absent_when_unsupported(
     mac = profile.factory_mac
     assert _data_entity_id(hass, mac, "wireguard_server_peers") is None
     assert _data_entity_id(hass, mac, "openvpn_server_users") is None
+
+
+async def test_client_count_sensors_split_wired_and_wireless(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """Wired and wireless client-count sensors mirror clients_status."""
+    mock_glinet.clients_status.side_effect = None
+    mock_glinet.clients_status.return_value = {"cable_total": 3, "wireless_total": 7}
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    mac = profile.factory_mac
+    assert hass.states.get(_data_entity_id(hass, mac, "wired_clients")).state == "3"
+    assert hass.states.get(_data_entity_id(hass, mac, "wireless_clients")).state == "7"
+
+
+async def test_client_count_sensors_treat_empty_payload_as_zero(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """An answered-but-empty clients_status is a real 0, not an absent sensor."""
+    mock_glinet.clients_status.side_effect = None
+    mock_glinet.clients_status.return_value = {}
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    mac = profile.factory_mac
+    assert hass.states.get(_data_entity_id(hass, mac, "wired_clients")).state == "0"
+    assert hass.states.get(_data_entity_id(hass, mac, "wireless_clients")).state == "0"
+
+
+async def test_ethernet_ports_sensor_counts_linked_ports(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """State is the count of ports carrying a link; all ports are in attributes."""
+    mock_glinet.ethernet_ports_status.side_effect = None
+    mock_glinet.ethernet_ports_status.return_value = [
+        {"name": "lan1", "speed": 1000, "duplex": "full"},
+        {"name": "lan2", "speed": 0, "duplex": "half"},
+    ]
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    state = hass.states.get(
+        _data_entity_id(hass, profile.factory_mac, "ethernet_ports")
+    )
+    assert state.state == "1"
+    assert len(state.attributes["ports"]) == 2
+
+
+async def test_usb_devices_sensor_counts_devices(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """State is the number of attached USB devices."""
+    mock_glinet.router_usb_info.side_effect = None
+    mock_glinet.router_usb_info.return_value = [
+        {"label": "USB Port", "value": "usb2.0"}
+    ]
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    state = hass.states.get(_data_entity_id(hass, profile.factory_mac, "usb_devices"))
+    assert state.state == "1"
+    assert state.attributes["devices"] == [{"label": "USB Port", "value": "usb2.0"}]
+
+
+async def test_diagnostics_sensors_absent_when_unsupported(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,  # noqa: ARG001  (leaves the reads raising)
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """A router that doesn't answer these reads gets no such sensors."""
+    await _setup_at(hass, mock_config_entry, freezer)
+    mac = profile.factory_mac
+    for key in ("wired_clients", "wireless_clients", "ethernet_ports", "usb_devices"):
+        assert _data_entity_id(hass, mac, key) is None
