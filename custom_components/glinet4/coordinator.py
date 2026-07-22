@@ -41,7 +41,7 @@ from .models import ClientDevInfo, WifiInterface, WireGuardClient
 from .utils import adjust_mac
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Coroutine
+    from collections.abc import Callable, Coroutine, Mapping
 
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_registry import RegistryEntry
@@ -98,6 +98,8 @@ class GLinetData:
     ethernet_ports: list[dict] | None = None
     usb_devices: list[dict] | None = None
     flow_stats_top_apps: list[dict] | None = None
+    multiwan_status: dict | None = None
+    repeater_status: dict | None = None
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -160,6 +162,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._ethernet_ports: list[dict] | None = None
         self._usb_devices: list[dict] | None = None
         self._flow_stats_top_apps: list[dict] | None = None
+        self._multiwan_status: dict | None = None
+        self._repeater_status: dict | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -351,6 +355,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             ethernet_ports=self._ethernet_ports,
             usb_devices=self._usb_devices,
             flow_stats_top_apps=self._flow_stats_top_apps,
+            multiwan_status=self._multiwan_status,
+            repeater_status=self._repeater_status,
         )
 
     def async_build_siblings(self) -> GLinetRuntimeData:
@@ -389,6 +395,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         await self.update_firewall_state()
         await self.update_vpn_server_state()
         await self.update_diagnostics_state()
+        await self.update_link_diagnostics()
         await self.update_firmware_check()
 
     async def _update_platform(
@@ -757,6 +764,27 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._ethernet_ports = [dict(port) for port in ports]
         if usb is not None:
             self._usb_devices = [dict(device) for device in usb]
+
+    async def update_link_diagnostics(self) -> None:
+        """Poll multi-WAN health and repeater (WiFi-as-WAN) state; both optional."""
+        multiwan, repeater = await asyncio.gather(
+            self._call_optional("multiwan_status", self._api.multiwan_status),
+            self._call_optional("repeater_status", self._api.repeater_status),
+        )
+        if multiwan is not None:
+            self._multiwan_status = dict(multiwan)
+        if repeater is not None:
+            self._repeater_status = self._summarise_repeater(repeater)
+
+    @staticmethod
+    def _summarise_repeater(status: Mapping[str, Any]) -> dict:
+        """Keep only the repeater's connection state.
+
+        Deliberately drops ``portal_info`` -- it carries captive-portal
+        credentials (a ``password`` field), which must never enter the snapshot
+        (the diagnostics dump reads the snapshot).
+        """
+        return {"state": status.get("state"), "state_s": status.get("state_s")}
 
     async def update_firmware_check(self) -> None:
         """Check online for a firmware update, at most every 6 hours."""

@@ -56,6 +56,8 @@ EXPECTED_NAMES: dict[str, dict[str, str]] = {
         "ethernet_ports": "Ethernet ports",
         "usb_devices": "USB devices",
         "flow_top_apps": "Top apps",
+        "multiwan": "Multi-WAN interfaces",
+        "repeater": "Repeater",
     },
     "switch": {
         "flow_statistics": "Flow statistics",
@@ -100,6 +102,8 @@ EXPECTED_ICONS: dict[str, dict[str, dict]] = {
         "ethernet_ports": {"default": "mdi:ethernet"},
         "usb_devices": {"default": "mdi:usb-port"},
         "flow_top_apps": {"default": "mdi:chart-donut"},
+        "multiwan": {"default": "mdi:call-split"},
+        "repeater": {"default": "mdi:wifi-star"},
     },
     "switch": {
         "client_internet": {"default": "mdi:web"},
