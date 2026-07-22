@@ -97,7 +97,8 @@
       "usb_devices": { "name": "USB devices" },
       "flow_top_apps": { "name": "Top apps" },
       "multiwan": { "name": "Multi-WAN interfaces" },
-      "repeater": { "name": "Repeater" }
+      "repeater": { "name": "Repeater" },
+      "wifi_radios": { "name": "WiFi radios" }
     },
     "switch": {
       "flow_statistics": { "name": "Flow statistics" },

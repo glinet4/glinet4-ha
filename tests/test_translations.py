@@ -58,6 +58,7 @@ EXPECTED_NAMES: dict[str, dict[str, str]] = {
         "flow_top_apps": "Top apps",
         "multiwan": "Multi-WAN interfaces",
         "repeater": "Repeater",
+        "wifi_radios": "WiFi radios",
     },
     "switch": {
         "flow_statistics": "Flow statistics",
@@ -104,6 +105,7 @@ EXPECTED_ICONS: dict[str, dict[str, dict]] = {
         "flow_top_apps": {"default": "mdi:chart-donut"},
         "multiwan": {"default": "mdi:call-split"},
         "repeater": {"default": "mdi:wifi-star"},
+        "wifi_radios": {"default": "mdi:wifi-settings"},
     },
     "switch": {
         "client_internet": {"default": "mdi:web"},

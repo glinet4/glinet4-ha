@@ -446,6 +446,20 @@ DIAGNOSTICS_SENSORS: list[GLinetDataEntityDescription] = [
             else data.repeater_status.get("state_s")
         ),
     ),
+    GLinetDataEntityDescription(
+        key="wifi_radios",
+        translation_key="wifi_radios",
+        has_entity_name=True,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        state_class=SensorStateClass.MEASUREMENT,
+        # Count of radios, with each radio's band/channel/state in attributes.
+        value_fn=lambda data: (
+            None if data.wifi_radios is None else len(data.wifi_radios)
+        ),
+        extra_attributes_fn=lambda data: (
+            None if data.wifi_radios is None else {"radios": data.wifi_radios}
+        ),
+    ),
 ]
 
 

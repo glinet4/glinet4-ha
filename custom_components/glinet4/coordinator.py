@@ -100,6 +100,7 @@ class GLinetData:
     flow_stats_top_apps: list[dict] | None = None
     multiwan_status: dict | None = None
     repeater_status: dict | None = None
+    wifi_radios: list[dict] | None = None
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -164,6 +165,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._flow_stats_top_apps: list[dict] | None = None
         self._multiwan_status: dict | None = None
         self._repeater_status: dict | None = None
+        self._wifi_radios: list[dict] | None = None
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -357,6 +359,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             flow_stats_top_apps=self._flow_stats_top_apps,
             multiwan_status=self._multiwan_status,
             repeater_status=self._repeater_status,
+            wifi_radios=self._wifi_radios,
         )
 
     def async_build_siblings(self) -> GLinetRuntimeData:
@@ -767,14 +770,17 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
 
     async def update_link_diagnostics(self) -> None:
         """Poll multi-WAN health and repeater (WiFi-as-WAN) state; both optional."""
-        multiwan, repeater = await asyncio.gather(
+        multiwan, repeater, radios = await asyncio.gather(
             self._call_optional("multiwan_status", self._api.multiwan_status),
             self._call_optional("repeater_status", self._api.repeater_status),
+            self._call_optional("wifi_status", self._api.wifi_status),
         )
         if multiwan is not None:
             self._multiwan_status = dict(multiwan)
         if repeater is not None:
             self._repeater_status = self._summarise_repeater(repeater)
+        if radios is not None:
+            self._wifi_radios = [dict(radio) for radio in radios]
 
     @staticmethod
     def _summarise_repeater(status: Mapping[str, Any]) -> dict:

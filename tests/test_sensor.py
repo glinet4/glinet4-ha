@@ -654,3 +654,35 @@ async def test_multiwan_repeater_absent_when_unsupported(
     mac = profile.factory_mac
     assert _data_entity_id(hass, mac, "multiwan") is None
     assert _data_entity_id(hass, mac, "repeater") is None
+
+
+async def test_wifi_radios_sensor_counts_and_exposes_radios(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """The wifi-radios sensor counts radios and exposes each band/channel/state."""
+    mock_glinet.wifi_status.side_effect = None
+    mock_glinet.wifi_status.return_value = [
+        {"band": "2g", "channel": 6, "name": "radio0", "state": "up"},
+        {"band": "5g", "channel": 36, "name": "radio1", "state": "up"},
+    ]
+    await _setup_at(hass, mock_config_entry, freezer)
+
+    state = hass.states.get(_data_entity_id(hass, profile.factory_mac, "wifi_radios"))
+    assert state.state == "2"
+    assert {r["band"] for r in state.attributes["radios"]} == {"2g", "5g"}
+
+
+async def test_wifi_radios_sensor_absent_when_unsupported(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,  # noqa: ARG001  (leaves the read raising)
+    profile: Profile,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """A router that doesn't answer wifi get_status gets no radios sensor."""
+    await _setup_at(hass, mock_config_entry, freezer)
+    assert _data_entity_id(hass, profile.factory_mac, "wifi_radios") is None

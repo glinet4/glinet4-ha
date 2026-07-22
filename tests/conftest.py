@@ -215,6 +215,7 @@ def build_mock_api(profile: Profile) -> AsyncMock:
         api.flow_stats_top_apps, profile.load("flow_stats_top_apps")
     )
     _wire_optional_endpoint(api.clients_status, profile.load("clients_status"))
+    _wire_optional_endpoint(api.wifi_status, profile.load("wifi_status"))
     _wire_optional_endpoint(api.multiwan_status, profile.load("multiwan_status"))
     _wire_optional_endpoint(api.repeater_status, profile.load("repeater_status"))
     _wire_optional_endpoint(
