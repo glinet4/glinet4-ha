@@ -22,7 +22,8 @@
       "usb_devices": { "default": "mdi:usb-port" },
       "flow_top_apps": { "default": "mdi:chart-donut" },
       "multiwan": { "default": "mdi:call-split" },
-      "repeater": { "default": "mdi:wifi-star" }
+      "repeater": { "default": "mdi:wifi-star" },
+      "wifi_radios": { "default": "mdi:wifi-settings" }
     },
     "switch": {
       "client_internet": { "default": "mdi:web" },
