@@ -88,7 +88,9 @@
       "firewall_rules": { "name": "Firewall rules" },
       "wan_download_speed": { "name": "WAN download speed" },
       "wan_upload_speed": { "name": "WAN upload speed" },
-      "tailscale_status": { "name": "Tailscale status" }
+      "tailscale_status": { "name": "Tailscale status" },
+      "wireguard_server_peers": { "name": "WireGuard peers" },
+      "openvpn_server_users": { "name": "OpenVPN users" }
     },
     "switch": {
       "flow_statistics": { "name": "Flow statistics" },

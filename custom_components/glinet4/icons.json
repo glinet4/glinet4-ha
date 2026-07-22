@@ -13,7 +13,9 @@
       "firewall_rules": { "default": "mdi:wall-fire" },
       "wan_download_speed": { "default": "mdi:download" },
       "wan_upload_speed": { "default": "mdi:upload" },
-      "tailscale_status": { "default": "mdi:vpn" }
+      "tailscale_status": { "default": "mdi:vpn" },
+      "wireguard_server_peers": { "default": "mdi:account-network" },
+      "openvpn_server_users": { "default": "mdi:account-key" }
     },
     "switch": {
       "client_internet": { "default": "mdi:web" },
