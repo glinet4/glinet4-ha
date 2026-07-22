@@ -11,14 +11,62 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock
 
+import pytest
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.glinet4.const import DOMAIN
 from custom_components.glinet4.coordinator import GLinetSubCoordinator
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers import device_registry as dr, entity_registry as er
+from homeassistant.helpers.device_registry import CONNECTION_NETWORK_MAC, format_mac
 
 from .conftest import Profile
+
+
+@pytest.mark.usefixtures("entity_registry_enabled_by_default")
+async def test_enabled_tracker_creates_device_for_client(
+    hass: HomeAssistant,
+    mock_config_entry: MockConfigEntry,
+    mock_glinet: AsyncMock,  # noqa: ARG001  (patches the client used at setup)
+    profile: Profile,
+) -> None:
+    """Enabling a tracker creates a device keyed by the client's MAC connection.
+
+    HA's ScannerEntity never creates a device itself (device_info is final None);
+    the integration creates it explicitly when the entity is enabled, giving the
+    #51 "turn the tracker on and it becomes a device" outcome without creating
+    devices for clients the user never enables.
+    """
+    mock_config_entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(mock_config_entry.entry_id)
+    await hass.async_block_till_done()
+
+    ent_reg = er.async_get(hass)
+    dev_reg = dr.async_get(hass)
+    trackers = [
+        entry
+        for entry in er.async_entries_for_config_entry(
+            ent_reg, mock_config_entry.entry_id
+        )
+        if entry.domain == "device_tracker"
+    ]
+    if not trackers:
+        pytest.skip("profile has no tracked clients")
+
+    for tracker in trackers:
+        assert tracker.device_id is not None, f"{tracker.unique_id} has no device"
+        device = dev_reg.async_get(tracker.device_id)
+        assert device is not None
+        # Keyed by the client's MAC connection so it merges with any existing
+        # HA device for the same client rather than duplicating it.
+        client_macs = {
+            value
+            for (kind, value) in device.connections
+            if kind == CONNECTION_NETWORK_MAC
+        }
+        assert format_mac(tracker.unique_id) in client_macs
+        # Standalone: client devices are not nested under the router.
+        assert device.via_device_id is None
 
 
 async def test_trackers_created(
