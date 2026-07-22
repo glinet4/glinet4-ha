@@ -102,7 +102,11 @@
       "firmware": { "name": "Firmware" }
     },
     "binary_sensor": {
-      "internet": { "name": "Internet" }
+      "internet": { "name": "Internet" },
+      "wan_ssh": { "name": "WAN SSH" },
+      "wan_https": { "name": "WAN HTTPS" },
+      "wan_ping": { "name": "WAN ping" },
+      "dmz": { "name": "DMZ" }
     },
     "button": {
       "reboot": { "name": "Reboot" }

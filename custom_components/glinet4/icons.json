@@ -28,6 +28,12 @@
     },
     "button": {
       "reboot": { "default": "mdi:restart" }
+    },
+    "binary_sensor": {
+      "wan_ssh": { "default": "mdi:console-network" },
+      "wan_https": { "default": "mdi:web" },
+      "wan_ping": { "default": "mdi:access-point-network" },
+      "dmz": { "default": "mdi:wall" }
     }
   }
 }

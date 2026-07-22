@@ -57,7 +57,13 @@ EXPECTED_NAMES: dict[str, dict[str, str]] = {
     },
     "select": {"tailscale_exit_node": "Tailscale exit node"},
     "update": {"firmware": "Firmware"},
-    "binary_sensor": {"internet": "Internet"},
+    "binary_sensor": {
+        "internet": "Internet",
+        "wan_ssh": "WAN SSH",
+        "wan_https": "WAN HTTPS",
+        "wan_ping": "WAN ping",
+        "dmz": "DMZ",
+    },
     "button": {"reboot": "Reboot"},
 }
 
@@ -89,6 +95,12 @@ EXPECTED_ICONS: dict[str, dict[str, dict]] = {
     },
     "select": {"tailscale_exit_node": {"default": "mdi:server-network"}},
     "button": {"reboot": {"default": "mdi:restart"}},
+    "binary_sensor": {
+        "wan_ssh": {"default": "mdi:console-network"},
+        "wan_https": {"default": "mdi:web"},
+        "wan_ping": {"default": "mdi:access-point-network"},
+        "dmz": {"default": "mdi:wall"},
+    },
 }
 
 

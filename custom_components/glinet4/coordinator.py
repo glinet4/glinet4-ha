@@ -81,6 +81,8 @@ class GLinetData:
     flow_stats_rule: dict = field(default_factory=dict)
     network_acceleration: dict = field(default_factory=dict)
     network_mode: str = ""
+    firewall_wan_access: dict = field(default_factory=dict)
+    firewall_dmz: dict = field(default_factory=dict)
 
 
 class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
@@ -133,6 +135,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         self._flow_stats_rule: dict = {}
         self._network_acceleration: dict = {}
         self._network_mode: str = ""
+        self._firewall_wan_access: dict = {}
+        self._firewall_dmz: dict = {}
         # Optional-endpoint probe results: confirmed on first success,
         # unsupported on a NonZeroResponse before any success.
         self._confirmed_endpoints: set[str] = set()
@@ -314,6 +318,8 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             flow_stats_rule=self._flow_stats_rule,
             network_acceleration=self._network_acceleration,
             network_mode=self._network_mode,
+            firewall_wan_access=self._firewall_wan_access,
+            firewall_dmz=self._firewall_dmz,
         )
 
     def async_build_siblings(self) -> GLinetRuntimeData:
@@ -349,6 +355,7 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
         await self.update_tailscale_state()
         await self.update_led_state()
         await self.update_flow_statistics_state()
+        await self.update_firewall_state()
         await self.update_firmware_check()
 
     async def _update_platform(
@@ -613,6 +620,17 @@ class GLinetUpdateCoordinator(DataUpdateCoordinator[GLinetData]):
             self._flow_stats_rule = dict(rule)
         if accel is not None:
             self._network_acceleration = dict(accel)
+
+    async def update_firewall_state(self) -> None:
+        """Poll the WAN-exposure and DMZ config; both optional per firmware."""
+        wan_access, dmz = await asyncio.gather(
+            self._call_optional("firewall_wan_access", self._api.firewall_wan_access),
+            self._call_optional("firewall_dmz", self._api.firewall_dmz),
+        )
+        if wan_access is not None:
+            self._firewall_wan_access = dict(wan_access)
+        if dmz is not None:
+            self._firewall_dmz = dict(dmz)
 
     async def update_firmware_check(self) -> None:
         """Check online for a firmware update, at most every 6 hours."""
