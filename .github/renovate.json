@@ -1,12 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
-  "labels": ["dependencies"],
-  "minimumReleaseAge": "7 days",
-  "automergeStrategy": "squash",
+  "extends": [
+    "github>firmfooting/renovate-config"
+  ],
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["before 4am on monday"],
+    "schedule": [
+      "before 4am on monday"
+    ],
     "automerge": true
   },
   "packageRules": [
@@ -20,12 +21,17 @@
     },
     {
       "description": "homeassistant is the deliberate minimum-supported runtime floor (kept in step with hacs.json), not the dev/test version; pytest is pinned transitively by pytest-hacc. Neither should get its own version PR.",
-      "matchPackageNames": ["homeassistant", "pytest"],
+      "matchPackageNames": [
+        "homeassistant",
+        "pytest"
+      ],
       "enabled": false
     },
     {
       "description": "glinet4 is a git dependency tracking the library's main branch (a deliberate canary); its commit is refreshed by lockFileMaintenance, so it needs no dedicated version PR.",
-      "matchPackageNames": ["glinet4"],
+      "matchPackageNames": [
+        "glinet4"
+      ],
       "enabled": false
     },
     {
@@ -39,14 +45,25 @@
         "voluptuous-stubs"
       ],
       "groupName": "dev tooling",
-      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest"
+      ],
       "automerge": true
     },
     {
       "description": "GitHub Actions: bundle and auto-merge non-major bumps (Actions stay digest-pinned via helpers:pinGitHubActionDigests; CI gates the merge). Majors get their own PR for review.",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "groupName": "github-actions",
-      "matchUpdateTypes": ["minor", "patch", "digest", "pin"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest",
+        "pin"
+      ],
       "automerge": true
     }
   ]
