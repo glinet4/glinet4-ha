@@ -1,9 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "helpers:pinGitHubActionDigests"],
-  "labels": ["dependencies"],
-  "minimumReleaseAge": "7 days",
-  "automergeStrategy": "squash",
+  "extends": ["github>firmfooting/renovate-config"],
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["before 4am on monday"],
