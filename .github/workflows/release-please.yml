@@ -58,7 +58,7 @@ jobs:
           ref: ${{ fromJSON(needs.release-please.outputs.pr).headBranchName }}
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
-      - uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
       - name: Refresh uv.lock for the release version
         run: |
           uv lock
